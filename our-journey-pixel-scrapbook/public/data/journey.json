@@ -1,0 +1,97 @@
+{
+  "site": {
+    "title": "A Saga of Us",
+    "subtitle": "A pixel scrapbook of us",
+    "startButton": "START JOURNEY",
+    "openingNote": "Sebuah cerita kecil yang tersimpan dalam save file kita."
+  },
+  "couple": {
+    "personA": "Pipit",
+    "personB": "Wulan",
+    "label": "Story of Us"
+  },
+  "startDate": "2026-02-10T00:00:00+07:00",
+  "assets": {
+    "music": "./assets/music/our-theme.mp3",
+    "paperSound": "./assets/sounds/paper-open.mp3",
+    "selectSound": "./assets/sounds/select.mp3"
+  },
+  "dialog": [
+    {
+      "name": "System",
+      "text": "Save file ditemukan: Our Journey."
+    },
+    {
+      "name": "System",
+      "text": "Awal bersua dari chat Whatsapp."
+    },
+    {
+      "name": "System",
+      "text": "Pria ini beranikan untuk menyapa."
+    },
+    {
+      "name": "Pipit",
+      "text": "Hai Mbak , Boleh kenalan?."
+    },
+    {
+      "name": "Wulan",
+      "text": "Halo Mas, Boleh mas."
+    },
+    {
+      "name": "System",
+      "text": "Quest unlocked: berjalan bersama, satu hari demi satu hari ♥"
+    }
+  ],
+  "chapters": [
+    {
+      "id": "first-meet",
+      "icon": "🌱",
+      "title": "First Meet",
+      "date": "28 February 2026",
+      "location": "Tempat pertama bertemu dan Our Favorite Place to talk : Rahma Resto & Cafe",
+      "background": "spring",
+      "summary": "Hari pertama kita bertemu. Awalnya hanya obrolan yang penuh kecanggungan, tapi ternyata menjadi awal perjalanan yang panjang.",
+      "quote": "It all started here...",
+      "photos": [
+        "./assets/photos/first-meet/photo-1.jpg",
+        "./assets/photos/first-meet/photo-2.jpg",
+        "./assets/photos/first-meet/photo-3.jpg"
+      ]
+    },
+    {
+      "id": "first-date",
+      "icon": "☕",
+      "title": "First Date",
+      "date": "24 April 2026",
+      "location": "Lintang Lawu",
+      "background": "cafe",
+      "summary": "Masih canggung dan awkward kadang-kadang, tapi pulang dengan senyum yang susah hilang.",
+      "quote": "A tiny moment, a big memory.",
+      "photos": [
+        "./assets/photos/first-date/photo-404.jpg",
+        "./assets/photos/first-date/photo-404.jpg",
+        "./assets/photos/first-date/photo-404.jpg"
+      ]
+    },
+    {
+      "id": "first-trip",
+      "icon": "✈️",
+      "title": "First Trip",
+      "date": "16 May 2026",
+      "location": "Menjelajah Surakarta",
+      "background": "night",
+      "summary": "Chapter pertama di luar rutinitas. Foto-foto kecil ini jadi bukti bahwa kita pernah tertawa sejauh itu.",
+      "quote": "Every road feels warmer with you.",
+      "photos": [
+        "./assets/photos/first-trip/photo-1.jpg",
+        "./assets/photos/first-trip/photo-2.png",
+        "./assets/photos/first-trip/photo-3.jpg"
+      ]
+    }
+  ],
+  "ending": {
+    "title": "To Be Continued...",
+    "text": "Cerita ini belum selesai. Setiap hari baru adalah chapter berikutnya.",
+    "button": "SAVE PROGRESS"
+  }
+}

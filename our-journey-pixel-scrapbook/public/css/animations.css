@@ -1,0 +1,170 @@
+.cloud {
+  position: absolute;
+  left: -160px;
+  width: 110px;
+  height: 34px;
+  background: #fff;
+  box-shadow: 20px -14px 0 #fff, 52px -8px 0 #fff, 78px 0 0 #fff;
+  opacity: .75;
+  z-index: 0;
+}
+
+.cloud-1 {
+  top: 9%;
+  animation: cloudMove 42s linear infinite;
+}
+
+.cloud-2 {
+  top: 20%;
+  width: 140px;
+  animation: cloudMove 58s linear infinite;
+}
+
+@keyframes cloudMove {
+  to {
+    transform: translateX(calc(100vw + 220px));
+  }
+}
+
+.tree {
+  position: absolute;
+  bottom: 32%;
+  width: clamp(48px, 10vw, 80px);
+  height: clamp(80px, 18vw, 132px);
+  z-index: 1;
+}
+
+.tree-left {
+  left: clamp(8px, 5vw, 80px);
+}
+
+.tree-right {
+  right: clamp(8px, 5vw, 80px);
+}
+
+.tree::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 38%;
+  width: 24%;
+  height: 48%;
+  background: #8b5634;
+  border: 3px solid var(--brown);
+}
+
+.tree::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 62%;
+  background: #3fa852;
+  border: 4px solid #1f6d35;
+  box-shadow: 0 18px 0 #2f8d44, 12px 6px 0 #57bb67, -12px 10px 0 #57bb67;
+}
+
+.bride {
+  left: -90px;
+  animation: brideEnter 4s steps(18) .5s forwards;
+}
+
+.groom {
+  right: -90px;
+  animation: groomEnter 4s steps(18) .5s forwards;
+}
+
+@keyframes brideEnter {
+  to {
+    left: calc(50% - clamp(104px, 24vw, 160px));
+  }
+}
+
+@keyframes groomEnter {
+  to {
+    right: calc(50% - clamp(104px, 24vw, 160px));
+  }
+}
+
+.center-heart {
+  animation: heartPop 1s steps(4) 4.7s forwards, heartFloat 1.1s steps(3) 5.7s infinite;
+}
+
+@keyframes heartPop {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.28);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+@keyframes heartFloat {
+  50% {
+    transform: translateX(-50%) translateY(-8px) scale(1.08);
+  }
+}
+
+.floating-heart {
+  animation: floatUp 2.6s steps(8) 6.2s infinite;
+}
+
+.floating-heart.h2 {
+  animation-delay: 6.7s;
+}
+
+.floating-heart.h3 {
+  animation-delay: 7.2s;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(.7);
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-90px) scale(1.15);
+  }
+}
+
+@keyframes heartBeat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.16);
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
