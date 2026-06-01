@@ -55,7 +55,8 @@
       "photos": [
         "./assets/photos/first-meet/photo-1.jpg",
         "./assets/photos/first-meet/photo-2.jpg",
-        "./assets/photos/first-meet/photo-3.jpg"
+        "./assets/photos/first-meet/photo-3.jpg",
+        "./assets/photos/first-meet/photo-4.jpg"
       ]
     },
     {
@@ -68,7 +69,6 @@
       "summary": "Masih canggung dan awkward kadang-kadang, tapi pulang dengan senyum yang susah hilang.",
       "quote": "A tiny moment, a big memory.",
       "photos": [
-        "./assets/photos/first-date/photo-404.jpg",
         "./assets/photos/first-date/photo-404.jpg",
         "./assets/photos/first-date/photo-404.jpg"
       ]
@@ -85,7 +85,8 @@
       "photos": [
         "./assets/photos/first-trip/photo-1.jpg",
         "./assets/photos/first-trip/photo-2.png",
-        "./assets/photos/first-trip/photo-3.jpg"
+        "./assets/photos/first-trip/photo-3.jpg",
+        "./assets/photos/first-trip/photo-4.jpg"
       ]
     }
   ],
