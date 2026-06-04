@@ -126,7 +126,7 @@ button {
 }
 
 .days-pixel-img {
-  width: 220px;
+  width: 130px;
   height: auto;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
@@ -253,7 +253,7 @@ textarea {
 
 .guest-date {
   margin-top: 6px;
-  font-size: 10px;
+  font-size: 7px;
   opacity: 0.7;
 }
 
