@@ -113,12 +113,28 @@ function renderMemories(memories) {
     .map(function (item) {
       return `
         <div class="guest-item">
-          <strong>${escapeHTML(item.name)}:</strong><br />
+          <strong>${escapeHTML(item.name)}:</strong>
+          <div class="guest-date">
+            ${formatMemoryDate(item.created_at)}
+          </div>
+          <br />
           ${escapeHTML(item.message)}
         </div>
       `;
     })
     .join("");
+}
+
+function formatMemoryDate(dateValue) {
+  if (!dateValue) return "";
+
+  return new Date(dateValue).toLocaleString("en-US", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }
 
 async function loadDefaultGuestbook() {
