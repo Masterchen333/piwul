@@ -126,24 +126,10 @@ button {
 }
 
 .days-pixel-img {
-  width: 130px;
+  width: clamp(120px, 25vw, 180px);
   height: auto;
   image-rendering: pixelated;
-  image-rendering: crisp-edges;
-}
-
-@keyframes idleFloat {
-  0% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-4px);
-  }
-
-  100% {
-    transform: translateY(0);
-  }
+  animation: idleFloat 2s ease-in-out infinite;
 }
 
 .name-card,
