@@ -5,8 +5,28 @@ const rupiah = (num) =>
     maximumFractionDigits: 0,
   }).format(Number(num || 0));
 
+const monthNames = [
+  "Januari",
+  "Februari",
+  "Maret",
+  "April",
+  "Mei",
+  "Juni",
+  "Juli",
+  "Agustus",
+  "September",
+  "Oktober",
+  "November",
+  "Desember",
+];
+
 let state = {
-  nextArisan: { host: "-", date: "-", address: "-", winner: "-" },
+  nextArisan: {
+    host: "-",
+    date: "-",
+    address: "-",
+    winner: "-",
+  },
   cash: [],
   savings: [],
   minutes: [],
@@ -15,7 +35,10 @@ let state = {
 
 async function loadData() {
   try {
-    const response = await fetch("/api/sheets", { cache: "no-store" });
+    const response = await fetch("/api/sheets", {
+      cache: "no-store",
+    });
+
     const data = await response.json();
 
     if (!response.ok) {
@@ -40,11 +63,35 @@ async function loadData() {
 function renderAll() {
   renderNextArisan();
   renderStats();
-  renderMonths();
+  renderFilters();
   renderCashTable();
   renderSavings();
   renderMinutes();
   renderAnnouncements();
+}
+
+function getCashDate(item) {
+  const rawDate = String(item.date || "").trim();
+  const parsedDate = new Date(rawDate);
+
+  if (!Number.isNaN(parsedDate.getTime())) {
+    return parsedDate;
+  }
+
+  const monthText = String(item.month || "").trim();
+  const parts = monthText.split(" ");
+  const monthName = parts[0];
+  const year = Number(parts[1]);
+
+  const monthIndex = monthNames.findIndex(
+    (m) => m.toLowerCase() === String(monthName || "").toLowerCase(),
+  );
+
+  if (monthIndex >= 0 && year) {
+    return new Date(year, monthIndex, 1);
+  }
+
+  return null;
 }
 
 function renderNextArisan() {
@@ -53,6 +100,7 @@ function renderNextArisan() {
   nextHost.textContent = next.host || "-";
   nextDate.textContent = next.date || "-";
   nextAddress.textContent = next.address || "-";
+
   scheduleHost.textContent = next.host || "-";
   scheduleMonth.textContent = next.date || "-";
   schedulePlace.textContent = next.address || "-";
@@ -79,36 +127,73 @@ function renderStats() {
   totalSavings.textContent = rupiah(savings);
 }
 
-function renderMonths() {
-  const currentValue = monthFilter.value || "all";
+function renderFilters() {
+  const currentMonth = monthFilter.value || "all";
+  const currentYear = yearFilter.value || "all";
 
   const months = [
     ...new Set(
-      state.cash.map((x) => String(x.month || "").trim()).filter(Boolean),
+      state.cash
+        .map((item) => {
+          const date = getCashDate(item);
+          if (!date) return null;
+          return String(date.getMonth() + 1);
+        })
+        .filter(Boolean),
     ),
-  ];
+  ].sort((a, b) => Number(a) - Number(b));
+
+  const years = [
+    ...new Set(
+      state.cash
+        .map((item) => {
+          const date = getCashDate(item);
+          if (!date) return null;
+          return String(date.getFullYear());
+        })
+        .filter(Boolean),
+    ),
+  ].sort((a, b) => Number(b) - Number(a));
 
   monthFilter.innerHTML =
-    '<option value="all">Semua Bulan</option>' +
+    `<option value="all">Semua Bulan</option>` +
     months
-      .map((month) => `<option value="${month}">${month}</option>`)
+      .map((monthNumber) => {
+        const label = monthNames[Number(monthNumber) - 1];
+        return `<option value="${monthNumber}">${label}</option>`;
+      })
       .join("");
 
-  monthFilter.value = months.includes(currentValue) ? currentValue : "all";
+  yearFilter.innerHTML =
+    `<option value="all">Semua Tahun</option>` +
+    years.map((year) => `<option value="${year}">${year}</option>`).join("");
+
+  monthFilter.value = months.includes(currentMonth) ? currentMonth : "all";
+  yearFilter.value = years.includes(currentYear) ? currentYear : "all";
 }
 
 function renderCashTable() {
-  const selected = monthFilter.value || "all";
+  const selectedMonth = monthFilter.value || "all";
+  const selectedYear = yearFilter.value || "all";
 
   const rows = state.cash.filter((item) => {
-    const itemMonth = String(item.month || "").trim();
-    return selected === "all" || itemMonth === selected;
+    const date = getCashDate(item);
+
+    if (!date) return false;
+
+    const itemMonth = String(date.getMonth() + 1);
+    const itemYear = String(date.getFullYear());
+
+    const matchMonth = selectedMonth === "all" || itemMonth === selectedMonth;
+    const matchYear = selectedYear === "all" || itemYear === selectedYear;
+
+    return matchMonth && matchYear;
   });
 
   if (!rows.length) {
     cashTable.innerHTML = `
       <tr>
-        <td colspan="5">Belum ada data kas untuk bulan ini.</td>
+        <td colspan="5">Belum ada data kas untuk filter ini.</td>
       </tr>
     `;
     return;
@@ -228,16 +313,24 @@ function shareWhatsApp() {
   window.open(`https://wa.me/?text=${createWaText()}`, "_blank");
 }
 
-loginOpen.addEventListener("click", () => loginModal.classList.add("show"));
-loginClose.addEventListener("click", () => loginModal.classList.remove("show"));
+loginOpen.addEventListener("click", () => {
+  loginModal.classList.add("show");
+});
+
+loginClose.addEventListener("click", () => {
+  loginModal.classList.remove("show");
+});
 
 async function checkAdminLogin() {
   const token = localStorage.getItem("admin_token");
+
   if (!token) return;
 
   try {
     const response = await fetch("/api/verify", {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     if (response.ok) {
@@ -262,7 +355,9 @@ loginForm.addEventListener("submit", async (event) => {
   try {
     const response = await fetch("/api/login", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ username, password }),
     });
 
@@ -274,6 +369,7 @@ loginForm.addEventListener("submit", async (event) => {
     }
 
     localStorage.setItem("admin_token", data.token);
+
     loginModal.classList.remove("show");
     adminPanel.style.display = "block";
 
@@ -291,7 +387,9 @@ logoutAdmin.addEventListener("click", () => {
 });
 
 adminShareWa.addEventListener("click", shareWhatsApp);
+
 monthFilter.addEventListener("change", renderCashTable);
+yearFilter.addEventListener("change", renderCashTable);
 shareWa.addEventListener("click", shareWhatsApp);
 shareSchedule.addEventListener("click", shareWhatsApp);
 
