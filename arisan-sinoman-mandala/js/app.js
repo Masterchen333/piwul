@@ -204,7 +204,7 @@ function renderCashTable() {
       (item) => `
         <tr>
           <td>${formatDate(item.date)}</td>
-          <td>${item.title || "-"}</td>
+<td class="cash-title">${item.title || "-"}</td>
           <td>${item.category || "-"}</td>
           <td>
 <span class="badge ${item.type}">

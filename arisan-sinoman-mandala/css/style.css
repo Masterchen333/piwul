@@ -798,3 +798,7 @@ form {
     padding: 3px 4px;
   }
 }
+.cash-title {
+  white-space: pre-line;
+  line-height: 1.45;
+}
