@@ -289,7 +289,7 @@ function renderCashTable() {
               <tr>
                 <td>${index + 1}.</td>
                 <td class="cash-title">${item.title || "-"}</td>
-                <td>Pemasukan</td>
+                <td>Masuk</td>
                 <td><span class="badge in">IN</span></td>
                 <td class="amount in-amount">${rupiah(item.amount)}</td>
               </tr>
@@ -313,7 +313,7 @@ function renderCashTable() {
               <tr>
                 <td>${index + 1}.</td>
                 <td class="cash-title">${item.title || "-"}</td>
-                <td>Pengeluaran</td>
+                <td>Keluar</td>
                 <td><span class="badge out">OUT</span></td>
                 <td class="amount out-amount">${rupiah(item.amount)}</td>
               </tr>
