@@ -95,30 +95,60 @@ function renderStats() {
 }
 
 function renderMonths() {
-  const months = [...new Set(state.cash.map((x) => x.month).filter(Boolean))];
+  const currentValue = monthFilter.value || "all";
+
+  const months = [
+    ...new Set(
+      state.cash
+        .map((x) => String(x.month || "").trim())
+        .filter(Boolean)
+    ),
+  ];
 
   monthFilter.innerHTML =
     '<option value="all">Semua Bulan</option>' +
     months
       .map((month) => `<option value="${month}">${month}</option>`)
       .join("");
+
+  monthFilter.value = months.includes(currentValue) ? currentValue : "all";
 }
 
 function renderCashTable() {
   const selected = monthFilter.value || "all";
 
-  const rows = state.cash.filter(
-    (item) => selected === "all" || item.month === selected,
-  );
+  const rows = state.cash.filter((item) => {
+    const itemMonth = String(item.month || "").trim();
+    return selected === "all" || itemMonth === selected;
+  });
 
   if (!rows.length) {
     cashTable.innerHTML = `
       <tr>
-        <td colspan="5">Belum ada data kas.</td>
+        <td colspan="5">Belum ada data kas untuk bulan ini.</td>
       </tr>
     `;
     return;
   }
+
+  cashTable.innerHTML = rows
+    .map(
+      (item) => `
+        <tr>
+          <td>${formatDate(item.date)}</td>
+          <td>${item.title || "-"}</td>
+          <td>${item.category || "-"}</td>
+          <td>
+            <span class="badge ${item.type === "in" ? "in" : "out"}">
+              ${item.type === "in" ? "Masuk" : "Keluar"}
+            </span>
+          </td>
+          <td>${rupiah(item.amount)}</td>
+        </tr>
+      `
+    )
+    .join("");
+}
 
   cashTable.innerHTML = rows
     .map(

@@ -58,16 +58,29 @@ export default async function handler(req, res) {
       }),
     ]);
 
-    const cashData = (cash.data.values || []).map(
-      ([date, month, title, type, amount]) => ({
-        date: date || "",
-        month: month || "",
-        title: title || "",
-        type: type === "in" ? "in" : "out",
-        category: type === "in" ? "Pemasukan" : "Pengeluaran",
-        amount: parseNumber(amount),
-      }),
-    );
+    const cashData = (cash.data.values || [])
+      .filter((row) => row.some((cell) => cell))
+      .map(([date, month, title, type, amount]) => {
+        const cleanType = String(type || "")
+          .trim()
+          .toLowerCase();
+
+        const finalType =
+          cleanType === "in" ||
+          cleanType === "masuk" ||
+          cleanType === "pemasukan"
+            ? "in"
+            : "out";
+
+        return {
+          date: date || "",
+          month: String(month || "").trim(),
+          title: title || "",
+          type: finalType,
+          category: finalType === "in" ? "Pemasukan" : "Pengeluaran",
+          amount: parseNumber(amount),
+        };
+      });
 
     const savingsData = (savings.data.values || []).map(([name, amount]) => ({
       name: name || "",
