@@ -265,7 +265,7 @@ function renderMinutes() {
         <div class="note-item">
           <strong>${item.title || "-"}</strong>
           <p class="muted">${item.date || "-"}</p>
-          <p>${item.body || "-"}</p>
+          <p class="multiline-text">${item.body || "-"}</p>
         </div>
       `,
     )
@@ -283,7 +283,8 @@ function renderAnnouncements() {
       (item) => `
         <div class="announcement-item">
           <strong>${item.title || "-"}</strong>
-          <p>${item.body || "-"}</p>
+          <p class="muted">${item.date || "-"}</p>
+          <p class="multiline-text">${item.body || "-"}</p>
         </div>
       `,
     )
