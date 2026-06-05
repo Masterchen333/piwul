@@ -241,8 +241,6 @@ function renderCashTable() {
     .filter((item) => item.type === "out")
     .reduce((sum, item) => sum + Number(item.amount || 0), 0);
 
-  const filteredBalance = filteredIncome - filteredExpense;
-
   updateCashStats(rows);
 
   if (!rows.length) {
@@ -322,20 +320,20 @@ function renderCashTable() {
       })
       .join("") +
     `
-      <tr class="summary-row">
-        <td colspan="2">
-          <strong>📊 TOTAL RINGKASAN</strong>
-          <small>Data sesuai filter bulan dan tahun yang dipilih</small>
-        </td>
-        <td>
-          <span>Total Pemasukan</span>
-          <strong class="in-amount">${rupiah(filteredIncome)}</strong>
-        </td>
-        <td>
-          <span>Total Pengeluaran</span>
-          <strong class="out-amount">${rupiah(filteredExpense)}</strong>
-        </td>
-      </tr>
+<tr class="summary-row">
+  <td colspan="3">
+    <strong>📊 TOTAL RINGKASAN</strong>
+    <small>Data sesuai filter bulan dan tahun yang dipilih</small>
+  </td>
+  <td>
+    <span>Total Pemasukan</span>
+    <strong class="in-amount">${rupiah(filteredIncome)}</strong>
+  </td>
+  <td>
+    <span>Total Pengeluaran</span>
+    <strong class="out-amount">${rupiah(filteredExpense)}</strong>
+  </td>
+</tr>
     `;
 }
 
