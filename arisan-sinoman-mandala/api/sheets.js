@@ -82,7 +82,7 @@ export default async function handler(req, res) {
           month: String(month || "").trim(),
           title: String(title || "").trim(),
           type: finalType,
-          category: finalType === "in" ? "Pemasukan" : "Pengeluaran",
+          category: finalType === "in" ? "Masuk" : "Keluar",
           amount: parseNumber(amount),
         };
       });
