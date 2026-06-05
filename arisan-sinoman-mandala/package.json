@@ -8,11 +8,16 @@
     "start": "vercel dev"
   },
   "dependencies": {
-    "googleapis": "latest",
-    "jsonwebtoken": "latest",
-    "bcryptjs": "latest"
+    "bcryptjs": "^3.0.3",
+    "googleapis": "^173.0.0",
+    "jsonwebtoken": "^9.0.3"
   },
   "devDependencies": {
-    "vercel": "latest"
-  }
+    "vercel": "^54.9.1"
+  },
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

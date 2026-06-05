@@ -1,149 +1,207 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arisan Sinoman Mandala</title>
-  <link rel="stylesheet" href="./css/style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-</head>
-<body>
-  <header class="topbar">
-    <div class="brand">
-      <div class="brand-mark">ASM</div>
-      <div>
-        <h1>Arisan Sinoman Mandala</h1>
-        <p>Dashboard informasi kas, tabungan, jadwal, dan pengumuman</p>
-      </div>
-    </div>
-    <nav class="nav-actions">
-      <a href="#keuangan">Keuangan</a>
-      <a href="#jadwal">Jadwal</a>
-      <a href="#notulen">Notulen</a>
-      <button id="loginOpen" class="btn btn-primary">Login Admin</button>
-    </nav>
-  </header>
-
-  <main>
-    <section class="hero">
-      <div class="hero-copy">
-        <span class="eyebrow">Laporan Bulanan</span>
-        <h2>Data arisan rapi, transparan, dan mudah dibagikan.</h2>
-        <p>Anggota bisa melihat kas, tabungan, penerima arisan, lokasi bulan depan, notulen, dan pengumuman terbaru dalam satu halaman.</p>
-        <div class="hero-buttons">
-          <a class="btn btn-primary" href="#jadwal">Lihat Jadwal</a>
-          <button id="shareWa" class="btn btn-ghost">Bagikan ke WhatsApp</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arisan Sinoman Mandala</title>
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">ASM</div>
+        <div>
+          <h1>Arisan Sinoman Mandala</h1>
+          <p>Dashboard informasi kas, tabungan, jadwal, dan pengumuman</p>
         </div>
       </div>
-      <div class="hero-card glass">
-        <p class="label">Arisan Berikutnya</p>
-        <h3 id="nextHost">Memuat...</h3>
-        <p id="nextDate">Tanggal 5 bulan depan</p>
-        <p id="nextAddress" class="muted"></p>
-      </div>
-    </section>
+      <nav class="nav-actions">
+        <a href="#keuangan">Keuangan</a>
+        <a href="#jadwal">Jadwal</a>
+        <a href="#notulen">Notulen</a>
+        <button id="loginOpen" class="btn btn-primary">Login Admin</button>
+      </nav>
+    </header>
 
-    <section class="stats-grid" id="keuangan">
-      <article class="stat-card">
-        <p>Total Kas</p>
-        <h3 id="totalKas">Rp0</h3>
-        <span>Berdasarkan laporan bulan ini</span>
-      </article>
-      <article class="stat-card income">
-        <p>Pemasukan</p>
-        <h3 id="totalIncome">Rp0</h3>
-        <span>Iuran, donasi, dan sumber lain</span>
-      </article>
-      <article class="stat-card expense">
-        <p>Pengeluaran</p>
-        <h3 id="totalExpense">Rp0</h3>
-        <span>Konsumsi, kegiatan, dan kebutuhan</span>
-      </article>
-      <article class="stat-card">
-        <p>Total Tabungan Anggota</p>
-        <h3 id="totalSavings">Rp0</h3>
-        <span>Akumulasi semua anggota</span>
-      </article>
-    </section>
-
-    <section class="content-grid">
-      <div class="panel span-2">
-        <div class="panel-header">
-          <div>
-            <p class="label">Detail Kas</p>
-            <h2>Pemasukan & Pengeluaran</h2>
-          </div>
-          <select id="monthFilter" class="input">
-            <option value="all">Semua Bulan</option>
-          </select>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr><th>Tanggal</th><th>Keterangan</th><th>Kategori</th><th>Tipe</th><th>Nominal</th></tr>
-            </thead>
-            <tbody id="cashTable"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <aside class="panel" id="jadwal">
-        <p class="label">Jadwal Arisan</p>
-        <h2>Bulan Depan</h2>
-        <div class="schedule-card">
-          <div class="calendar-date">5</div>
-          <div>
-            <h3 id="scheduleHost">-</h3>
-            <p id="scheduleMonth">-</p>
-            <p id="schedulePlace" class="muted">-</p>
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">Laporan Bulanan</span>
+          <h2>Data arisan rapi, transparan, dan mudah dibagikan.</h2>
+          <p>
+            Anggota bisa melihat kas, tabungan, penerima arisan, lokasi bulan
+            depan, notulen, dan pengumuman terbaru dalam satu halaman.
+          </p>
+          <div class="hero-buttons">
+            <a class="btn btn-primary" href="#jadwal">Lihat Jadwal</a>
+            <button id="shareWa" class="btn btn-ghost">
+              Bagikan ke WhatsApp
+            </button>
           </div>
         </div>
-        <div class="winner-box">
-          <span>Penerima bulan ini</span>
-          <strong id="winnerName">-</strong>
+        <div class="hero-card glass">
+          <p class="label">Arisan Berikutnya</p>
+          <h3 id="nextHost">Memuat...</h3>
+          <p id="nextDate">Tanggal 5 bulan depan</p>
+          <p id="nextAddress" class="muted"></p>
         </div>
-        <button id="shareSchedule" class="btn btn-primary full">Share Jadwal ke WhatsApp</button>
-      </aside>
-    </section>
+      </section>
 
-    <section class="content-grid">
-      <div class="panel">
-        <p class="label">Tabungan</p>
-        <h2>Tabungan per Anggota</h2>
-        <div id="memberSavings" class="member-list"></div>
+      <section class="stats-grid" id="keuangan">
+        <article class="stat-card">
+          <p>Total Kas</p>
+          <h3 id="totalKas">Rp0</h3>
+          <span>Berdasarkan laporan bulan ini</span>
+        </article>
+        <article class="stat-card income">
+          <p>Pemasukan</p>
+          <h3 id="totalIncome">Rp0</h3>
+          <span>Iuran, donasi, dan sumber lain</span>
+        </article>
+        <article class="stat-card expense">
+          <p>Pengeluaran</p>
+          <h3 id="totalExpense">Rp0</h3>
+          <span>Konsumsi, kegiatan, dan kebutuhan</span>
+        </article>
+        <article class="stat-card">
+          <p>Total Tabungan Anggota</p>
+          <h3 id="totalSavings">Rp0</h3>
+          <span>Akumulasi semua anggota</span>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <div class="panel span-2">
+          <div class="panel-header">
+            <div>
+              <p class="label">Detail Kas</p>
+              <h2>Pemasukan & Pengeluaran</h2>
+            </div>
+            <select id="monthFilter" class="input">
+              <option value="all">Semua Bulan</option>
+            </select>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tanggal</th>
+                  <th>Keterangan</th>
+                  <th>Kategori</th>
+                  <th>Tipe</th>
+                  <th>Nominal</th>
+                </tr>
+              </thead>
+              <tbody id="cashTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <aside class="panel" id="jadwal">
+          <p class="label">Jadwal Arisan</p>
+          <h2>Bulan Depan</h2>
+          <div class="schedule-card">
+            <div class="calendar-date">5</div>
+            <div>
+              <h3 id="scheduleHost">-</h3>
+              <p id="scheduleMonth">-</p>
+              <p id="schedulePlace" class="muted">-</p>
+            </div>
+          </div>
+          <div class="winner-box">
+            <span>Penerima bulan ini</span>
+            <strong id="winnerName">-</strong>
+          </div>
+          <button id="shareSchedule" class="btn btn-primary full">
+            Share Jadwal ke WhatsApp
+          </button>
+        </aside>
+      </section>
+
+      <section class="content-grid">
+        <div class="panel">
+          <p class="label">Tabungan</p>
+          <h2>Tabungan per Anggota</h2>
+          <div id="memberSavings" class="member-list"></div>
+        </div>
+
+        <div class="panel">
+          <p class="label">Notulen</p>
+          <h2>Hasil Diskusi Arisan</h2>
+          <div id="minutesList" class="notes-list"></div>
+        </div>
+
+        <div class="panel">
+          <p class="label">Pengumuman</p>
+          <h2>Informasi Terbaru</h2>
+          <div id="announcementList" class="announcement-list"></div>
+        </div>
+      </section>
+    </main>
+
+    <div id="loginModal" class="modal" aria-hidden="true">
+      <div class="modal-card">
+        <button id="loginClose" class="modal-close">×</button>
+        <h2>Login Admin</h2>
+        <p class="muted">
+          Demo UI. Login aman harus diproses di server/API, bukan dicek langsung
+          dari file JS.
+        </p>
+        <form id="loginForm">
+          <label>Admin ID</label>
+          <input
+            id="adminUsername"
+            class="input"
+            type="text"
+            placeholder="admin"
+            required
+          />
+
+          <label>Password</label>
+          <input
+            id="adminPassword"
+            class="input"
+            type="password"
+            placeholder="••••••••"
+            required
+          />
+
+          <button class="btn btn-primary full" type="submit">
+            Masuk Dashboard
+          </button>
+        </form>
       </div>
-
-      <div class="panel">
-        <p class="label">Notulen</p>
-        <h2>Hasil Diskusi Arisan</h2>
-        <div id="minutesList" class="notes-list"></div>
-      </div>
-
-      <div class="panel">
-        <p class="label">Pengumuman</p>
-        <h2>Informasi Terbaru</h2>
-        <div id="announcementList" class="announcement-list"></div>
-      </div>
-    </section>
-  </main>
-
-  <div id="loginModal" class="modal" aria-hidden="true">
-    <div class="modal-card">
-      <button id="loginClose" class="modal-close">×</button>
-      <h2>Login Admin</h2>
-      <p class="muted">Demo UI. Login aman harus diproses di server/API, bukan dicek langsung dari file JS.</p>
-      <form id="loginForm">
-        <label>Admin ID</label>
-        <input class="input" type="text" placeholder="admin@mandala" required>
-        <label>Password</label>
-        <input class="input" type="password" placeholder="••••••••" required>
-        <button class="btn btn-primary full" type="submit">Masuk Dashboard</button>
-      </form>
     </div>
-  </div>
+    <section id="adminPanel" class="panel admin-panel" style="display: none">
+      <div class="panel-header">
+        <div>
+          <p class="label">Dashboard Admin</p>
+          <h2>Kelola Arisan Sinoman Mandala</h2>
+        </div>
+        <button id="logoutAdmin" class="btn btn-ghost">Logout</button>
+      </div>
 
-  <script src="./js/app.js"></script>
-</body>
+      <div class="admin-grid">
+        <button id="adminShareWa" class="btn btn-primary">
+          Share Jadwal ke WhatsApp
+        </button>
+
+        <a class="btn btn-ghost" href="#keuangan"> Lihat Data Keuangan </a>
+
+        <a class="btn btn-ghost" href="#jadwal"> Lihat Jadwal Arisan </a>
+      </div>
+
+      <p class="muted">
+        Admin sudah login. Untuk fitur edit pengumuman, jadwal, kas, dan
+        notulen, nanti perlu dibuat API update khusus.
+      </p>
+    </section>
+    <script src="./js/app.js"></script>
+  </body>
 </html>
