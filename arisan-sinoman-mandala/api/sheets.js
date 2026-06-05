@@ -12,6 +12,23 @@ function parseNumber(value) {
   );
 }
 
+function normalizeType(value) {
+  const clean = String(value || "")
+    .trim()
+    .toLowerCase();
+
+  if (
+    clean === "in" ||
+    clean === "masuk" ||
+    clean === "pemasukan" ||
+    clean === "income"
+  ) {
+    return "in";
+  }
+
+  return "out";
+}
+
 export default async function handler(req, res) {
   try {
     const serviceAccountEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
@@ -30,10 +47,7 @@ export default async function handler(req, res) {
       scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
     });
 
-    const sheets = google.sheets({
-      version: "v4",
-      auth,
-    });
+    const sheets = google.sheets({ version: "v4", auth });
 
     const [cash, savings, arisan, minutes, announcements] = await Promise.all([
       sheets.spreadsheets.values.get({
@@ -59,60 +73,55 @@ export default async function handler(req, res) {
     ]);
 
     const cashData = (cash.data.values || [])
-      .filter((row) => row.some((cell) => cell))
+      .filter((row) => row.some((cell) => String(cell || "").trim()))
       .map(([date, month, title, type, amount]) => {
-        const cleanType = String(type || "")
-          .trim()
-          .toLowerCase();
-
-        const finalType =
-          cleanType === "in" ||
-          cleanType === "masuk" ||
-          cleanType === "pemasukan"
-            ? "in"
-            : "out";
+        const finalType = normalizeType(type);
 
         return {
-          date: date || "",
+          date: String(date || "").trim(),
           month: String(month || "").trim(),
-          title: title || "",
+          title: String(title || "").trim(),
           type: finalType,
           category: finalType === "in" ? "Pemasukan" : "Pengeluaran",
           amount: parseNumber(amount),
         };
       });
 
-    const savingsData = (savings.data.values || []).map(([name, amount]) => ({
-      name: name || "",
-      amount: parseNumber(amount),
-    }));
+    const savingsData = (savings.data.values || [])
+      .filter((row) => row.some((cell) => String(cell || "").trim()))
+      .map(([name, amount]) => ({
+        name: String(name || "").trim(),
+        amount: parseNumber(amount),
+      }));
 
-    const arisanRows = arisan.data.values || [];
+    const arisanRows = (arisan.data.values || []).filter((row) =>
+      row.some((cell) => String(cell || "").trim()),
+    );
 
     const nextArisanRow = arisanRows[0] || [];
 
     const nextArisan = {
-      date: nextArisanRow[0] || "-",
-      host: nextArisanRow[1] || "-",
-      winner: nextArisanRow[2] || "-",
-      address: nextArisanRow[3] || "-",
+      date: String(nextArisanRow[0] || "-").trim(),
+      host: String(nextArisanRow[1] || "-").trim(),
+      winner: String(nextArisanRow[2] || "-").trim(),
+      address: String(nextArisanRow[3] || "-").trim(),
     };
 
-    const minutesData = (minutes.data.values || []).map(
-      ([date, title, body]) => ({
-        date: date || "",
-        title: title || "",
-        body: body || "",
-      }),
-    );
+    const minutesData = (minutes.data.values || [])
+      .filter((row) => row.some((cell) => String(cell || "").trim()))
+      .map(([date, title, body]) => ({
+        date: String(date || "").trim(),
+        title: String(title || "").trim(),
+        body: String(body || "").trim(),
+      }));
 
-    const announcementsData = (announcements.data.values || []).map(
-      ([date, title, body]) => ({
-        date: date || "",
-        title: title || "",
-        body: body || "",
-      }),
-    );
+    const announcementsData = (announcements.data.values || [])
+      .filter((row) => row.some((cell) => String(cell || "").trim()))
+      .map(([date, title, body]) => ({
+        date: String(date || "").trim(),
+        title: String(title || "").trim(),
+        body: String(body || "").trim(),
+      }));
 
     return res.status(200).json({
       nextArisan,

@@ -3,15 +3,10 @@ const rupiah = (num) =>
     style: "currency",
     currency: "IDR",
     maximumFractionDigits: 0,
-  }).format(num || 0);
+  }).format(Number(num || 0));
 
 let state = {
-  nextArisan: {
-    host: "-",
-    date: "-",
-    address: "-",
-    winner: "-",
-  },
+  nextArisan: { host: "-", date: "-", address: "-", winner: "-" },
   cash: [],
   savings: [],
   minutes: [],
@@ -20,13 +15,8 @@ let state = {
 
 async function loadData() {
   try {
-    const response = await fetch("/api/sheets", {
-      cache: "no-store",
-    });
-
+    const response = await fetch("/api/sheets", { cache: "no-store" });
     const data = await response.json();
-
-    console.log("DATA DARI GOOGLE SHEET:", data);
 
     if (!response.ok) {
       throw new Error(data.detail || data.error || "Gagal mengambil data");
@@ -58,12 +48,7 @@ function renderAll() {
 }
 
 function renderNextArisan() {
-  const next = state.nextArisan || {
-    host: "-",
-    date: "-",
-    address: "-",
-    winner: "-",
-  };
+  const next = state.nextArisan || {};
 
   nextHost.textContent = next.host || "-";
   nextDate.textContent = next.date || "-";
@@ -99,9 +84,7 @@ function renderMonths() {
 
   const months = [
     ...new Set(
-      state.cash
-        .map((x) => String(x.month || "").trim())
-        .filter(Boolean)
+      state.cash.map((x) => String(x.month || "").trim()).filter(Boolean),
     ),
   ];
 
@@ -130,25 +113,6 @@ function renderCashTable() {
     `;
     return;
   }
-
-  cashTable.innerHTML = rows
-    .map(
-      (item) => `
-        <tr>
-          <td>${formatDate(item.date)}</td>
-          <td>${item.title || "-"}</td>
-          <td>${item.category || "-"}</td>
-          <td>
-            <span class="badge ${item.type === "in" ? "in" : "out"}">
-              ${item.type === "in" ? "Masuk" : "Keluar"}
-            </span>
-          </td>
-          <td>${rupiah(item.amount)}</td>
-        </tr>
-      `
-    )
-    .join("");
-}
 
   cashTable.innerHTML = rows
     .map(
@@ -264,24 +228,16 @@ function shareWhatsApp() {
   window.open(`https://wa.me/?text=${createWaText()}`, "_blank");
 }
 
-loginOpen.addEventListener("click", () => {
-  loginModal.classList.add("show");
-});
-
-loginClose.addEventListener("click", () => {
-  loginModal.classList.remove("show");
-});
+loginOpen.addEventListener("click", () => loginModal.classList.add("show"));
+loginClose.addEventListener("click", () => loginModal.classList.remove("show"));
 
 async function checkAdminLogin() {
   const token = localStorage.getItem("admin_token");
-
   if (!token) return;
 
   try {
     const response = await fetch("/api/verify", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     });
 
     if (response.ok) {
@@ -306,9 +262,7 @@ loginForm.addEventListener("submit", async (event) => {
   try {
     const response = await fetch("/api/login", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
     });
 
@@ -320,7 +274,6 @@ loginForm.addEventListener("submit", async (event) => {
     }
 
     localStorage.setItem("admin_token", data.token);
-
     loginModal.classList.remove("show");
     adminPanel.style.display = "block";
 
@@ -338,7 +291,6 @@ logoutAdmin.addEventListener("click", () => {
 });
 
 adminShareWa.addEventListener("click", shareWhatsApp);
-
 monthFilter.addEventListener("change", renderCashTable);
 shareWa.addEventListener("click", shareWhatsApp);
 shareSchedule.addEventListener("click", shareWhatsApp);
