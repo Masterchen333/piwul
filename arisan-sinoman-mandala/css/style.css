@@ -313,15 +313,15 @@ button {
 
 .table-wrap {
   width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  overflow-x: visible;
   border-radius: 16px;
 }
 
 table {
   width: 100%;
+  min-width: 0;
+  table-layout: fixed;
   border-collapse: collapse;
-  min-width: 680px;
 }
 
 th,
@@ -331,21 +331,48 @@ td {
   border-bottom: 1px solid var(--border);
   vertical-align: top;
   line-height: 1.4;
+  word-break: break-word;
+  white-space: normal;
 }
 
 th {
   color: var(--muted);
   font-size: 13px;
-  white-space: nowrap;
+}
+
+th:nth-child(1),
+td:nth-child(1) {
+  width: 18%;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+  width: 34%;
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+  width: 18%;
+}
+
+th:nth-child(4),
+td:nth-child(4) {
+  width: 12%;
+}
+
+th:nth-child(5),
+td:nth-child(5) {
+  width: 18%;
 }
 
 .badge {
-  padding: 6px 10px;
+  padding: 6px 8px;
   border-radius: 999px;
   font-weight: 800;
-  font-size: 12px;
+  font-size: 11px;
   display: inline-flex;
-  white-space: nowrap;
+  white-space: normal;
+  line-height: 1.2;
 }
 
 .badge.in {
@@ -554,7 +581,7 @@ form {
   .page-shell {
     width: 100%;
     max-width: 100%;
-    padding: 14px;
+    padding: 12px;
   }
 
   .page-section {
@@ -572,13 +599,19 @@ form {
 
   .hero {
     min-height: auto;
-    padding: 22px;
-    border-radius: 24px;
+    padding: 20px;
+    border-radius: 22px;
     gap: 18px;
+    grid-template-columns: 1fr;
+  }
+
+  .hero-copy,
+  .hero-card {
+    width: 100%;
   }
 
   .hero h2 {
-    font-size: 31px;
+    font-size: 30px;
     line-height: 1.1;
   }
 
@@ -589,16 +622,12 @@ form {
   .hero-buttons {
     display: grid;
     grid-template-columns: 1fr;
+    gap: 10px;
     margin-top: 18px;
   }
 
   .hero-buttons .btn {
     width: 100%;
-  }
-
-  .hero-card {
-    padding: 20px;
-    border-radius: 22px;
   }
 
   .stats-grid,
@@ -607,10 +636,17 @@ form {
     gap: 14px;
   }
 
+  .span-2 {
+    grid-column: auto;
+  }
+
   .stat-card,
-  .panel {
+  .panel,
+  .admin-panel {
+    width: 100%;
+    min-width: 0;
     padding: 18px;
-    border-radius: 22px;
+    border-radius: 20px;
   }
 
   .panel-header {
@@ -620,26 +656,68 @@ form {
   }
 
   .filter-row {
+    width: 100%;
+    display: grid;
     grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .filter-row .input {
     width: 100%;
   }
 
   .table-wrap {
     width: 100%;
+    overflow-x: visible;
     margin: 0;
   }
 
   table {
-    min-width: 620px;
+    width: 100%;
+    min-width: 0;
+    table-layout: fixed;
   }
 
   th,
   td {
-    padding: 12px 9px;
-    font-size: 13px;
+    font-size: 10px;
+    padding: 8px 4px;
+    word-break: break-word;
+    white-space: normal;
+  }
+
+  th:nth-child(1),
+  td:nth-child(1) {
+    width: 18%;
+  }
+
+  th:nth-child(2),
+  td:nth-child(2) {
+    width: 32%;
+  }
+
+  th:nth-child(3),
+  td:nth-child(3) {
+    width: 18%;
+  }
+
+  th:nth-child(4),
+  td:nth-child(4) {
+    width: 12%;
+  }
+
+  th:nth-child(5),
+  td:nth-child(5) {
+    width: 20%;
+  }
+
+  .badge {
+    font-size: 9px;
+    padding: 3px 5px;
   }
 
   .schedule-card {
+    width: 100%;
     align-items: flex-start;
     padding: 14px;
   }
@@ -652,12 +730,13 @@ form {
   }
 
   .winner-box {
+    width: 100%;
     margin: 14px 0;
   }
 
   .member-item {
-    align-items: stretch;
     flex-direction: column;
+    align-items: stretch;
   }
 
   .member-item strong {
@@ -667,9 +746,11 @@ form {
   .admin-grid {
     display: grid;
     grid-template-columns: 1fr;
+    gap: 10px;
   }
 
-  .admin-grid .btn {
+  .admin-grid .btn,
+  .admin-grid a {
     width: 100%;
   }
 
@@ -679,6 +760,7 @@ form {
   }
 
   .modal-card {
+    width: 100%;
     padding: 22px;
     border-radius: 24px 24px 18px 18px;
   }
@@ -703,5 +785,16 @@ form {
 
   .nav-actions button {
     grid-column: auto;
+  }
+
+  th,
+  td {
+    font-size: 9px;
+    padding: 7px 3px;
+  }
+
+  .badge {
+    font-size: 8px;
+    padding: 3px 4px;
   }
 }
