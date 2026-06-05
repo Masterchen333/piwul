@@ -233,6 +233,16 @@ function getFilteredCashRows() {
 function renderCashTable() {
   const rows = getFilteredCashRows();
 
+  const filteredIncome = rows
+    .filter((item) => item.type === "in")
+    .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+
+  const filteredExpense = rows
+    .filter((item) => item.type === "out")
+    .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+
+  const filteredBalance = filteredIncome - filteredExpense;
+
   updateCashStats(rows);
 
   if (!rows.length) {
@@ -246,85 +256,91 @@ function renderCashTable() {
 
   const grouped = groupItemsByDate(rows);
 
-  cashTable.innerHTML = Object.entries(grouped)
-    .map(([date, items]) => {
-      const incomeItems = items.filter((item) => item.type === "in");
-      const expenseItems = items.filter((item) => item.type === "out");
+  cashTable.innerHTML =
+    Object.entries(grouped)
+      .map(([date, items]) => {
+        const incomeItems = items.filter((item) => item.type === "in");
+        const expenseItems = items.filter((item) => item.type === "out");
 
-      const incomeTotal = incomeItems.reduce(
-        (sum, item) => sum + Number(item.amount || 0),
-        0,
-      );
+        return `
+          <tr class="date-group-row">
+            <td colspan="5">
+              <div class="date-group-header">
+                <strong>📅 ${date}</strong>
+              </div>
+            </td>
+          </tr>
 
-      const expenseTotal = expenseItems.reduce(
-        (sum, item) => sum + Number(item.amount || 0),
-        0,
-      );
+          ${
+            incomeItems.length
+              ? `
+                <tr class="cash-section-row in-section">
+                  <td colspan="5">PEMASUKAN</td>
+                </tr>
+              `
+              : ""
+          }
 
-      return `
-        <tr class="date-group-row">
-          <td colspan="5">
-            <div class="date-group-header">
-              <strong>${date}</strong>
-              <span>IN ${rupiah(incomeTotal)} • OUT ${rupiah(expenseTotal)}</span>
-            </div>
-          </td>
-        </tr>
+          ${incomeItems
+            .map(
+              (item) => `
+                <tr>
+                  <td></td>
+                  <td class="cash-title">${item.title || "-"}</td>
+                  <td>Pemasukan</td>
+                  <td><span class="badge in">IN</span></td>
+                  <td class="amount in-amount">${rupiah(item.amount)}</td>
+                </tr>
+              `,
+            )
+            .join("")}
 
-        ${
-          incomeItems.length
-            ? `
-              <tr class="cash-section-row in-section">
-                <td colspan="5">Pemasukan</td>
-              </tr>
-            `
-            : ""
-        }
+          ${
+            expenseItems.length
+              ? `
+                <tr class="cash-section-row out-section">
+                  <td colspan="5">PENGELUARAN</td>
+                </tr>
+              `
+              : ""
+          }
 
-        ${incomeItems
-          .map(
-            (item) => `
-              <tr>
-                <td></td>
-                <td class="cash-title">${item.title || "-"}</td>
-                <td>Pemasukan</td>
-                <td>
-                  <span class="badge in">IN</span>
-                </td>
-                <td>${rupiah(item.amount)}</td>
-              </tr>
-            `,
-          )
-          .join("")}
-
-        ${
-          expenseItems.length
-            ? `
-              <tr class="cash-section-row out-section">
-                <td colspan="5">Pengeluaran</td>
-              </tr>
-            `
-            : ""
-        }
-
-        ${expenseItems
-          .map(
-            (item) => `
-              <tr>
-                <td></td>
-                <td class="cash-title">${item.title || "-"}</td>
-                <td>Pengeluaran</td>
-                <td>
-                  <span class="badge out">OUT</span>
-                </td>
-                <td>${rupiah(item.amount)}</td>
-              </tr>
-            `,
-          )
-          .join("")}
-      `;
-    })
-    .join("");
+          ${expenseItems
+            .map(
+              (item) => `
+                <tr>
+                  <td></td>
+                  <td class="cash-title">${item.title || "-"}</td>
+                  <td>Pengeluaran</td>
+                  <td><span class="badge out">OUT</span></td>
+                  <td class="amount out-amount">${rupiah(item.amount)}</td>
+                </tr>
+              `,
+            )
+            .join("")}
+        `;
+      })
+      .join("") +
+    `
+      <tr class="summary-row">
+        <td colspan="2">
+          <strong>📊 TOTAL RINGKASAN</strong>
+          <small>Data sesuai filter bulan dan tahun yang dipilih</small>
+        </td>
+        <td>
+          <span>Total Pemasukan</span>
+          <strong class="in-amount">${rupiah(filteredIncome)}</strong>
+        </td>
+        <td>
+          <span>Total Pengeluaran</span>
+          <strong class="out-amount">${rupiah(filteredExpense)}</strong>
+        </td>
+        <td>
+          <span>Saldo</span>
+          <strong>${rupiah(filteredBalance)}</strong>
+        </td>
+      </tr>
+    `;
 }
 
 function renderSavings() {

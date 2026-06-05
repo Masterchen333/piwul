@@ -385,6 +385,72 @@ td:nth-child(5) {
   color: var(--red);
 }
 
+.amount {
+  font-weight: 800;
+  text-align: right;
+}
+
+.in-amount {
+  color: var(--green);
+}
+
+.out-amount {
+  color: var(--red);
+}
+
+.date-group-row td {
+  background: #fff4dd;
+  color: var(--primary-dark);
+  font-weight: 900;
+  padding: 16px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.date-group-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cash-section-row td {
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 12px;
+}
+
+.in-section td {
+  background: #f3fbf6;
+  color: var(--green);
+}
+
+.out-section td {
+  background: #fff5ef;
+  color: var(--red);
+}
+
+.summary-row td {
+  background: #fff8eb;
+  border-top: 2px solid #e7c99f;
+  padding: 18px 12px;
+  vertical-align: middle;
+}
+
+.summary-row span,
+.summary-row small {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.summary-row strong {
+  display: block;
+  font-size: 18px;
+}
+
 .schedule-card {
   display: flex;
   gap: 16px;
@@ -457,6 +523,31 @@ td:nth-child(5) {
   height: 100%;
   background: var(--primary);
   border-radius: inherit;
+}
+
+.group-card {
+  padding: 14px;
+  margin-bottom: 14px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: #fff8eb;
+}
+
+.group-card h3 {
+  margin: 0 0 10px;
+  font-size: 15px;
+  color: var(--primary-dark);
+}
+
+.group-card .note-item,
+.group-card .announcement-item {
+  padding: 12px 0;
+}
+
+.cash-title,
+.multiline-text {
+  white-space: pre-line;
+  line-height: 1.55;
 }
 
 .admin-panel {
@@ -716,6 +807,30 @@ form {
     padding: 3px 5px;
   }
 
+  .date-group-row td {
+    font-size: 11px;
+    padding: 10px 6px;
+  }
+
+  .cash-section-row td {
+    font-size: 10px;
+    padding: 8px 4px;
+  }
+
+  .summary-row td {
+    font-size: 10px;
+    padding: 10px 4px;
+  }
+
+  .summary-row strong {
+    font-size: 11px;
+  }
+
+  .summary-row span,
+  .summary-row small {
+    font-size: 9px;
+  }
+
   .schedule-card {
     width: 100%;
     align-items: flex-start;
@@ -741,6 +856,15 @@ form {
 
   .member-item strong {
     text-align: right;
+  }
+
+  .group-card {
+    padding: 12px;
+    border-radius: 16px;
+  }
+
+  .group-card h3 {
+    font-size: 14px;
   }
 
   .admin-grid {
@@ -796,108 +920,5 @@ form {
   .badge {
     font-size: 8px;
     padding: 3px 4px;
-  }
-}
-.cash-title,
-.multiline-text {
-  white-space: pre-line;
-  line-height: 1.55;
-}
-
-/* =========================
-   GROUPED CASH / NOTULEN / PENGUMUMAN
-========================= */
-
-.date-group-row td {
-  background: #fff4dd;
-  color: var(--primary-dark);
-  font-weight: 800;
-  padding: 12px 10px;
-  border-bottom: 1px solid var(--border);
-}
-
-.date-group-header {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.date-group-header span {
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.cash-section-row td {
-  background: #fffaf2;
-  font-size: 12px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 10px;
-}
-
-.in-section td {
-  color: var(--green);
-}
-
-.out-section td {
-  color: var(--red);
-}
-
-.group-card {
-  padding: 14px;
-  margin-bottom: 14px;
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  background: #fff8eb;
-}
-
-.group-card h3 {
-  margin: 0 0 10px;
-  font-size: 15px;
-  color: var(--primary-dark);
-}
-
-.group-card .note-item,
-.group-card .announcement-item {
-  padding: 12px 0;
-}
-
-.cash-title,
-.multiline-text {
-  white-space: pre-line;
-  line-height: 1.55;
-}
-
-@media (max-width: 768px) {
-  .date-group-row td {
-    font-size: 11px;
-    padding: 10px 6px;
-  }
-
-  .date-group-header {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 4px;
-  }
-
-  .date-group-header span {
-    font-size: 10px;
-  }
-
-  .cash-section-row td {
-    font-size: 10px;
-    padding: 8px 4px;
-  }
-
-  .group-card {
-    padding: 12px;
-    border-radius: 16px;
-  }
-
-  .group-card h3 {
-    font-size: 14px;
   }
 }
