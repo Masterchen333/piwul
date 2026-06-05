@@ -1,0 +1,28 @@
+{
+  "nextArisan": {
+    "date": "5 Juli 2026",
+    "host": "Rumah Bapak Rahmad",
+    "address": "RT 03 Mandala",
+    "winner": "Ibu Sari"
+  },
+  "cash": [
+    {"date":"2026-06-05","month":"Juni 2026","title":"Iuran anggota bulan Juni","category":"Iuran","type":"in","amount":1500000},
+    {"date":"2026-06-05","month":"Juni 2026","title":"Donasi konsumsi","category":"Donasi","type":"in","amount":250000},
+    {"date":"2026-06-05","month":"Juni 2026","title":"Konsumsi arisan","category":"Konsumsi","type":"out","amount":450000},
+    {"date":"2026-06-05","month":"Juni 2026","title":"Perlengkapan acara","category":"Perlengkapan","type":"out","amount":175000}
+  ],
+  "savings": [
+    {"name":"Bapak Rahmad","amount":1200000},
+    {"name":"Ibu Sari","amount":950000},
+    {"name":"Mas Dika","amount":750000},
+    {"name":"Mbak Rina","amount":1100000}
+  ],
+  "minutes": [
+    {"date":"5 Juni 2026","title":"Kesepakatan kas konsumsi","body":"Konsumsi bulan depan memakai dana kas maksimal Rp500.000."},
+    {"date":"5 Juni 2026","title":"Kegiatan kerja bakti","body":"Kerja bakti lingkungan dilakukan hari Minggu minggu kedua."}
+  ],
+  "announcements": [
+    {"title":"Pembayaran iuran","body":"Mohon iuran bulan Juli dibayarkan paling lambat tanggal 5."},
+    {"title":"Datang tepat waktu","body":"Arisan dimulai pukul 19.30 WIB."}
+  ]
+}
