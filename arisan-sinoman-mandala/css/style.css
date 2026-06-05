@@ -803,3 +803,101 @@ form {
   white-space: pre-line;
   line-height: 1.55;
 }
+
+/* =========================
+   GROUPED CASH / NOTULEN / PENGUMUMAN
+========================= */
+
+.date-group-row td {
+  background: #fff4dd;
+  color: var(--primary-dark);
+  font-weight: 800;
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.date-group-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.date-group-header span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.cash-section-row td {
+  background: #fffaf2;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 10px;
+}
+
+.in-section td {
+  color: var(--green);
+}
+
+.out-section td {
+  color: var(--red);
+}
+
+.group-card {
+  padding: 14px;
+  margin-bottom: 14px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: #fff8eb;
+}
+
+.group-card h3 {
+  margin: 0 0 10px;
+  font-size: 15px;
+  color: var(--primary-dark);
+}
+
+.group-card .note-item,
+.group-card .announcement-item {
+  padding: 12px 0;
+}
+
+.cash-title,
+.multiline-text {
+  white-space: pre-line;
+  line-height: 1.55;
+}
+
+@media (max-width: 768px) {
+  .date-group-row td {
+    font-size: 11px;
+    padding: 10px 6px;
+  }
+
+  .date-group-header {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .date-group-header span {
+    font-size: 10px;
+  }
+
+  .cash-section-row td {
+    font-size: 10px;
+    padding: 8px 4px;
+  }
+
+  .group-card {
+    padding: 12px;
+    border-radius: 16px;
+  }
+
+  .group-card h3 {
+    font-size: 14px;
+  }
+}

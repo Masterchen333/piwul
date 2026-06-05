@@ -62,7 +62,6 @@ async function loadData() {
 
 function renderAll(useCurrentMonth = false) {
   renderNextArisan();
-  renderStats();
   renderFilters(useCurrentMonth);
   renderCashTable();
   renderSavings();
@@ -94,6 +93,30 @@ function getCashDate(item) {
   return null;
 }
 
+function getItemDate(item) {
+  const rawDate = String(item.date || "").trim();
+  const parsedDate = new Date(rawDate);
+
+  if (!Number.isNaN(parsedDate.getTime())) {
+    return parsedDate;
+  }
+
+  return null;
+}
+
+function groupItemsByDate(items) {
+  return items.reduce((groups, item) => {
+    const dateText = formatDate(item.date);
+
+    if (!groups[dateText]) {
+      groups[dateText] = [];
+    }
+
+    groups[dateText].push(item);
+    return groups;
+  }, {});
+}
+
 function renderNextArisan() {
   const next = state.nextArisan || {};
 
@@ -107,12 +130,12 @@ function renderNextArisan() {
   winnerName.textContent = next.winner || "-";
 }
 
-function renderStats() {
-  const income = state.cash
+function updateCashStats(rows) {
+  const income = rows
     .filter((x) => x.type === "in")
     .reduce((sum, x) => sum + Number(x.amount || 0), 0);
 
-  const expense = state.cash
+  const expense = rows
     .filter((x) => x.type === "out")
     .reduce((sum, x) => sum + Number(x.amount || 0), 0);
 
@@ -179,23 +202,38 @@ function renderFilters(useCurrentMonth = false) {
   yearFilter.value = years.includes(currentYear) ? currentYear : "all";
 }
 
-function renderCashTable() {
+function getFilteredCashRows() {
   const selectedMonth = monthFilter.value || "all";
   const selectedYear = yearFilter.value || "all";
 
-  const rows = state.cash.filter((item) => {
-    const date = getCashDate(item);
+  return state.cash
+    .filter((item) => {
+      const date = getCashDate(item);
 
-    if (!date) return false;
+      if (!date) return false;
 
-    const itemMonth = String(date.getMonth() + 1);
-    const itemYear = String(date.getFullYear());
+      const itemMonth = String(date.getMonth() + 1);
+      const itemYear = String(date.getFullYear());
 
-    const matchMonth = selectedMonth === "all" || itemMonth === selectedMonth;
-    const matchYear = selectedYear === "all" || itemYear === selectedYear;
+      const matchMonth = selectedMonth === "all" || itemMonth === selectedMonth;
+      const matchYear = selectedYear === "all" || itemYear === selectedYear;
 
-    return matchMonth && matchYear;
-  });
+      return matchMonth && matchYear;
+    })
+    .sort((a, b) => {
+      const dateA = getCashDate(a);
+      const dateB = getCashDate(b);
+
+      if (!dateA || !dateB) return 0;
+
+      return dateB - dateA;
+    });
+}
+
+function renderCashTable() {
+  const rows = getFilteredCashRows();
+
+  updateCashStats(rows);
 
   if (!rows.length) {
     cashTable.innerHTML = `
@@ -206,22 +244,86 @@ function renderCashTable() {
     return;
   }
 
-  cashTable.innerHTML = rows
-    .map(
-      (item) => `
-        <tr>
-          <td>${formatDate(item.date)}</td>
-          <td class="cash-title">${item.title || "-"}</td>
-          <td>${item.category || "-"}</td>
-          <td>
-            <span class="badge ${item.type}">
-              ${item.type.toUpperCase()}
-            </span>
+  const grouped = groupItemsByDate(rows);
+
+  cashTable.innerHTML = Object.entries(grouped)
+    .map(([date, items]) => {
+      const incomeItems = items.filter((item) => item.type === "in");
+      const expenseItems = items.filter((item) => item.type === "out");
+
+      const incomeTotal = incomeItems.reduce(
+        (sum, item) => sum + Number(item.amount || 0),
+        0,
+      );
+
+      const expenseTotal = expenseItems.reduce(
+        (sum, item) => sum + Number(item.amount || 0),
+        0,
+      );
+
+      return `
+        <tr class="date-group-row">
+          <td colspan="5">
+            <div class="date-group-header">
+              <strong>${date}</strong>
+              <span>IN ${rupiah(incomeTotal)} • OUT ${rupiah(expenseTotal)}</span>
+            </div>
           </td>
-          <td>${rupiah(item.amount)}</td>
         </tr>
-      `,
-    )
+
+        ${
+          incomeItems.length
+            ? `
+              <tr class="cash-section-row in-section">
+                <td colspan="5">Pemasukan</td>
+              </tr>
+            `
+            : ""
+        }
+
+        ${incomeItems
+          .map(
+            (item) => `
+              <tr>
+                <td></td>
+                <td class="cash-title">${item.title || "-"}</td>
+                <td>Pemasukan</td>
+                <td>
+                  <span class="badge in">IN</span>
+                </td>
+                <td>${rupiah(item.amount)}</td>
+              </tr>
+            `,
+          )
+          .join("")}
+
+        ${
+          expenseItems.length
+            ? `
+              <tr class="cash-section-row out-section">
+                <td colspan="5">Pengeluaran</td>
+              </tr>
+            `
+            : ""
+        }
+
+        ${expenseItems
+          .map(
+            (item) => `
+              <tr>
+                <td></td>
+                <td class="cash-title">${item.title || "-"}</td>
+                <td>Pengeluaran</td>
+                <td>
+                  <span class="badge out">OUT</span>
+                </td>
+                <td>${rupiah(item.amount)}</td>
+              </tr>
+            `,
+          )
+          .join("")}
+      `;
+    })
     .join("");
 }
 
@@ -259,13 +361,33 @@ function renderMinutes() {
     return;
   }
 
-  minutesList.innerHTML = state.minutes
+  const grouped = groupItemsByDate(
+    state.minutes.sort((a, b) => {
+      const dateA = getItemDate(a);
+      const dateB = getItemDate(b);
+
+      if (!dateA || !dateB) return 0;
+
+      return dateB - dateA;
+    }),
+  );
+
+  minutesList.innerHTML = Object.entries(grouped)
     .map(
-      (item) => `
-        <div class="note-item">
-          <strong>${item.title || "-"}</strong>
-          <p class="muted">${item.date || "-"}</p>
-          <p class="multiline-text">${item.body || "-"}</p>
+      ([date, items]) => `
+        <div class="group-card">
+          <h3>${date}</h3>
+
+          ${items
+            .map(
+              (item) => `
+                <div class="note-item">
+                  <strong>${item.title || "-"}</strong>
+                  <p class="multiline-text">${item.body || "-"}</p>
+                </div>
+              `,
+            )
+            .join("")}
         </div>
       `,
     )
@@ -278,13 +400,33 @@ function renderAnnouncements() {
     return;
   }
 
-  announcementList.innerHTML = state.announcements
+  const grouped = groupItemsByDate(
+    state.announcements.sort((a, b) => {
+      const dateA = getItemDate(a);
+      const dateB = getItemDate(b);
+
+      if (!dateA || !dateB) return 0;
+
+      return dateB - dateA;
+    }),
+  );
+
+  announcementList.innerHTML = Object.entries(grouped)
     .map(
-      (item) => `
-        <div class="announcement-item">
-          <strong>${item.title || "-"}</strong>
-          <p class="muted">${item.date || "-"}</p>
-          <p class="multiline-text">${item.body || "-"}</p>
+      ([date, items]) => `
+        <div class="group-card">
+          <h3>${date}</h3>
+
+          ${items
+            .map(
+              (item) => `
+                <div class="announcement-item">
+                  <strong>${item.title || "-"}</strong>
+                  <p class="multiline-text">${item.body || "-"}</p>
+                </div>
+              `,
+            )
+            .join("")}
         </div>
       `,
     )
