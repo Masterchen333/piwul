@@ -1,33 +1,117 @@
-// Contoh endpoint Vercel Serverless Function untuk baca Google Sheet privat.
-// Install: npm install googleapis
-// Environment Variables di Vercel:
-// GOOGLE_SERVICE_ACCOUNT_EMAIL=...
-// GOOGLE_PRIVATE_KEY=-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n
-import { google } from 'googleapis';
+import { google } from "googleapis";
+
+function parseNumber(value) {
+  if (!value) return 0;
+
+  return (
+    Number(
+      String(value)
+        .replace(/[^\d,-]/g, "")
+        .replace(",", "."),
+    ) || 0
+  );
+}
 
 export default async function handler(req, res) {
   try {
-    const auth = new google.auth.JWT({
-      email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-      key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-      scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly']
-    });
-
-    const sheets = google.sheets({ version: 'v4', auth });
+    const serviceAccountEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+    const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n");
     const spreadsheetId = process.env.GOOGLE_SHEET_ID;
 
-    const [cash, savings] = await Promise.all([
-      sheets.spreadsheets.values.get({ spreadsheetId, range: 'Kas!A2:E' }),
-      sheets.spreadsheets.values.get({ spreadsheetId, range: 'Tabungan!A2:B' })
+    if (!serviceAccountEmail || !privateKey || !spreadsheetId) {
+      return res.status(500).json({
+        error: "Environment Variable belum lengkap.",
+      });
+    }
+
+    const auth = new google.auth.JWT({
+      email: serviceAccountEmail,
+      key: privateKey,
+      scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
+    });
+
+    const sheets = google.sheets({
+      version: "v4",
+      auth,
+    });
+
+    const [cash, savings, arisan, minutes, announcements] = await Promise.all([
+      sheets.spreadsheets.values.get({
+        spreadsheetId,
+        range: "Kas!A2:E",
+      }),
+      sheets.spreadsheets.values.get({
+        spreadsheetId,
+        range: "Tabungan!A2:B",
+      }),
+      sheets.spreadsheets.values.get({
+        spreadsheetId,
+        range: "Arisan!A2:D",
+      }),
+      sheets.spreadsheets.values.get({
+        spreadsheetId,
+        range: "Notulen!A2:C",
+      }),
+      sheets.spreadsheets.values.get({
+        spreadsheetId,
+        range: "Pengumuman!A2:C",
+      }),
     ]);
 
-    res.status(200).json({
-      cash: (cash.data.values || []).map(([date, month, title, type, amount]) => ({
-        date, month, title, category: type === 'in' ? 'Pemasukan' : 'Pengeluaran', type, amount: Number(amount || 0)
-      })),
-      savings: (savings.data.values || []).map(([name, amount]) => ({ name, amount: Number(amount || 0) }))
+    const cashData = (cash.data.values || []).map(
+      ([date, month, title, type, amount]) => ({
+        date: date || "",
+        month: month || "",
+        title: title || "",
+        type: type === "in" ? "in" : "out",
+        category: type === "in" ? "Pemasukan" : "Pengeluaran",
+        amount: parseNumber(amount),
+      }),
+    );
+
+    const savingsData = (savings.data.values || []).map(([name, amount]) => ({
+      name: name || "",
+      amount: parseNumber(amount),
+    }));
+
+    const arisanRows = arisan.data.values || [];
+
+    const nextArisanRow = arisanRows[0] || [];
+
+    const nextArisan = {
+      date: nextArisanRow[0] || "-",
+      host: nextArisanRow[1] || "-",
+      winner: nextArisanRow[2] || "-",
+      address: nextArisanRow[3] || "-",
+    };
+
+    const minutesData = (minutes.data.values || []).map(
+      ([date, title, body]) => ({
+        date: date || "",
+        title: title || "",
+        body: body || "",
+      }),
+    );
+
+    const announcementsData = (announcements.data.values || []).map(
+      ([date, title, body]) => ({
+        date: date || "",
+        title: title || "",
+        body: body || "",
+      }),
+    );
+
+    return res.status(200).json({
+      nextArisan,
+      cash: cashData,
+      savings: savingsData,
+      minutes: minutesData,
+      announcements: announcementsData,
     });
   } catch (error) {
-    res.status(500).json({ error: 'Gagal membaca Google Sheet', detail: error.message });
+    return res.status(500).json({
+      error: "Gagal membaca Google Sheet",
+      detail: error.message,
+    });
   }
 }
