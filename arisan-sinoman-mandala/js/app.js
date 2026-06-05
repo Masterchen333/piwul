@@ -53,17 +53,17 @@ async function loadData() {
       announcements: data.announcements || [],
     };
 
-    renderAll();
+    renderAll(true);
   } catch (error) {
     console.error("LOAD DATA ERROR:", error);
     alert("Gagal mengambil data dari Google Sheet: " + error.message);
   }
 }
 
-function renderAll() {
+function renderAll(useCurrentMonth = false) {
   renderNextArisan();
   renderStats();
-  renderFilters();
+  renderFilters(useCurrentMonth);
   renderCashTable();
   renderSavings();
   renderMinutes();
@@ -127,9 +127,10 @@ function renderStats() {
   totalSavings.textContent = rupiah(savings);
 }
 
-function renderFilters() {
-  const currentMonth = monthFilter.value || "all";
-  const currentYear = yearFilter.value || "all";
+function renderFilters(useCurrentMonth = false) {
+  const now = new Date();
+  const defaultMonth = String(now.getMonth() + 1);
+  const defaultYear = String(now.getFullYear());
 
   const months = [
     ...new Set(
@@ -154,6 +155,12 @@ function renderFilters() {
         .filter(Boolean),
     ),
   ].sort((a, b) => Number(b) - Number(a));
+
+  const currentMonth = useCurrentMonth
+    ? defaultMonth
+    : monthFilter.value || "all";
+
+  const currentYear = useCurrentMonth ? defaultYear : yearFilter.value || "all";
 
   monthFilter.innerHTML =
     `<option value="all">Semua Bulan</option>` +
@@ -204,12 +211,12 @@ function renderCashTable() {
       (item) => `
         <tr>
           <td>${formatDate(item.date)}</td>
-<td class="cash-title">${item.title || "-"}</td>
+          <td class="cash-title">${item.title || "-"}</td>
           <td>${item.category || "-"}</td>
           <td>
-<span class="badge ${item.type}">
-  ${item.type.toUpperCase()}
-</span>
+            <span class="badge ${item.type}">
+              ${item.type.toUpperCase()}
+            </span>
           </td>
           <td>${rupiah(item.amount)}</td>
         </tr>
