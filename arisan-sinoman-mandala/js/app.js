@@ -131,11 +131,19 @@ function renderNextArisan() {
 }
 
 function updateCashStats(rows) {
-  const income = rows
+  const filteredIncome = rows
     .filter((x) => x.type === "in")
     .reduce((sum, x) => sum + Number(x.amount || 0), 0);
 
-  const expense = rows
+  const filteredExpense = rows
+    .filter((x) => x.type === "out")
+    .reduce((sum, x) => sum + Number(x.amount || 0), 0);
+
+  const allIncome = state.cash
+    .filter((x) => x.type === "in")
+    .reduce((sum, x) => sum + Number(x.amount || 0), 0);
+
+  const allExpense = state.cash
     .filter((x) => x.type === "out")
     .reduce((sum, x) => sum + Number(x.amount || 0), 0);
 
@@ -144,9 +152,9 @@ function updateCashStats(rows) {
     0,
   );
 
-  totalIncome.textContent = rupiah(income);
-  totalExpense.textContent = rupiah(expense);
-  totalKas.textContent = rupiah(income - expense);
+  totalIncome.textContent = rupiah(filteredIncome);
+  totalExpense.textContent = rupiah(filteredExpense);
+  totalKas.textContent = rupiah(allIncome - allExpense);
   totalSavings.textContent = rupiah(savings);
 }
 
