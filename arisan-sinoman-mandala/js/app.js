@@ -321,7 +321,22 @@ function renderCashTable() {
         `;
       })
       .join("") +
-      ;
+    `
+      <tr class="summary-row">
+        <td colspan="2">
+          <strong>📊 TOTAL RINGKASAN</strong>
+          <small>Data sesuai filter bulan dan tahun yang dipilih</small>
+        </td>
+        <td>
+          <span>Total Pemasukan</span>
+          <strong class="in-amount">${rupiah(filteredIncome)}</strong>
+        </td>
+        <td>
+          <span>Total Pengeluaran</span>
+          <strong class="out-amount">${rupiah(filteredExpense)}</strong>
+        </td>
+      </tr>
+    `;
 }
 
 function renderSavings() {
