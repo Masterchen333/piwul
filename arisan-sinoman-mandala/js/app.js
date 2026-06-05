@@ -208,7 +208,7 @@ function renderCashTable() {
           <td>${item.category || "-"}</td>
           <td>
             <span class="badge ${item.type === "in" ? "in" : "out"}">
-              ${item.type === "in" ? "Masuk" : "Keluar"}
+              ${item.type === "in" ? "IN" : "OUT"}
             </span>
           </td>
           <td>${rupiah(item.amount)}</td>
