@@ -1,1 +1,0 @@
-Put paper-open.mp3 and select.wav in this folder. Optional.
