@@ -3,18 +3,30 @@ const guestList = document.getElementById("guestList");
 const saveProgress = document.getElementById("saveProgress");
 const saveMessage = document.getElementById("saveMessage");
 
-const SUPABASE_URL = "https://erhgqluzlnygskphahgu.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_9Z6eDE3iplmppmoUs4NRCA_3uadUufJ";
+const GOOGLE_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbwDjSIMzVWoEMssEfjdCuYmYBwJbIGrCH0HIqmenLilBg9AOUHTfUJ6fZwIBchSbO8O/exec";
 
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY,
-);
+const SPAM_COOLDOWN = 30 * 1000;
+const LAST_SUBMIT_KEY = "ourJourneyLastMemorySubmit";
+let memoryCache = [];
 
 if (guestForm) {
   guestForm.addEventListener("submit", async function (event) {
     event.preventDefault();
     event.stopPropagation();
+
+    const now = Date.now();
+    const lastSubmit = Number(localStorage.getItem(LAST_SUBMIT_KEY) || 0);
+    const remaining = SPAM_COOLDOWN - (now - lastSubmit);
+
+    if (remaining > 0) {
+      alert(
+        `Please wait ${Math.ceil(
+          remaining / 1000,
+        )} seconds before sending another memory.`,
+      );
+      return false;
+    }
 
     const nameInput = document.getElementById("guestName");
     const messageInput = document.getElementById("guestMessage");
@@ -33,11 +45,27 @@ if (guestForm) {
       submitButton.textContent = "Saving...";
     }
 
+    const newMemory = {
+      name,
+      message,
+      created_at: new Date().toISOString(),
+    };
+
+    memoryCache.unshift(newMemory);
+    renderMemories(memoryCache);
+
     const success = await saveMemory(name, message);
 
     if (success) {
+      localStorage.setItem(LAST_SUBMIT_KEY, String(Date.now()));
       guestForm.reset();
-      await loadDefaultGuestbook();
+
+      setTimeout(async () => {
+        await loadDefaultGuestbook();
+      }, 1500);
+    } else {
+      memoryCache = memoryCache.filter((item) => item !== newMemory);
+      renderMemories(memoryCache);
     }
 
     if (submitButton) {
@@ -66,34 +94,37 @@ if (saveProgress) {
 }
 
 async function getMemories() {
-  const { data, error } = await supabaseClient
-    .from("memories")
-    .select("*")
-    .order("created_at", { ascending: false });
+  try {
+    const response = await fetch(GOOGLE_SCRIPT_URL);
+    const data = await response.json();
 
-  if (error) {
-    console.error("Gagal mengambil memories:", error);
+    return Array.isArray(data) ? data : [];
+  } catch (error) {
+    console.error("Gagal mengambil memories dari Google Sheet:", error);
     return [];
   }
-
-  return data || [];
 }
 
 async function saveMemory(name, message) {
-  const { error } = await supabaseClient.from("memories").insert([
-    {
-      name: name,
-      message: message,
-    },
-  ]);
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8",
+      },
+      body: JSON.stringify({
+        name: name,
+        message: message,
+      }),
+    });
 
-  if (error) {
-    console.error("Gagal menyimpan memory:", error);
-    alert("Ucapan gagal dikirim. Cek setting Supabase.");
+    return true;
+  } catch (error) {
+    console.error("Gagal menyimpan memory ke Google Sheet:", error);
+    alert("Ucapan gagal dikirim. Cek Google Apps Script.");
     return false;
   }
-
-  return true;
 }
 
 function renderMemories(memories) {
@@ -113,7 +144,11 @@ function renderMemories(memories) {
     .map(function (item) {
       return `
         <div class="guest-item">
-          <strong>${escapeHTML(item.name)}:</strong><br />
+          <strong>${escapeHTML(item.name)}:</strong>
+          <div class="guest-date">
+            ${formatMemoryDate(item.created_at)}
+          </div>
+          <br />
           ${escapeHTML(item.message)}
         </div>
       `;
@@ -121,10 +156,34 @@ function renderMemories(memories) {
     .join("");
 }
 
-async function loadDefaultGuestbook() {
-  const memories = await getMemories();
-  renderMemories(memories);
+function formatMemoryDate(dateValue) {
+  if (!dateValue) return "";
+
+  const date = new Date(dateValue);
+
+  return (
+    date.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    }) +
+    " • " +
+    date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    })
+  );
 }
+
+async function loadDefaultGuestbook() {
+  memoryCache = await getMemories();
+  renderMemories(memoryCache);
+}
+
+setInterval(async () => {
+  await loadDefaultGuestbook();
+}, 10000);
 
 function escapeHTML(text) {
   return String(text)
