@@ -5,9 +5,6 @@ const appState = {
   fadeInterval: null,
 };
 
-const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbwDjSIMzVWoEMssEfjdCuYmYBwJbIGrCH0HIqmenLilBg9AOUHTfUJ6fZwIBchSbO8O/exec";
-
 if ("scrollRestoration" in history) {
   history.scrollRestoration = "manual";
 }
@@ -61,7 +58,6 @@ async function loadConfig() {
 
   if (isInvitationMode()) {
     fillInvitationContent();
-    markInvitationOpened();
   } else {
     hideWeddingSection();
   }
@@ -212,28 +208,6 @@ function fillInvitationContent() {
   }
 }
 
-async function markInvitationOpened() {
-  const guest = getGuestNameFromURL();
-
-  if (!guest) return;
-
-  try {
-    await fetch(GOOGLE_SCRIPT_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "text/plain;charset=utf-8",
-      },
-      body: JSON.stringify({
-        type: "opened",
-        name: guest,
-      }),
-    });
-  } catch (e) {
-    console.log(e);
-  }
-}
-
 function hideWeddingSection() {
   const weddingSection = document.getElementById("wedding");
 
@@ -259,3 +233,25 @@ function formatDate(value) {
 }
 
 loadConfig();
+
+async function markInvitationOpened() {
+  const guest = getGuestNameFromURL();
+
+  if (!guest) return;
+
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8",
+      },
+      body: JSON.stringify({
+        type: "opened",
+        name: guest,
+      }),
+    });
+  } catch (e) {
+    console.log(e);
+  }
+}
