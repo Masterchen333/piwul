@@ -1,0 +1,16 @@
+{
+  "id": "first-trip",
+  "icon": "✈️",
+  "title": "First Trip",
+  "date": "16 May 2026",
+  "location": "Menjelajah Surakarta",
+  "background": "night",
+  "summary": "Chapter pertama di luar rutinitas. Foto-foto kecil ini jadi bukti bahwa kita pernah tertawa sejauh itu.",
+  "quote": "Every road feels warmer with you.",
+  "photos": [
+    "./assets/photos/first-trip/photo-1.jpg",
+    "./assets/photos/first-trip/photo-2.png",
+    "./assets/photos/first-trip/photo-3.jpg",
+    "./assets/photos/first-trip/photo-4.jpg"
+  ]
+}

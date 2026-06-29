@@ -1,0 +1,16 @@
+{
+  "id": "hirono-winter",
+  "icon": "☕",
+  "title": "Hirono & Winter",
+  "date": "12 June 2026",
+  "location": "The Bridge",
+  "background": "cafe",
+  "summary": "Little Hirono meets Winter at the Bridge just to talk, chill, and enjoy each other's company.",
+  "quote": "They're talking for hours, sharing random thoughts, and simply enjoying each other's presence.",
+  "photos": [
+    "./assets/photos/hirono-winter/photo.jpg",
+    "./assets/photos/hirono-winter/photo-01.jpg",
+    "./assets/photos/hirono-winter/photo-02.jpg",
+    "./assets/photos/hirono-winter/photo-03.jpg"
+  ]
+}

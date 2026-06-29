@@ -48,62 +48,32 @@
       "icon": "🌱",
       "title": "First Meet",
       "date": "28 February 2026",
-      "location": "Tempat pertama bertemu dan Our Favorite Place to talk : Rahma Resto & Cafe",
       "background": "spring",
-      "summary": "Hari pertama kita bertemu. Awalnya hanya obrolan yang penuh kecanggungan, tapi ternyata menjadi awal perjalanan yang panjang.",
-      "quote": "It all started here...",
-      "photos": [
-        "./assets/photos/first-meet/photo-1.jpg",
-        "./assets/photos/first-meet/photo-2.jpg",
-        "./assets/photos/first-meet/photo-3.jpg",
-        "./assets/photos/first-meet/photo-4.jpg"
-      ]
+      "file": "./data/chapters/first-meet.json"
     },
     {
       "id": "first-date",
       "icon": "☕",
       "title": "First Date",
       "date": "24 April 2026",
-      "location": "Lintang Lawu",
       "background": "cafe",
-      "summary": "Masih canggung dan awkward kadang-kadang, tapi pulang dengan senyum yang susah hilang.",
-      "quote": "A tiny moment, a big memory.",
-      "photos": [
-        "./assets/photos/first-date/photo-404.jpg",
-        "./assets/photos/first-date/photo-404.jpg"
-      ]
+      "file": "./data/chapters/first-date.json"
     },
     {
       "id": "first-trip",
       "icon": "✈️",
       "title": "First Trip",
       "date": "16 May 2026",
-      "location": "Menjelajah Surakarta",
       "background": "night",
-      "summary": "Chapter pertama di luar rutinitas. Foto-foto kecil ini jadi bukti bahwa kita pernah tertawa sejauh itu.",
-      "quote": "Every road feels warmer with you.",
-      "photos": [
-        "./assets/photos/first-trip/photo-1.jpg",
-        "./assets/photos/first-trip/photo-2.png",
-        "./assets/photos/first-trip/photo-3.jpg",
-        "./assets/photos/first-trip/photo-4.jpg"
-      ]
+      "file": "./data/chapters/first-trip.json"
     },
     {
-      "id": "Hirono-Winter",
+      "id": "hirono-winter",
       "icon": "☕",
       "title": "Hirono & Winter",
       "date": "12 June 2026",
-      "location": "The Bridge",
       "background": "cafe",
-      "summary": "Little Hirono meets Winter at the Bridge just to talk, chill, and enjoy each other's company.",
-      "quote": "They're talking for hours, sharing random thoughts, and simply enjoying each other's presence.",
-      "photos": [
-        "./assets/photos/hirono-winter/photo.jpg",
-        "./assets/photos/hirono-winter/photo-01.jpg",
-        "./assets/photos/hirono-winter/photo-02.jpg",
-        "./assets/photos/hirono-winter/photo-03.jpg"
-      ]
+      "file": "./data/chapters/hirono-winter.json"
     }
   ],
   "ending": {

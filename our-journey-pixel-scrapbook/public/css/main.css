@@ -473,3 +473,13 @@ textarea {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+.spotify-section {
+  text-align: center;
+}
+
+.spotify-embed {
+  margin-top: 18px;
+  border-radius: 18px;
+  max-width: 720px;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.18);
+}

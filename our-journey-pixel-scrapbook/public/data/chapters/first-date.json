@@ -1,0 +1,14 @@
+{
+  "id": "first-date",
+  "icon": "☕",
+  "title": "First Date",
+  "date": "24 April 2026",
+  "location": "Lintang Lawu",
+  "background": "cafe",
+  "summary": "Masih canggung dan awkward kadang-kadang, tapi pulang dengan senyum yang susah hilang.",
+  "quote": "A tiny moment, a big memory.",
+  "photos": [
+    "./assets/photos/first-date/photo-404.jpg",
+    "./assets/photos/first-date/photo-404.jpg"
+  ]
+}

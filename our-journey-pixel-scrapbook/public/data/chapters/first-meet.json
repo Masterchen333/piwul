@@ -1,0 +1,16 @@
+{
+  "id": "first-meet",
+  "icon": "🌱",
+  "title": "First Meet",
+  "date": "28 February 2026",
+  "location": "Tempat pertama bertemu dan Our Favorite Place to talk : Rahma Resto & Cafe",
+  "background": "spring",
+  "summary": "Hari pertama kita bertemu. Awalnya hanya obrolan yang penuh kecanggungan, tapi ternyata menjadi awal perjalanan yang panjang.",
+  "quote": "It all started here...",
+  "photos": [
+    "./assets/photos/first-meet/photo-1.jpg",
+    "./assets/photos/first-meet/photo-2.jpg",
+    "./assets/photos/first-meet/photo-3.jpg",
+    "./assets/photos/first-meet/photo-4.jpg"
+  ]
+}
