@@ -7,126 +7,31 @@
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="stylesheet" href="../css/stardew-ui.css" />
   </head>
+
   <body>
     <main class="world">
       <div class="content">
         <section class="section pixel-box">
           <h2>INVITATION GENERATOR</h2>
 
-          <input id="adminGuestName" type="text" placeholder="Nama tamu" />
-          <input
-            id="adminGuestPhone"
-            type="text"
-            placeholder="Nomor WA: 628xxxx"
-          />
+          <input id="guestName" type="text" placeholder="Nama tamu" />
+
+          <input id="guestPhone" type="text" placeholder="Nomor WA: 628xxxx" />
 
           <button class="pixel-btn" id="generateBtn" type="button">
             GENERATE LINK
           </button>
 
           <div class="guest-list" id="resultBox"></div>
+        </section>
+
+        <section class="section pixel-box">
+          <h2>GUEST DASHBOARD</h2>
           <div class="guest-list" id="dashboardBox"></div>
         </section>
       </div>
     </main>
 
-    <script>
-      const BASE_URL = "https://piwul.vercel.app";
-
-      const GOOGLE_SCRIPT_URL =
-        "https://script.google.com/macros/s/AKfycbwDjSIMzVWoEMssEfjdCuYmYBwJbIGrCH0HIqmenLilBg9AOUHTfUJ6fZwIBchSbO8O/exec";
-
-      const guestName = document.getElementById("adminGuestName");
-      const guestPhone = document.getElementById("adminGuestPhone");
-      const generateBtn = document.getElementById("generateBtn");
-      const resultBox = document.getElementById("resultBox");
-
-      generateBtn.addEventListener("click", async function () {
-        const name = guestName.value.trim();
-        const phone = guestPhone.value.trim();
-
-        if (!name || !phone) {
-          alert("Isi nama dan nomor WA dulu.");
-          return;
-        }
-
-        generateBtn.disabled = true;
-        generateBtn.textContent = "SAVING...";
-
-        const cleanedPhone = cleanPhone(phone);
-        const invitationLink = `${BASE_URL}/?to=${encodeURIComponent(name)}`;
-
-        const message =
-          `Kepada Yth. ${name}\n\n` +
-          `Dengan penuh kebahagiaan, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di hari bahagia kami.\n\n` +
-          `Silakan buka undangan berikut:\n${invitationLink}\n\n` +
-          `Terima kasih ♥`;
-
-        const waLink = `https://wa.me/${cleanedPhone}?text=${encodeURIComponent(
-          message,
-        )}`;
-
-        await saveGuestToSheet(name, cleanedPhone, invitationLink, waLink);
-
-        resultBox.innerHTML = `
-          <div class="guest-item">
-            <strong>${escapeHTML(name)}</strong><br /><br />
-
-            <small>Nomor WA:</small><br />
-            <input value="${escapeHTML(cleanedPhone)}" readonly onclick="this.select()" />
-
-            <br /><br />
-
-            <small>Invitation Link:</small><br />
-            <input value="${escapeHTML(invitationLink)}" readonly onclick="this.select()" />
-
-            <br /><br />
-
-            <a class="pixel-btn" href="${waLink}" target="_blank" rel="noopener">
-              OPEN WHATSAPP
-            </a>
-          </div>
-        `;
-
-        generateBtn.disabled = false;
-        generateBtn.textContent = "GENERATE LINK";
-      });
-
-      async function saveGuestToSheet(name, phone, link, waLink) {
-        try {
-          await fetch(GOOGLE_SCRIPT_URL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: {
-              "Content-Type": "text/plain;charset=utf-8",
-            },
-            body: JSON.stringify({
-              type: "guest",
-              name,
-              phone,
-              link,
-              waLink,
-            }),
-          });
-        } catch (error) {
-          console.error("Gagal menyimpan guest:", error);
-          alert("Link berhasil dibuat, tapi gagal menyimpan ke Google Sheet.");
-        }
-      }
-
-      function cleanPhone(phone) {
-        return phone.replace(/\D/g, "").replace(/^0/, "62");
-      }
-
-      function escapeHTML(text) {
-        return String(text)
-          .replaceAll("&", "&amp;")
-          .replaceAll("<", "&lt;")
-          .replaceAll(">", "&gt;")
-          .replaceAll('"', "&quot;")
-          .replaceAll("'", "&#039;");
-      }
-    </script>
-    <script src="./admin.js?v=1"></script>
+    <script src="./admin.js?v=2"></script>
   </body>
 </html>
