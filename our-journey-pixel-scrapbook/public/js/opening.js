@@ -5,6 +5,9 @@ const appState = {
   fadeInterval: null,
 };
 
+const GOOGLE_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbwDjSIMzVWoEMssEfjdCuYmYBwJbIGrCH0HIqmenLilBg9AOUHTfUJ6fZwIBchSbO8O/exec";
+
 if ("scrollRestoration" in history) {
   history.scrollRestoration = "manual";
 }
@@ -26,7 +29,7 @@ function getGuestNameFromURL() {
 
   if (!rawName) return "";
 
-  return decodeURIComponent(rawName).replaceAll("+", " ").trim();
+  return rawName.replaceAll("+", " ").trim();
 }
 
 function isInvitationMode() {
@@ -34,37 +37,56 @@ function isInvitationMode() {
 }
 
 async function loadConfig() {
-  const response = await fetch("./data/journey.json");
-  appState.config = await response.json();
+  try {
+    const response = await fetch("./data/journey.json");
+    appState.config = await response.json();
 
-  if (isInvitationMode()) {
-    try {
-      const weddingResponse = await fetch("./data/wedding.json");
-      appState.wedding = await weddingResponse.json();
-    } catch (error) {
-      console.error("Failed to load wedding.json:", error);
+    if (isInvitationMode()) {
+      try {
+        const weddingResponse = await fetch("./data/wedding.json");
+        appState.wedding = await weddingResponse.json();
+      } catch (error) {
+        console.error("Failed to load wedding.json:", error);
+      }
     }
+
+    music.src = appState.config.assets.music;
+    paperSound.src = appState.config.assets.paperSound;
+    selectSound.src = appState.config.assets.selectSound;
+
+    music.load();
+    paperSound.load();
+    selectSound.load();
+
+    fillJourneyContent();
+
+    if (isInvitationMode()) {
+      fillInvitationContent();
+      markInvitationOpened();
+    } else {
+      hideWeddingSection();
+    }
+
+    try {
+      updateJourneyCounter();
+    } catch (error) {
+      console.error("Counter error:", error);
+    }
+
+    try {
+      await renderTimeline();
+    } catch (error) {
+      console.error("Timeline error:", error);
+    }
+
+    try {
+      loadDefaultGuestbook();
+    } catch (error) {
+      console.error("Guestbook error:", error);
+    }
+  } catch (error) {
+    console.error("Load config error:", error);
   }
-
-  music.src = appState.config.assets.music;
-  paperSound.src = appState.config.assets.paperSound;
-  selectSound.src = appState.config.assets.selectSound;
-
-  music.load();
-  paperSound.load();
-  selectSound.load();
-
-  fillJourneyContent();
-
-  if (isInvitationMode()) {
-    fillInvitationContent();
-  } else {
-    hideWeddingSection();
-  }
-
-  updateJourneyCounter();
-  await renderTimeline();
-  loadDefaultGuestbook();
 }
 
 async function playMusicFadeIn() {
@@ -101,8 +123,6 @@ openInvitation.addEventListener("click", async () => {
     paperSound.play();
   } catch {}
 
-  await playMusicFadeIn();
-
   opening.classList.add("hidden");
 
   window.scrollTo({
@@ -111,7 +131,14 @@ openInvitation.addEventListener("click", async () => {
   });
 
   musicControl.classList.add("show");
-  startDialogCutscene();
+
+  try {
+    startDialogCutscene();
+  } catch (error) {
+    console.error("Cutscene error:", error);
+  }
+
+  playMusicFadeIn();
 });
 
 musicControl.addEventListener("click", async () => {
@@ -208,6 +235,28 @@ function fillInvitationContent() {
   }
 }
 
+async function markInvitationOpened() {
+  const guest = getGuestNameFromURL();
+
+  if (!guest) return;
+
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8",
+      },
+      body: JSON.stringify({
+        type: "opened",
+        name: guest,
+      }),
+    });
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 function hideWeddingSection() {
   const weddingSection = document.getElementById("wedding");
 
@@ -233,25 +282,3 @@ function formatDate(value) {
 }
 
 loadConfig();
-
-async function markInvitationOpened() {
-  const guest = getGuestNameFromURL();
-
-  if (!guest) return;
-
-  try {
-    await fetch(GOOGLE_SCRIPT_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "text/plain;charset=utf-8",
-      },
-      body: JSON.stringify({
-        type: "opened",
-        name: guest,
-      }),
-    });
-  } catch (e) {
-    console.log(e);
-  }
-}
