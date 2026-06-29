@@ -23,8 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   generateBtn.addEventListener("click", async () => {
-    alert("Generate clicked"); // test dulu, nanti boleh dihapus
-
     const name = guestName.value.trim();
     const phone = guestPhone.value.trim();
 
