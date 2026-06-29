@@ -57,6 +57,26 @@ document.addEventListener("DOMContentLoaded", () => {
       message,
     )}`;
 
+    resultBox.innerHTML = `
+      <div class="guest-item">
+        <strong>${escapeHTML(name)}</strong><br /><br />
+
+        <small>Nomor WA:</small><br />
+        <input value="${escapeHTML(cleanedPhone)}" readonly onclick="this.select()" />
+
+        <br /><br />
+
+        <small>Invitation Link:</small><br />
+        <input value="${escapeHTML(invitationLink)}" readonly onclick="this.select()" />
+
+        <br /><br />
+
+        <a class="pixel-btn" href="${waLink}" target="_blank" rel="noopener">
+          OPEN WHATSAPP
+        </a>
+      </div>
+    `;
+
     generateBtn.disabled = true;
     generateBtn.textContent = "SAVING...";
 
@@ -75,92 +95,62 @@ document.addEventListener("DOMContentLoaded", () => {
           waLink,
         }),
       });
-
-      resultBox.innerHTML = `
-        <div class="guest-item">
-          <strong>${escapeHTML(name)}</strong><br /><br />
-
-          <small>Nomor WA:</small><br />
-          <input value="${escapeHTML(cleanedPhone)}" readonly onclick="this.select()" />
-
-          <br /><br />
-
-          <small>Invitation Link:</small><br />
-          <input value="${escapeHTML(invitationLink)}" readonly onclick="this.select()" />
-
-          <br /><br />
-
-          <a class="pixel-btn" href="${waLink}" target="_blank" rel="noopener">
-            OPEN WHATSAPP
-          </a>
-        </div>
-      `;
-
-      await loadDashboard();
     } catch (error) {
-      console.error("Generate failed:", error);
-      resultBox.innerHTML = `
-        <div class="guest-item">
-          Failed to generate/save guest.
-        </div>
-      `;
+      console.error("Generate save failed:", error);
     }
 
     generateBtn.disabled = false;
     generateBtn.textContent = "GENERATE LINK";
+
+    loadDashboard();
   });
 
-  async function loadDashboard() {
+  function loadDashboard() {
     if (!dashboardBox) return;
 
-    try {
-      dashboardBox.innerHTML = `
-        <div class="guest-item">
-          Loading dashboard...
-        </div>
-      `;
+    dashboardBox.innerHTML = `
+      <div class="guest-item">
+        Loading dashboard...
+      </div>
+    `;
 
-      const response = await fetch(`${GOOGLE_SCRIPT_URL}?type=guests`);
-      const text = await response.text();
+    const callbackName = "loadGuestsCallback_" + Date.now();
+    let script;
 
-      console.log("Raw dashboard response:", text);
-
-      let data;
-
-      try {
-        data = JSON.parse(text);
-      } catch (error) {
-        dashboardBox.innerHTML = `
-          <div class="guest-item">
-            Failed to parse dashboard data.<br /><br />
-            Response bukan JSON.<br /><br />
-            Cek Apps Script deploy.
-          </div>
-        `;
-        return;
-      }
-
-      if (!Array.isArray(data)) {
-        dashboardBox.innerHTML = `
-          <div class="guest-item">
-            Dashboard data bukan array.<br /><br />
-            Response:<br />
-            ${escapeHTML(JSON.stringify(data))}
-          </div>
-        `;
-        return;
-      }
-
-      guestData = data;
+    window[callbackName] = function (data) {
+      guestData = Array.isArray(data) ? data : [];
       renderDashboard();
-    } catch (error) {
-      console.error("Dashboard load failed:", error);
+
+      delete window[callbackName];
+
+      if (script && script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    };
+
+    script = document.createElement("script");
+    script.src =
+      GOOGLE_SCRIPT_URL +
+      "?type=guests&callback=" +
+      callbackName +
+      "&t=" +
+      Date.now();
+
+    script.onerror = function () {
       dashboardBox.innerHTML = `
         <div class="guest-item">
           Failed to load dashboard.
         </div>
       `;
-    }
+
+      delete window[callbackName];
+
+      if (script && script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    };
+
+    document.body.appendChild(script);
   }
 
   function renderDashboard() {
