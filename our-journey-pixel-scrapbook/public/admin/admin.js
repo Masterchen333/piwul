@@ -166,8 +166,8 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderDashboard() {
     if (!dashboardBox) return;
 
-    const keyword = (searchGuest?.value || "").toLowerCase().trim();
-    const filter = filterGuest?.value || "all";
+    const keyword = searchGuest ? searchGuest.value.toLowerCase().trim() : "";
+    const filter = filterGuest ? filterGuest.value : "all";
 
     const total = guestData.length;
     const opened = guestData.filter((g) => g.opened === "YES").length;
