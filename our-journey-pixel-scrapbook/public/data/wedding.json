@@ -1,0 +1,22 @@
+{
+  "enabled": true,
+  "title": "The Next Chapter",
+  "subtitle": "Our Wedding Day",
+  "couple": "Pipit & Wulan",
+  "akad": {
+    "title": "Akad Nikah",
+    "date": "2026-10-10",
+    "time": "09:00 WIB",
+    "place": "Masukkan lokasi akad",
+    "address": "Masukkan alamat lengkap akad"
+  },
+  "resepsi": {
+    "title": "Resepsi",
+    "date": "2026-10-10",
+    "time": "11:00 WIB - selesai",
+    "place": "Masukkan lokasi resepsi",
+    "address": "Masukkan alamat lengkap resepsi"
+  },
+  "maps": "https://maps.google.com/",
+  "message": "Dengan penuh kebahagiaan, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di hari bahagia kami."
+}
