@@ -13,8 +13,12 @@
         <section class="section pixel-box">
           <h2>INVITATION GENERATOR</h2>
 
-          <input id="guestName" type="text" placeholder="Nama tamu" />
-          <input id="guestPhone" type="text" placeholder="Nomor WA: 628xxxx" />
+          <input id="adminGuestName" type="text" placeholder="Nama tamu" />
+          <input
+            id="adminGuestPhone"
+            type="text"
+            placeholder="Nomor WA: 628xxxx"
+          />
 
           <button class="pixel-btn" id="generateBtn" type="button">
             GENERATE LINK
@@ -25,6 +29,61 @@
       </div>
     </main>
 
-    <script src="./admin.js"></script>
+    <script>
+      const BASE_URL = "https://piwul.vercel.app";
+
+      const guestName = document.getElementById("adminGuestName");
+      const guestPhone = document.getElementById("adminGuestPhone");
+      const generateBtn = document.getElementById("generateBtn");
+      const resultBox = document.getElementById("resultBox");
+
+      generateBtn.addEventListener("click", function () {
+        const name = guestName.value.trim();
+        const phone = guestPhone.value.trim();
+
+        if (!name || !phone) {
+          alert("Isi nama dan nomor WA dulu.");
+          return;
+        }
+
+        const invitationLink = `${BASE_URL}/?to=${encodeURIComponent(name)}`;
+
+        const message =
+          `Kepada Yth. ${name}\n\n` +
+          `Dengan penuh kebahagiaan, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di hari bahagia kami.\n\n` +
+          `Silakan buka undangan berikut:\n${invitationLink}\n\n` +
+          `Terima kasih ♥`;
+
+        const waLink = `https://wa.me/${cleanPhone(phone)}?text=${encodeURIComponent(message)}`;
+
+        resultBox.innerHTML = `
+          <div class="guest-item">
+            <strong>${escapeHTML(name)}</strong><br /><br />
+
+            <small>Invitation Link:</small><br />
+            <input value="${invitationLink}" readonly onclick="this.select()" />
+
+            <br /><br />
+
+            <a class="pixel-btn" href="${waLink}" target="_blank" rel="noopener">
+              OPEN WHATSAPP
+            </a>
+          </div>
+        `;
+      });
+
+      function cleanPhone(phone) {
+        return phone.replace(/\D/g, "").replace(/^0/, "62");
+      }
+
+      function escapeHTML(text) {
+        return String(text)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+    </script>
   </body>
 </html>
