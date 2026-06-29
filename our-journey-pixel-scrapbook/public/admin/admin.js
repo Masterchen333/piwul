@@ -10,16 +10,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const generateBtn = document.getElementById("generateBtn");
   const resultBox = document.getElementById("resultBox");
   const dashboardBox = document.getElementById("dashboardBox");
+  const searchGuest = document.getElementById("searchGuest");
+  const filterGuest = document.getElementById("filterGuest");
 
   const BASE_URL = "https://piwul.vercel.app";
   const GOOGLE_SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbwDjSIMzVWoEMssEfjdCuYmYBwJbIGrCH0HIqmenLilBg9AOUHTfUJ6fZwIBchSbO8O/exec";
+
+  let guestData = [];
 
   if (!guestName || !guestPhone || !generateBtn || !resultBox) {
     alert(
       "Admin element tidak lengkap. Cek id input/button di admin/index.html.",
     );
     return;
+  }
+
+  if (searchGuest) {
+    searchGuest.addEventListener("input", renderDashboard);
+  }
+
+  if (filterGuest) {
+    filterGuest.addEventListener("change", renderDashboard);
   }
 
   generateBtn.addEventListener("click", async () => {
@@ -93,31 +105,114 @@ document.addEventListener("DOMContentLoaded", () => {
       dashboardBox.innerHTML = `<div class="guest-item">Loading dashboard...</div>`;
 
       const response = await fetch(`${GOOGLE_SCRIPT_URL}?type=guests`);
-      const guests = await response.json();
+      guestData = await response.json();
 
-      dashboardBox.innerHTML = `
-        <div class="guest-item">
-          <strong>DASHBOARD</strong><br /><br />
-          Total Guests: ${guests.length}
-        </div>
-
-        ${guests
-          .map(
-            (guest) => `
-              <div class="guest-item">
-                <strong>${escapeHTML(guest.name || "-")}</strong><br />
-                WA: ${escapeHTML(guest.phone || "-")}<br />
-                Opened: ${escapeHTML(guest.opened || "NO")}<br />
-                RSVP: ${escapeHTML(guest.rsvp || "-")}
-              </div>
-            `,
-          )
-          .join("")}
-      `;
+      renderDashboard();
     } catch (error) {
       console.error(error);
       dashboardBox.innerHTML = `<div class="guest-item">Failed to load dashboard.</div>`;
     }
+  }
+
+  function renderDashboard() {
+    if (!dashboardBox) return;
+
+    const keyword = (searchGuest?.value || "").toLowerCase().trim();
+    const filter = filterGuest?.value || "all";
+
+    const total = guestData.length;
+    const opened = guestData.filter((g) => g.opened === "YES").length;
+    const attending = guestData.filter((g) => g.rsvp === "Attending").length;
+    const declined = guestData.filter(
+      (g) => g.rsvp === "Unable to Attend",
+    ).length;
+    const pending = total - attending - declined;
+
+    const filteredGuests = guestData.filter((guest) => {
+      const name = String(guest.name || "").toLowerCase();
+      const phone = String(guest.phone || "").toLowerCase();
+
+      const matchKeyword =
+        !keyword || name.includes(keyword) || phone.includes(keyword);
+
+      const matchFilter =
+        filter === "all" ||
+        (filter === "opened" && guest.opened === "YES") ||
+        (filter === "not-opened" && guest.opened !== "YES") ||
+        (filter === "attending" && guest.rsvp === "Attending") ||
+        (filter === "declined" && guest.rsvp === "Unable to Attend") ||
+        (filter === "pending" && !guest.rsvp);
+
+      return matchKeyword && matchFilter;
+    });
+
+    dashboardBox.innerHTML = `
+      <div class="dashboard-stats">
+        <div class="stat-card">TOTAL<strong>${total}</strong></div>
+        <div class="stat-card">OPENED<strong>${opened}</strong></div>
+        <div class="stat-card">NOT OPEN<strong>${total - opened}</strong></div>
+        <div class="stat-card">ATTEND<strong>${attending}</strong></div>
+        <div class="stat-card">PENDING<strong>${pending}</strong></div>
+      </div>
+
+      ${filteredGuests
+        .map((guest) => {
+          const statusIcon =
+            guest.rsvp === "Attending"
+              ? "🟢"
+              : guest.opened === "YES"
+                ? "🟡"
+                : "🔴";
+
+          return `
+            <div class="guest-item">
+              <strong>${statusIcon} ${escapeHTML(guest.name || "-")}</strong><br />
+              WA: ${escapeHTML(guest.phone || "-")}<br />
+              Opened: ${escapeHTML(guest.opened || "NO")}<br />
+              RSVP: ${escapeHTML(guest.rsvp || "-")}<br />
+
+              <div class="guest-status">
+                Opened At: ${
+                  guest.openedAt ? formatAdminDate(guest.openedAt) : "-"
+                }<br />
+                RSVP Time: ${
+                  guest.rsvpTime ? formatAdminDate(guest.rsvpTime) : "-"
+                }
+              </div>
+
+              <br />
+
+              ${
+                guest.link
+                  ? `<a class="pixel-btn" href="${escapeHTML(
+                      guest.link,
+                    )}" target="_blank" rel="noopener">OPEN LINK</a>`
+                  : ""
+              }
+
+              ${
+                guest.waLink
+                  ? `<a class="pixel-btn" href="${escapeHTML(
+                      guest.waLink,
+                    )}" target="_blank" rel="noopener">OPEN WA</a>`
+                  : ""
+              }
+            </div>
+          `;
+        })
+        .join("")}
+    `;
+  }
+
+  function formatAdminDate(value) {
+    if (!value) return "-";
+
+    return new Date(value).toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    });
   }
 
   function cleanPhone(phone) {
