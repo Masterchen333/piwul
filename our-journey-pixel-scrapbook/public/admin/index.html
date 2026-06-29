@@ -32,12 +32,15 @@
     <script>
       const BASE_URL = "https://piwul.vercel.app";
 
+      const GOOGLE_SCRIPT_URL =
+        "https://script.google.com/macros/s/AKfycbwDjSIMzVWoEMssEfjdCuYmYBwJbIGrCH0HIqmenLilBg9AOUHTfUJ6fZwIBchSbO8O/exec";
+
       const guestName = document.getElementById("adminGuestName");
       const guestPhone = document.getElementById("adminGuestPhone");
       const generateBtn = document.getElementById("generateBtn");
       const resultBox = document.getElementById("resultBox");
 
-      generateBtn.addEventListener("click", function () {
+      generateBtn.addEventListener("click", async function () {
         const name = guestName.value.trim();
         const phone = guestPhone.value.trim();
 
@@ -46,6 +49,10 @@
           return;
         }
 
+        generateBtn.disabled = true;
+        generateBtn.textContent = "SAVING...";
+
+        const cleanedPhone = cleanPhone(phone);
         const invitationLink = `${BASE_URL}/?to=${encodeURIComponent(name)}`;
 
         const message =
@@ -54,14 +61,23 @@
           `Silakan buka undangan berikut:\n${invitationLink}\n\n` +
           `Terima kasih ♥`;
 
-        const waLink = `https://wa.me/${cleanPhone(phone)}?text=${encodeURIComponent(message)}`;
+        const waLink = `https://wa.me/${cleanedPhone}?text=${encodeURIComponent(
+          message,
+        )}`;
+
+        await saveGuestToSheet(name, cleanedPhone, invitationLink, waLink);
 
         resultBox.innerHTML = `
           <div class="guest-item">
             <strong>${escapeHTML(name)}</strong><br /><br />
 
+            <small>Nomor WA:</small><br />
+            <input value="${escapeHTML(cleanedPhone)}" readonly onclick="this.select()" />
+
+            <br /><br />
+
             <small>Invitation Link:</small><br />
-            <input value="${invitationLink}" readonly onclick="this.select()" />
+            <input value="${escapeHTML(invitationLink)}" readonly onclick="this.select()" />
 
             <br /><br />
 
@@ -70,7 +86,32 @@
             </a>
           </div>
         `;
+
+        generateBtn.disabled = false;
+        generateBtn.textContent = "GENERATE LINK";
       });
+
+      async function saveGuestToSheet(name, phone, link, waLink) {
+        try {
+          await fetch(GOOGLE_SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+              "Content-Type": "text/plain;charset=utf-8",
+            },
+            body: JSON.stringify({
+              type: "guest",
+              name,
+              phone,
+              link,
+              waLink,
+            }),
+          });
+        } catch (error) {
+          console.error("Gagal menyimpan guest:", error);
+          alert("Link berhasil dibuat, tapi gagal menyimpan ke Google Sheet.");
+        }
+      }
 
       function cleanPhone(phone) {
         return phone.replace(/\D/g, "").replace(/^0/, "62");
