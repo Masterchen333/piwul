@@ -5,9 +5,6 @@ const appState = {
   fadeInterval: null,
 };
 
-const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbwDjSIMzVWoEMssEfjdCuYmYBwJbIGrCH0HIqmenLilBg9AOUHTfUJ6fZwIBchSbO8O/exec";
-
 if ("scrollRestoration" in history) {
   history.scrollRestoration = "manual";
 }
@@ -29,113 +26,45 @@ function getGuestNameFromURL() {
 
   if (!rawName) return "";
 
-  return rawName.replaceAll("+", " ").trim();
+  return decodeURIComponent(rawName).replaceAll("+", " ").trim();
 }
 
 function isInvitationMode() {
-  return getGuestNameFromURL().length > 0;
-}
-
-if (openInvitation) {
-  openInvitation.addEventListener("click", () => {
-    try {
-      paperSound.currentTime = 0;
-      paperSound.play();
-    } catch {}
-
-    if (opening) {
-      opening.classList.add("hidden");
-    }
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-
-    if (musicControl) {
-      musicControl.classList.add("show");
-    }
-
-    try {
-      startDialogCutscene();
-    } catch (error) {
-      console.error("Cutscene error:", error);
-    }
-
-    playMusicFadeIn();
-  });
-}
-
-if (musicControl) {
-  musicControl.addEventListener("click", async () => {
-    try {
-      selectSound.currentTime = 0;
-      selectSound.play();
-    } catch {}
-
-    if (appState.isPlaying) {
-      music.pause();
-      appState.isPlaying = false;
-      musicControl.textContent = "▶";
-    } else {
-      await playMusicFadeIn();
-    }
-  });
+  return Boolean(getGuestNameFromURL());
 }
 
 async function loadConfig() {
-  try {
-    const response = await fetch("./data/journey.json");
-    appState.config = await response.json();
+  const response = await fetch("./data/journey.json");
+  appState.config = await response.json();
 
-    if (isInvitationMode()) {
-      try {
-        const weddingResponse = await fetch("./data/wedding.json");
-        appState.wedding = await weddingResponse.json();
-      } catch (error) {
-        console.error("Failed to load wedding.json:", error);
-      }
-    }
-
-    if (music && appState.config.assets) {
-      music.src = appState.config.assets.music;
-      paperSound.src = appState.config.assets.paperSound;
-      selectSound.src = appState.config.assets.selectSound;
-
-      music.load();
-      paperSound.load();
-      selectSound.load();
-    }
-
-    fillJourneyContent();
-
-    if (isInvitationMode()) {
-      fillInvitationContent();
-      markInvitationOpened();
-    } else {
-      hideWeddingSection();
-    }
-
+  if (isInvitationMode()) {
     try {
-      updateJourneyCounter();
+      const weddingResponse = await fetch("./data/wedding.json");
+      appState.wedding = await weddingResponse.json();
     } catch (error) {
-      console.error("Counter error:", error);
+      console.error("Failed to load wedding.json:", error);
     }
-
-    try {
-      await renderTimeline();
-    } catch (error) {
-      console.error("Timeline error:", error);
-    }
-
-    try {
-      loadDefaultGuestbook();
-    } catch (error) {
-      console.error("Guestbook error:", error);
-    }
-  } catch (error) {
-    console.error("Load config error:", error);
   }
+
+  music.src = appState.config.assets.music;
+  paperSound.src = appState.config.assets.paperSound;
+  selectSound.src = appState.config.assets.selectSound;
+
+  music.load();
+  paperSound.load();
+  selectSound.load();
+
+  fillJourneyContent();
+
+  if (isInvitationMode()) {
+    fillInvitationContent();
+  } else {
+    hideWeddingSection();
+  }
+
+  updateJourneyCounter();
+  await renderTimeline();
+  loadDefaultGuestbook();
 }
 
 async function playMusicFadeIn() {
@@ -162,49 +91,82 @@ async function playMusicFadeIn() {
     }, 100);
   } catch (error) {
     appState.isPlaying = false;
-
-    if (musicControl) {
-      musicControl.textContent = "▶";
-    }
+    musicControl.textContent = "▶";
   }
 }
+
+openInvitation.addEventListener("click", async () => {
+  try {
+    paperSound.currentTime = 0;
+    paperSound.play();
+  } catch {}
+
+  await playMusicFadeIn();
+
+  opening.classList.add("hidden");
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+
+  musicControl.classList.add("show");
+  startDialogCutscene();
+});
+
+musicControl.addEventListener("click", async () => {
+  try {
+    selectSound.currentTime = 0;
+    selectSound.play();
+  } catch {}
+
+  if (appState.isPlaying) {
+    music.pause();
+    appState.isPlaying = false;
+    musicControl.textContent = "▶";
+  } else {
+    await playMusicFadeIn();
+  }
+});
 
 function fillJourneyContent() {
   const { site, couple, startDate, ending } = appState.config;
 
   document.title = `${site.title} - Pixel Scrapbook`;
 
-  setHTML("openingTitle", site.title.replace(" ", "<br />").toUpperCase());
-  setText("openingSubtitle", site.subtitle);
-  setText("openingNote", site.openingNote);
+  document.getElementById("openingTitle").innerHTML = site.title
+    .replace(" ", "<br />")
+    .toUpperCase();
 
-  if (openInvitation) {
-    openInvitation.textContent = site.startButton;
-  }
+  document.getElementById("openingSubtitle").textContent = site.subtitle;
+  document.getElementById("openingNote").textContent = site.openingNote;
+  openInvitation.textContent = site.startButton;
 
-  setText("storyLabel", couple.label.toUpperCase());
-  setText("heroTitle", site.title.toUpperCase());
-  setText("heroSubtitle", site.subtitle);
-  setText("personA", couple.personA);
-  setText("personB", couple.personB);
+  document.getElementById("storyLabel").textContent =
+    couple.label.toUpperCase();
 
-  setText("sinceText", `Sejak ${formatDate(startDate)}`);
-  setText("endingTitle", ending.title);
-  setText("endingText", ending.text);
-  setText("saveProgress", ending.button);
+  document.getElementById("heroTitle").textContent = site.title.toUpperCase();
+  document.getElementById("heroSubtitle").textContent = site.subtitle;
+  document.getElementById("personA").textContent = couple.personA;
+  document.getElementById("personB").textContent = couple.personB;
+
+  document.getElementById("sinceText").textContent = `Sejak ${formatDate(
+    startDate,
+  )}`;
+
+  document.getElementById("endingTitle").textContent = ending.title;
+  document.getElementById("endingText").textContent = ending.text;
+  document.getElementById("saveProgress").textContent = ending.button;
 }
 
 function fillInvitationContent() {
   const guestName = getGuestNameFromURL();
   const wedding = appState.wedding;
 
-  setHTML("openingTitle", "WEDDING<br />INVITATION");
-  setText("openingSubtitle", "Kepada Yth.");
-  setText("openingNote", guestName);
-
-  if (openInvitation) {
-    openInvitation.textContent = "BUKA UNDANGAN";
-  }
+  document.getElementById("openingTitle").innerHTML = "WEDDING<br />INVITATION";
+  document.getElementById("openingSubtitle").textContent = "Kepada Yth.";
+  document.getElementById("openingNote").textContent = guestName;
+  openInvitation.textContent = "BUKA UNDANGAN";
 
   const weddingSection = document.getElementById("wedding");
 
@@ -246,6 +208,32 @@ function fillInvitationContent() {
   }
 }
 
+function hideWeddingSection() {
+  const weddingSection = document.getElementById("wedding");
+
+  if (weddingSection) {
+    weddingSection.classList.add("hidden-wedding");
+  }
+}
+
+function setText(id, text) {
+  const element = document.getElementById(id);
+
+  if (element) {
+    element.textContent = text;
+  }
+}
+
+function formatDate(value) {
+  return new Date(value).toLocaleDateString("id-ID", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+loadConfig();
+
 async function markInvitationOpened() {
   const guest = getGuestNameFromURL();
 
@@ -263,35 +251,7 @@ async function markInvitationOpened() {
         name: guest,
       }),
     });
-  } catch (error) {
-    console.log("Tracking opened failed:", error);
+  } catch (e) {
+    console.log(e);
   }
 }
-
-function hideWeddingSection() {
-  const weddingSection = document.getElementById("wedding");
-
-  if (weddingSection) {
-    weddingSection.classList.add("hidden-wedding");
-  }
-}
-
-function setText(id, text) {
-  const element = document.getElementById(id);
-  if (element) element.textContent = text;
-}
-
-function setHTML(id, html) {
-  const element = document.getElementById(id);
-  if (element) element.innerHTML = html;
-}
-
-function formatDate(value) {
-  return new Date(value).toLocaleDateString("id-ID", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
-}
-
-loadConfig();
