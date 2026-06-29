@@ -624,3 +624,31 @@ textarea {
     width: 100%;
   }
 }
+
+.rsvp-box {
+  max-width: 680px;
+  margin: 30px auto;
+  padding: 22px;
+  border: 5px solid var(--brown);
+  background: #fffaf0;
+  box-shadow: 5px 5px 0 #d79ab0;
+  text-align: center;
+}
+
+.rsvp-box h3 {
+  margin: 0 0 18px;
+  color: var(--pink-dark);
+  font-size: var(--font-sm);
+  line-height: 2;
+}
+
+.rsvp-actions {
+  display: grid;
+  gap: 14px;
+}
+
+@media (min-width: 760px) {
+  .rsvp-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+}

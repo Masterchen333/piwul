@@ -110,6 +110,7 @@ async function loadConfig() {
     if (isInvitationMode()) {
       fillInvitationContent();
       markInvitationOpened();
+      setupRSVP();
     } else {
       hideWeddingSection();
     }
@@ -267,6 +268,57 @@ async function markInvitationOpened() {
   } catch (error) {
     console.log("Tracking opened failed:", error);
   }
+}
+
+function setupRSVP() {
+  const guest = getGuestNameFromURL();
+  const buttons = document.querySelectorAll(".rsvp-btn");
+  const rsvpMessage = document.getElementById("rsvpMessage");
+
+  if (!guest || !buttons.length) return;
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", async () => {
+      const rsvp = button.dataset.rsvp;
+
+      buttons.forEach((btn) => {
+        btn.disabled = true;
+        btn.textContent = "SAVING...";
+      });
+
+      try {
+        await fetch(OPENING_TRACKING_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8",
+          },
+          body: JSON.stringify({
+            type: "rsvp",
+            name: guest,
+            rsvp,
+          }),
+        });
+
+        if (rsvpMessage) {
+          rsvpMessage.textContent = `RSVP saved: ${rsvp} ♥`;
+        }
+      } catch (error) {
+        console.error("RSVP failed:", error);
+
+        if (rsvpMessage) {
+          rsvpMessage.textContent = "Failed to save RSVP.";
+        }
+      }
+
+      buttons.forEach((btn) => {
+        btn.disabled = false;
+      });
+
+      buttons[0].textContent = "YES, I WILL ATTEND";
+      buttons[1].textContent = "SORRY, I CAN'T";
+    });
+  });
 }
 
 function hideWeddingSection() {
