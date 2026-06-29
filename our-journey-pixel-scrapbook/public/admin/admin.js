@@ -29,17 +29,16 @@ generateBtn.addEventListener("click", () => {
   resultBox.innerHTML = `
     <div class="guest-item">
       <strong>${escapeHTML(name)}</strong><br /><br />
-
       <small>Invitation Link:</small><br />
       <input value="${invitationLink}" readonly />
-
       <br /><br />
-
-      <a class="pixel-btn" href="${waLink}" target="_blank">
-        SEND WHATSAPP
+      <a class="pixel-btn" href="${waLink}" target="_blank" rel="noopener">
+        OPEN WHATSAPP
       </a>
     </div>
   `;
+
+  window.location.href = waLink;
 });
 
 function cleanPhone(phone) {
