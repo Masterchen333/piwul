@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const filterGuest = document.getElementById("filterGuest");
 
   const BASE_URL = "https://piwul.vercel.app";
+
   const GOOGLE_SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbwDjSIMzVWoEMssEfjdCuYmYBwJbIGrCH0HIqmenLilBg9AOUHTfUJ6fZwIBchSbO8O/exec";
 
@@ -52,65 +53,113 @@ document.addEventListener("DOMContentLoaded", () => {
       `Silakan buka undangan berikut:\n${invitationLink}\n\n` +
       `Terima kasih ♥`;
 
-    const waLink = `https://wa.me/${cleanedPhone}?text=${encodeURIComponent(message)}`;
+    const waLink = `https://wa.me/${cleanedPhone}?text=${encodeURIComponent(
+      message,
+    )}`;
 
     generateBtn.disabled = true;
     generateBtn.textContent = "SAVING...";
 
-    await fetch(GOOGLE_SCRIPT_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "text/plain;charset=utf-8",
-      },
-      body: JSON.stringify({
-        type: "guest",
-        name,
-        phone: cleanedPhone,
-        link: invitationLink,
-        waLink,
-      }),
-    });
+    try {
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+        },
+        body: JSON.stringify({
+          type: "guest",
+          name,
+          phone: cleanedPhone,
+          link: invitationLink,
+          waLink,
+        }),
+      });
 
-    resultBox.innerHTML = `
-      <div class="guest-item">
-        <strong>${escapeHTML(name)}</strong><br /><br />
+      resultBox.innerHTML = `
+        <div class="guest-item">
+          <strong>${escapeHTML(name)}</strong><br /><br />
 
-        <small>Nomor WA:</small><br />
-        <input value="${escapeHTML(cleanedPhone)}" readonly onclick="this.select()" />
+          <small>Nomor WA:</small><br />
+          <input value="${escapeHTML(cleanedPhone)}" readonly onclick="this.select()" />
 
-        <br /><br />
+          <br /><br />
 
-        <small>Invitation Link:</small><br />
-        <input value="${escapeHTML(invitationLink)}" readonly onclick="this.select()" />
+          <small>Invitation Link:</small><br />
+          <input value="${escapeHTML(invitationLink)}" readonly onclick="this.select()" />
 
-        <br /><br />
+          <br /><br />
 
-        <a class="pixel-btn" href="${waLink}" target="_blank" rel="noopener">
-          OPEN WHATSAPP
-        </a>
-      </div>
-    `;
+          <a class="pixel-btn" href="${waLink}" target="_blank" rel="noopener">
+            OPEN WHATSAPP
+          </a>
+        </div>
+      `;
+
+      await loadDashboard();
+    } catch (error) {
+      console.error("Generate failed:", error);
+      resultBox.innerHTML = `
+        <div class="guest-item">
+          Failed to generate/save guest.
+        </div>
+      `;
+    }
 
     generateBtn.disabled = false;
     generateBtn.textContent = "GENERATE LINK";
-
-    await loadDashboard();
   });
 
   async function loadDashboard() {
     if (!dashboardBox) return;
 
     try {
-      dashboardBox.innerHTML = `<div class="guest-item">Loading dashboard...</div>`;
+      dashboardBox.innerHTML = `
+        <div class="guest-item">
+          Loading dashboard...
+        </div>
+      `;
 
       const response = await fetch(`${GOOGLE_SCRIPT_URL}?type=guests`);
-      guestData = await response.json();
+      const text = await response.text();
 
+      console.log("Raw dashboard response:", text);
+
+      let data;
+
+      try {
+        data = JSON.parse(text);
+      } catch (error) {
+        dashboardBox.innerHTML = `
+          <div class="guest-item">
+            Failed to parse dashboard data.<br /><br />
+            Response bukan JSON.<br /><br />
+            Cek Apps Script deploy.
+          </div>
+        `;
+        return;
+      }
+
+      if (!Array.isArray(data)) {
+        dashboardBox.innerHTML = `
+          <div class="guest-item">
+            Dashboard data bukan array.<br /><br />
+            Response:<br />
+            ${escapeHTML(JSON.stringify(data))}
+          </div>
+        `;
+        return;
+      }
+
+      guestData = data;
       renderDashboard();
     } catch (error) {
-      console.error(error);
-      dashboardBox.innerHTML = `<div class="guest-item">Failed to load dashboard.</div>`;
+      console.error("Dashboard load failed:", error);
+      dashboardBox.innerHTML = `
+        <div class="guest-item">
+          Failed to load dashboard.
+        </div>
+      `;
     }
   }
 
@@ -155,52 +204,48 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="stat-card">PENDING<strong>${pending}</strong></div>
       </div>
 
-      ${filteredGuests
-        .map((guest) => {
-          const statusIcon =
-            guest.rsvp === "Attending"
-              ? "🟢"
-              : guest.opened === "YES"
-                ? "🟡"
-                : "🔴";
+      ${
+        filteredGuests.length
+          ? filteredGuests.map(renderGuestItem).join("")
+          : `<div class="guest-item">No guest found.</div>`
+      }
+    `;
+  }
 
-          return `
-            <div class="guest-item">
-              <strong>${statusIcon} ${escapeHTML(guest.name || "-")}</strong><br />
-              WA: ${escapeHTML(guest.phone || "-")}<br />
-              Opened: ${escapeHTML(guest.opened || "NO")}<br />
-              RSVP: ${escapeHTML(guest.rsvp || "-")}<br />
+  function renderGuestItem(guest) {
+    const statusIcon =
+      guest.rsvp === "Attending" ? "🟢" : guest.opened === "YES" ? "🟡" : "🔴";
 
-              <div class="guest-status">
-                Opened At: ${
-                  guest.openedAt ? formatAdminDate(guest.openedAt) : "-"
-                }<br />
-                RSVP Time: ${
-                  guest.rsvpTime ? formatAdminDate(guest.rsvpTime) : "-"
-                }
-              </div>
+    return `
+      <div class="guest-item">
+        <strong>${statusIcon} ${escapeHTML(guest.name || "-")}</strong><br />
+        WA: ${escapeHTML(guest.phone || "-")}<br />
+        Opened: ${escapeHTML(guest.opened || "NO")}<br />
+        RSVP: ${escapeHTML(guest.rsvp || "-")}<br />
 
-              <br />
+        <div class="guest-status">
+          Opened At: ${guest.openedAt ? formatAdminDate(guest.openedAt) : "-"}<br />
+          RSVP Time: ${guest.rsvpTime ? formatAdminDate(guest.rsvpTime) : "-"}
+        </div>
 
-              ${
-                guest.link
-                  ? `<a class="pixel-btn" href="${escapeHTML(
-                      guest.link,
-                    )}" target="_blank" rel="noopener">OPEN LINK</a>`
-                  : ""
-              }
+        <br />
 
-              ${
-                guest.waLink
-                  ? `<a class="pixel-btn" href="${escapeHTML(
-                      guest.waLink,
-                    )}" target="_blank" rel="noopener">OPEN WA</a>`
-                  : ""
-              }
-            </div>
-          `;
-        })
-        .join("")}
+        ${
+          guest.link
+            ? `<a class="pixel-btn" href="${escapeHTML(
+                guest.link,
+              )}" target="_blank" rel="noopener">OPEN LINK</a>`
+            : ""
+        }
+
+        ${
+          guest.waLink
+            ? `<a class="pixel-btn" href="${escapeHTML(
+                guest.waLink,
+              )}" target="_blank" rel="noopener">OPEN WA</a>`
+            : ""
+        }
+      </div>
     `;
   }
 
