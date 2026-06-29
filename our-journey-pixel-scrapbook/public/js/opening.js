@@ -1,4 +1,9 @@
-const appState = { config: null, isPlaying: false, fadeInterval: null };
+const appState = {
+  config: null,
+  wedding: null,
+  isPlaying: false,
+  fadeInterval: null,
+};
 
 if ("scrollRestoration" in history) {
   history.scrollRestoration = "manual";
@@ -15,9 +20,31 @@ const paperSound = document.getElementById("paperSound");
 const selectSound = document.getElementById("selectSound");
 const musicControl = document.getElementById("musicControl");
 
+function getGuestNameFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const rawName = params.get("to");
+
+  if (!rawName) return "";
+
+  return decodeURIComponent(rawName).replaceAll("+", " ").trim();
+}
+
+function isInvitationMode() {
+  return Boolean(getGuestNameFromURL());
+}
+
 async function loadConfig() {
   const response = await fetch("./data/journey.json");
   appState.config = await response.json();
+
+  if (isInvitationMode()) {
+    try {
+      const weddingResponse = await fetch("./data/wedding.json");
+      appState.wedding = await weddingResponse.json();
+    } catch (error) {
+      console.error("Failed to load wedding.json:", error);
+    }
+  }
 
   music.src = appState.config.assets.music;
   paperSound.src = appState.config.assets.paperSound;
@@ -28,8 +55,15 @@ async function loadConfig() {
   selectSound.load();
 
   fillJourneyContent();
+
+  if (isInvitationMode()) {
+    fillInvitationContent();
+  } else {
+    hideWeddingSection();
+  }
+
   updateJourneyCounter();
-  renderTimeline();
+  await renderTimeline();
   loadDefaultGuestbook();
 }
 
@@ -99,6 +133,7 @@ function fillJourneyContent() {
   const { site, couple, startDate, ending } = appState.config;
 
   document.title = `${site.title} - Pixel Scrapbook`;
+
   document.getElementById("openingTitle").innerHTML = site.title
     .replace(" ", "<br />")
     .toUpperCase();
@@ -122,6 +157,71 @@ function fillJourneyContent() {
   document.getElementById("endingTitle").textContent = ending.title;
   document.getElementById("endingText").textContent = ending.text;
   document.getElementById("saveProgress").textContent = ending.button;
+}
+
+function fillInvitationContent() {
+  const guestName = getGuestNameFromURL();
+  const wedding = appState.wedding;
+
+  document.getElementById("openingTitle").innerHTML = "WEDDING<br />INVITATION";
+  document.getElementById("openingSubtitle").textContent = "Kepada Yth.";
+  document.getElementById("openingNote").textContent = guestName;
+  openInvitation.textContent = "BUKA UNDANGAN";
+
+  const weddingSection = document.getElementById("wedding");
+
+  if (weddingSection) {
+    weddingSection.classList.remove("hidden-wedding");
+  }
+
+  if (!wedding) return;
+
+  setText("weddingTitle", wedding.title || "Our Wedding Day");
+  setText("weddingSubtitle", wedding.subtitle || "");
+  setText("guestGreeting", `Kepada Yth. ${guestName}`);
+  setText("weddingMessage", wedding.message || "");
+
+  if (wedding.akad) {
+    setText("akadTitle", wedding.akad.title || "Akad Nikah");
+    setText(
+      "akadDate",
+      `${wedding.akad.date || ""} • ${wedding.akad.time || ""}`,
+    );
+    setText("akadPlace", wedding.akad.place || "");
+    setText("akadAddress", wedding.akad.address || "");
+  }
+
+  if (wedding.resepsi) {
+    setText("resepsiTitle", wedding.resepsi.title || "Resepsi");
+    setText(
+      "resepsiDate",
+      `${wedding.resepsi.date || ""} • ${wedding.resepsi.time || ""}`,
+    );
+    setText("resepsiPlace", wedding.resepsi.place || "");
+    setText("resepsiAddress", wedding.resepsi.address || "");
+  }
+
+  const mapsLink = document.getElementById("mapsLink");
+
+  if (mapsLink && wedding.maps) {
+    mapsLink.href = wedding.maps;
+  }
+}
+
+function hideWeddingSection() {
+  const weddingSection = document.getElementById("wedding");
+
+  if (weddingSection) {
+    weddingSection.classList.add("hidden-wedding");
+  }
+}
+
+function setText(id, text) {
+  const element = document.getElementById(id);
+
+  if (element) {
+    element.textContent = text;
+  }
 }
 
 function formatDate(value) {

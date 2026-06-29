@@ -483,3 +483,6 @@ textarea {
   max-width: 720px;
   box-shadow: 0 8px 0 rgba(0, 0, 0, 0.18);
 }
+.hidden-wedding {
+  display: none;
+}
