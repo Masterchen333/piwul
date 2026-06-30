@@ -3,32 +3,54 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Invitation Generator</title>
+    <title>Piwul Invitation Admin</title>
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="stylesheet" href="../css/stardew-ui.css" />
   </head>
 
-  <body>
-    <main class="world">
-      <div class="content">
-        <section class="section pixel-box">
-          <h2>INVITATION GENERATOR</h2>
+  <body class="admin-page">
+    <main class="admin-world">
+      <div class="admin-content">
+        <section class="admin-panel pixel-box">
+          <h2>🌸 INVITATION GENERATOR 🌸</h2>
 
-          <input id="guestName" type="text" placeholder="Nama tamu" />
+          <div class="admin-input-wrap">
+            <span>👤</span>
+            <input id="guestName" type="text" placeholder="Nama tamu" />
+          </div>
 
-          <input id="guestPhone" type="text" placeholder="Nomor WA: 628xxxx" />
+          <div class="admin-input-wrap">
+            <span>📱</span>
+            <input
+              id="guestPhone"
+              type="text"
+              placeholder="Nomor WA: 628xxxx"
+            />
+          </div>
 
-          <button class="pixel-btn" id="generateBtn" type="button">
-            GENERATE LINK
+          <button
+            class="pixel-btn admin-generate-btn"
+            id="generateBtn"
+            type="button"
+          >
+            GENERATE LINK 🤍
           </button>
 
           <div class="guest-list" id="resultBox"></div>
         </section>
 
-        <section class="section pixel-box">
-          <h2>GUEST DASHBOARD</h2>
+        <section class="admin-panel pixel-box">
+          <h2>🌸 GUEST DASHBOARD 🌸</h2>
+
           <div class="admin-tools">
-            <input id="searchGuest" type="text" placeholder="Search guest..." />
+            <div class="admin-search-wrap">
+              <span>🔍</span>
+              <input
+                id="searchGuest"
+                type="text"
+                placeholder="Search guest..."
+              />
+            </div>
 
             <select id="filterGuest">
               <option value="all">All</option>
@@ -39,11 +61,12 @@
               <option value="pending">Pending RSVP</option>
             </select>
           </div>
-          <div class="guest-list" id="dashboardBox"></div>
+
+          <div class="guest-list admin-dashboard-list" id="dashboardBox"></div>
         </section>
       </div>
     </main>
 
-    <script src="./admin.js?v=99"></script>
+    <script src="./admin.js?v=15"></script>
   </body>
 </html>
