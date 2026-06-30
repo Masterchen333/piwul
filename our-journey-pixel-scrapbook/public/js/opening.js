@@ -310,6 +310,10 @@ function setupRSVP() {
         if (rsvpMessage) {
           rsvpMessage.textContent = `RSVP saved: ${rsvp} ♥`;
         }
+
+        if (rsvp === "Attending") {
+          playPixelConfetti();
+        }
       } catch (error) {
         console.error("RSVP failed:", error);
 
@@ -382,6 +386,30 @@ function formatDate(value) {
     month: "long",
     year: "numeric",
   });
+}
+
+function playPixelConfetti() {
+  const layer = document.getElementById("confettiLayer");
+  if (!layer) return;
+
+  const pieces = ["🌸", "💗", "✨", "🎉", "♥"];
+
+  for (let i = 0; i < 28; i++) {
+    const piece = document.createElement("span");
+    piece.className = "confetti-piece";
+    piece.textContent = pieces[Math.floor(Math.random() * pieces.length)];
+
+    piece.style.setProperty("--x", `${Math.random() * 260 - 130}px`);
+    piece.style.setProperty("--y", `${Math.random() * -260 - 40}px`);
+    piece.style.left = `${Math.random() * 70 + 15}%`;
+    piece.style.top = `${Math.random() * 20 + 45}%`;
+
+    layer.appendChild(piece);
+
+    setTimeout(() => {
+      piece.remove();
+    }, 1300);
+  }
 }
 
 loadConfig();
