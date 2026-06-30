@@ -1137,3 +1137,57 @@ textarea {
     width: 100%;
   }
 }
+
+.secret-letter-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: none;
+  place-items: center;
+  padding: 22px;
+  background: rgba(23, 29, 47, 0.88);
+}
+
+.secret-letter-modal.show {
+  display: grid;
+}
+
+.secret-letter-box {
+  position: relative;
+  width: min(100%, 720px);
+  padding: clamp(20px, 5vw, 34px);
+  background: var(--paper);
+  text-align: center;
+}
+
+.secret-letter-box h2 {
+  color: var(--pink-dark);
+  font-size: clamp(16px, 4vw, 28px);
+  line-height: 1.8;
+  text-shadow: 3px 3px 0 #ffd1df;
+}
+
+.secret-letter-paper {
+  margin-top: 18px;
+  padding: clamp(18px, 5vw, 30px);
+  border: 5px solid var(--brown);
+  background:
+    linear-gradient(transparent 95%, rgba(75, 47, 35, 0.08) 96%), #fffaf0;
+  background-size: 100% 34px;
+  box-shadow: 5px 5px 0 #d79ab0;
+}
+
+.secret-letter-paper p {
+  margin-bottom: 18px;
+  font-size: var(--font-xs);
+  line-height: 2.4;
+  text-align: left;
+}
+
+#secretLetterGreeting {
+  color: var(--pink-dark);
+}
+
+.secret-letter-box .modal-close {
+  position: absolute;
+}

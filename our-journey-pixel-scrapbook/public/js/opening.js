@@ -105,6 +105,7 @@ async function loadConfig() {
       markInvitationOpened();
       setupRSVP();
       setupGiftCopy();
+      setupSecretLetter();
     } else {
       hideWeddingSection();
     }
@@ -294,6 +295,10 @@ function setupRSVP() {
 
         if (rsvp === "Attending") {
           playPixelConfetti();
+
+          setTimeout(() => {
+            showSecretLetter();
+          }, 500);
         }
       } catch (error) {
         console.error("RSVP failed:", error);
@@ -388,6 +393,51 @@ function playPixelConfetti() {
       piece.remove();
     }, 1300);
   }
+}
+
+function showSecretLetter() {
+  const guestName = getGuestNameFromURL();
+  const modal = document.getElementById("secretLetterModal");
+  const greeting = document.getElementById("secretLetterGreeting");
+
+  if (!modal) return;
+
+  if (greeting) {
+    greeting.textContent = `Dear ${guestName || "Guest"},`;
+  }
+
+  modal.classList.add("show");
+  modal.setAttribute("aria-hidden", "false");
+}
+
+function setupSecretLetter() {
+  const modal = document.getElementById("secretLetterModal");
+  const closeBtn = document.getElementById("secretLetterClose");
+
+  if (!modal || !closeBtn) return;
+
+  closeBtn.addEventListener("click", closeSecretLetter);
+
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      closeSecretLetter();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeSecretLetter();
+    }
+  });
+}
+
+function closeSecretLetter() {
+  const modal = document.getElementById("secretLetterModal");
+
+  if (!modal) return;
+
+  modal.classList.remove("show");
+  modal.setAttribute("aria-hidden", "true");
 }
 
 loadConfig();
