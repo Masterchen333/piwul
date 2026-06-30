@@ -29,7 +29,7 @@ function getGuestNameFromURL() {
 
   if (!rawName) return "";
 
-  return rawName.replaceAll("+", " ").trim();
+  return decodeURIComponent(rawName).replaceAll("+", " ").trim();
 }
 
 function isInvitationMode() {
@@ -49,14 +49,16 @@ if (openInvitation) {
 
     if (musicControl) musicControl.classList.add("show");
 
-    const npcGuide = document.getElementById("npcGuide");
+    if (isInvitationMode()) {
+      const npcGuide = document.getElementById("npcGuide");
 
-    if (npcGuide) {
-      npcGuide.classList.remove("npc-hidden");
+      if (npcGuide) {
+        npcGuide.classList.remove("npc-hidden");
 
-      setTimeout(() => {
-        showNPCBubble();
-      }, 500);
+        setTimeout(() => {
+          showNPCBubble();
+        }, 500);
+      }
     }
 
     try {
@@ -109,10 +111,10 @@ async function loadConfig() {
     selectSound.load();
 
     fillJourneyContent();
-    setupNPCGuide();
 
     if (isInvitationMode()) {
       fillInvitationContent();
+      setupNPCGuide();
       setupGuestPassport();
       markInvitationOpened();
       setupRSVP();
@@ -125,6 +127,7 @@ async function loadConfig() {
     } else {
       hideWeddingSection();
       hideGuestPassport();
+      hideNPCGuide();
     }
 
     try {
@@ -391,6 +394,18 @@ function hideWeddingSection() {
 
   const giftSection = document.getElementById("giftSection");
   if (giftSection) giftSection.classList.add("hidden-gift");
+}
+
+function hideNPCGuide() {
+  const npcGuide = document.getElementById("npcGuide");
+  const npcPanel = document.getElementById("npcPanel");
+
+  if (npcGuide) npcGuide.classList.add("npc-hidden");
+
+  if (npcPanel) {
+    npcPanel.classList.remove("show");
+    npcPanel.setAttribute("aria-hidden", "true");
+  }
 }
 
 function setText(id, text) {
