@@ -1405,15 +1405,14 @@ textarea {
     font-size: 7px;
   }
 
-    .npc-name {
+  .npc-name {
     font-size: 7px;
     padding: 7px 8px;
   }
 }
 
-  .npc-panel {
-    right: 10px;
-    bottom: 150px;
-    width: calc(100vw - 20px);
-  }
+.npc-panel {
+  right: 10px;
+  bottom: 150px;
+  width: calc(100vw - 20px);
 }
