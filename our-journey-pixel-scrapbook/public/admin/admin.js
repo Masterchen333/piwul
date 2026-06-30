@@ -1,4 +1,5 @@
-console.log("ADMIN JS v20 LOADED");
+console.log("ADMIN JS v21 LOADED");
+
 document.addEventListener("DOMContentLoaded", () => {
   const guestName =
     document.getElementById("guestName") ||
@@ -28,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const ADMIN_SESSION_KEY = "piwulAdminToken";
 
   let guestData = [];
+  let isLoggingIn = false;
 
   function unlockAdmin() {
     if (adminLoginScreen) adminLoginScreen.style.display = "none";
@@ -40,7 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (adminLoginScreen) adminLoginScreen.style.display = "grid";
     if (adminWorld) adminWorld.classList.add("admin-locked");
-
     if (adminPassword) adminPassword.value = "";
     if (adminLoginMessage) adminLoginMessage.textContent = "Logout berhasil.";
   }
@@ -57,36 +58,78 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  if (adminLoginBtn) {
-    adminLoginBtn.addEventListener("click", async () => {
-      const password = adminPassword.value.trim();
+  async function handleAdminLogin() {
+    if (isLoggingIn) return;
 
-      if (!password) {
+    const password = adminPassword ? adminPassword.value.trim() : "";
+
+    if (!password) {
+      if (adminLoginMessage) {
         adminLoginMessage.textContent = "Password tidak boleh kosong.";
-        return;
       }
+      return;
+    }
 
+    isLoggingIn = true;
+
+    if (adminLoginBtn) {
       adminLoginBtn.disabled = true;
       adminLoginBtn.textContent = "CHECKING...";
+    }
+
+    if (adminLoginMessage) {
       adminLoginMessage.textContent = "";
+    }
 
-      try {
-        const result = await adminLoginJSONP(password);
+    try {
+      const result = await adminLoginJSONP(password);
 
-        if (result.success) {
-          localStorage.setItem(ADMIN_SESSION_KEY, result.token);
-          unlockAdmin();
-        } else {
+      if (result && result.success) {
+        localStorage.setItem(ADMIN_SESSION_KEY, result.token || "YES");
+        unlockAdmin();
+      } else {
+        if (adminLoginMessage) {
           adminLoginMessage.textContent = "Password salah.";
+        }
+
+        if (adminPassword) {
           adminPassword.value = "";
         }
-      } catch (error) {
-        console.error("Login failed:", error);
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+
+      if (adminLoginMessage) {
         adminLoginMessage.textContent = "Login gagal. Cek koneksi.";
       }
+    }
 
+    isLoggingIn = false;
+
+    if (adminLoginBtn) {
       adminLoginBtn.disabled = false;
       adminLoginBtn.textContent = "LOGIN";
+    }
+  }
+
+  if (adminLoginBtn) {
+    adminLoginBtn.addEventListener("click", handleAdminLogin);
+
+    adminLoginBtn.addEventListener(
+      "touchend",
+      (event) => {
+        event.preventDefault();
+        handleAdminLogin();
+      },
+      { passive: false },
+    );
+  }
+
+  if (adminPassword) {
+    adminPassword.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        handleAdminLogin();
+      }
     });
   }
 
@@ -213,6 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await fetch(
         `${GOOGLE_SCRIPT_URL}?type=guests&t=${Date.now()}`,
       );
+
       const data = await response.json();
 
       guestData = Array.isArray(data) ? data : [];
