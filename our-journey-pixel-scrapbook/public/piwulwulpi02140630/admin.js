@@ -1,14 +1,8 @@
-console.log("ADMIN PUBLIC JS LOADED");
+console.log("ADMIN PUBLIC JS v3 LOADED");
 
 document.addEventListener("DOMContentLoaded", () => {
-  const guestName =
-    document.getElementById("guestName") ||
-    document.getElementById("adminGuestName");
-
-  const guestPhone =
-    document.getElementById("guestPhone") ||
-    document.getElementById("adminGuestPhone");
-
+  const guestName = document.getElementById("guestName");
+  const guestPhone = document.getElementById("guestPhone");
   const generateBtn = document.getElementById("generateBtn");
   const resultBox = document.getElementById("resultBox");
   const dashboardBox = document.getElementById("dashboardBox");
@@ -21,84 +15,89 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let guestData = [];
 
-  if (!guestName || !guestPhone || !generateBtn || !resultBox) {
-    return;
-  }
-
   if (searchGuest) searchGuest.addEventListener("input", renderDashboard);
   if (filterGuest) filterGuest.addEventListener("change", renderDashboard);
 
   loadDashboard();
 
-  generateBtn.addEventListener("click", async () => {
-    const name = guestName.value.trim();
-    const phone = guestPhone.value.trim();
+  if (generateBtn && guestName && guestPhone && resultBox) {
+    generateBtn.addEventListener("click", async () => {
+      const name = guestName.value.trim();
+      const phone = guestPhone.value.trim();
 
-    if (!name || !phone) {
-      alert("Isi nama dan nomor WA dulu.");
-      return;
-    }
+      if (!name || !phone) {
+        alert("Isi nama dan nomor WA dulu.");
+        return;
+      }
 
-    const cleanedPhone = cleanPhone(phone);
-    const invitationLink = `${BASE_URL}/invite/${slugifyName(name)}`;
+      const cleanedPhone = cleanPhone(phone);
+      const invitationLink = `${BASE_URL}/invite/${slugifyName(name)}`;
 
-    const message =
-      `Kepada Yth. ${name}\n\n` +
-      `Dengan penuh kebahagiaan, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di hari bahagia kami.\n\n` +
-      `Silakan buka undangan berikut:\n${invitationLink}\n\n` +
-      `Terima kasih ♥`;
+      const message =
+        `Kepada Yth. ${name}\n\n` +
+        `Dengan penuh kebahagiaan, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di hari bahagia kami.\n\n` +
+        `Silakan buka undangan berikut:\n${invitationLink}\n\n` +
+        `Terima kasih ♥`;
 
-    const waLink = `https://wa.me/${cleanedPhone}?text=${encodeURIComponent(
-      message,
-    )}`;
+      const waLink = `https://wa.me/${cleanedPhone}?text=${encodeURIComponent(
+        message,
+      )}`;
 
-    resultBox.innerHTML = `
-      <div class="guest-item">
-        <strong>${escapeHTML(name)}</strong><br /><br />
+      resultBox.innerHTML = `
+        <div class="guest-item">
+          <strong>${escapeHTML(name)}</strong><br /><br />
 
-        <small>Nomor WA:</small><br />
-        <input value="${escapeHTML(cleanedPhone)}" readonly onclick="this.select()" />
+          <small>Nomor WA:</small><br />
+          <input value="${escapeHTML(cleanedPhone)}" readonly onclick="this.select()" />
 
-        <br /><br />
+          <br /><br />
 
-        <small>Invitation Link:</small><br />
-        <input value="${escapeHTML(invitationLink)}" readonly onclick="this.select()" />
+          <small>Invitation Link:</small><br />
+          <input value="${escapeHTML(invitationLink)}" readonly onclick="this.select()" />
 
-        <br /><br />
+          <br /><br />
 
-        <a class="pixel-btn" href="${escapeHTML(waLink)}" target="_blank" rel="noopener">
-          OPEN WHATSAPP
-        </a>
-      </div>
-    `;
+          <a class="pixel-btn" href="${escapeHTML(waLink)}" target="_blank" rel="noopener">
+            OPEN WHATSAPP
+          </a>
+        </div>
+      `;
 
-    generateBtn.disabled = true;
-    generateBtn.textContent = "SAVING...";
+      generateBtn.disabled = true;
+      generateBtn.textContent = "SAVING...";
 
-    try {
-      await fetch(GOOGLE_SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "text/plain;charset=utf-8",
-        },
-        body: JSON.stringify({
-          type: "guest",
-          name,
-          phone: cleanedPhone,
-          link: invitationLink,
-          waLink,
-        }),
-      });
+      try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8",
+          },
+          body: JSON.stringify({
+            type: "guest",
+            name,
+            phone: cleanedPhone,
+            link: invitationLink,
+            waLink,
+          }),
+        });
 
-      setTimeout(loadDashboard, 1000);
-    } catch (error) {
-      console.error("Generate save failed:", error);
-    }
+        setTimeout(loadDashboard, 1200);
+      } catch (error) {
+        console.error("Generate save failed:", error);
+      }
 
-    generateBtn.disabled = false;
-    generateBtn.textContent = "GENERATE LINK";
-  });
+      generateBtn.disabled = false;
+      generateBtn.textContent = "GENERATE LINK 🤍";
+    });
+  } else {
+    console.warn("Generator element tidak lengkap:", {
+      guestName,
+      guestPhone,
+      generateBtn,
+      resultBox,
+    });
+  }
 
   function loadDashboard() {
     if (!dashboardBox) return;
@@ -120,7 +119,6 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     script = document.createElement("script");
-
     script.src =
       `${GOOGLE_SCRIPT_URL}?type=guests` +
       `&callback=${callbackName}` +
@@ -133,11 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
         script.parentNode.removeChild(script);
       }
 
-      dashboardBox.innerHTML = `
-      <div class="guest-item">
-        Failed to load dashboard.
-      </div>
-    `;
+      dashboardBox.innerHTML = `<div class="guest-item">Failed to load dashboard.</div>`;
     };
 
     document.body.appendChild(script);
@@ -202,29 +196,19 @@ document.addEventListener("DOMContentLoaded", () => {
         WA: ${escapeHTML(guest.phone || "-")}<br />
         Opened: ${escapeHTML(guest.opened || "NO")}<br />
         RSVP: ${escapeHTML(guest.rsvp || "-")}<br />
-
         <div class="guest-status">
-          Opened At: ${
-            guest.openedAt ? formatAdminDate(guest.openedAt) : "-"
-          }<br />
+          Opened At: ${guest.openedAt ? formatAdminDate(guest.openedAt) : "-"}<br />
           RSVP Time: ${guest.rsvpTime ? formatAdminDate(guest.rsvpTime) : "-"}
         </div>
-
         <br />
-
         ${
           guest.link
-            ? `<a class="pixel-btn" href="${escapeHTML(
-                guest.link,
-              )}" target="_blank" rel="noopener">OPEN LINK</a>`
+            ? `<a class="pixel-btn" href="${escapeHTML(guest.link)}" target="_blank" rel="noopener">OPEN LINK</a>`
             : ""
         }
-
         ${
           guest.waLink
-            ? `<a class="pixel-btn" href="${escapeHTML(
-                guest.waLink,
-              )}" target="_blank" rel="noopener">OPEN WA</a>`
+            ? `<a class="pixel-btn" href="${escapeHTML(guest.waLink)}" target="_blank" rel="noopener">OPEN WA</a>`
             : ""
         }
       </div>
