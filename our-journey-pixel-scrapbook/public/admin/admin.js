@@ -1,3 +1,4 @@
+console.log("ADMIN JS v20 LOADED");
 document.addEventListener("DOMContentLoaded", () => {
   const guestName =
     document.getElementById("guestName") ||
