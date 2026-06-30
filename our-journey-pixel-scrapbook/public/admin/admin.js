@@ -51,6 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
       if (!confirm("Logout dari Admin?")) return;
+
       lockAdmin();
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
@@ -118,13 +119,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const cleanedPhone = cleanPhone(phone);
     const invitationLink = `${BASE_URL}/invite/${slugifyName(name)}`;
 
-    function slugifyName(name) {
-      return String(name)
-        .trim()
-        .replace(/\s+/g, "-")
-        .replace(/[^a-zA-Z0-9-]/g, "");
-    }
-
     const message =
       `Kepada Yth. ${name}\n\n` +
       `Dengan penuh kebahagiaan, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di hari bahagia kami.\n\n` +
@@ -138,13 +132,18 @@ document.addEventListener("DOMContentLoaded", () => {
     resultBox.innerHTML = `
       <div class="guest-item">
         <strong>${escapeHTML(name)}</strong><br /><br />
+
         <small>Nomor WA:</small><br />
         <input value="${escapeHTML(cleanedPhone)}" readonly onclick="this.select()" />
+
         <br /><br />
+
         <small>Invitation Link:</small><br />
         <input value="${escapeHTML(invitationLink)}" readonly onclick="this.select()" />
+
         <br /><br />
-        <a class="pixel-btn" href="${waLink}" target="_blank" rel="noopener">
+
+        <a class="pixel-btn" href="${escapeHTML(waLink)}" target="_blank" rel="noopener">
           OPEN WHATSAPP
         </a>
       </div>
@@ -256,19 +255,29 @@ document.addEventListener("DOMContentLoaded", () => {
         WA: ${escapeHTML(guest.phone || "-")}<br />
         Opened: ${escapeHTML(guest.opened || "NO")}<br />
         RSVP: ${escapeHTML(guest.rsvp || "-")}<br />
+
         <div class="guest-status">
-          Opened At: ${guest.openedAt ? formatAdminDate(guest.openedAt) : "-"}<br />
+          Opened At: ${
+            guest.openedAt ? formatAdminDate(guest.openedAt) : "-"
+          }<br />
           RSVP Time: ${guest.rsvpTime ? formatAdminDate(guest.rsvpTime) : "-"}
         </div>
+
         <br />
+
         ${
           guest.link
-            ? `<a class="pixel-btn" href="${escapeHTML(guest.link)}" target="_blank" rel="noopener">OPEN LINK</a>`
+            ? `<a class="pixel-btn" href="${escapeHTML(
+                guest.link,
+              )}" target="_blank" rel="noopener">OPEN LINK</a>`
             : ""
         }
+
         ${
           guest.waLink
-            ? `<a class="pixel-btn" href="${escapeHTML(guest.waLink)}" target="_blank" rel="noopener">OPEN WA</a>`
+            ? `<a class="pixel-btn" href="${escapeHTML(
+                guest.waLink,
+              )}" target="_blank" rel="noopener">OPEN WA</a>`
             : ""
         }
       </div>
@@ -288,6 +297,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function cleanPhone(phone) {
     return phone.replace(/\D/g, "").replace(/^0/, "62");
+  }
+
+  function slugifyName(name) {
+    return String(name)
+      .trim()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-zA-Z0-9-]/g, "");
   }
 
   function escapeHTML(text) {
