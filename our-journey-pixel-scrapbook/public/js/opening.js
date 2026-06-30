@@ -99,6 +99,7 @@ async function loadConfig() {
     selectSound.load();
 
     fillJourneyContent();
+    setupNPCGuide();
 
     if (isInvitationMode()) {
       fillInvitationContent();
@@ -477,6 +478,44 @@ function unlockAchievement(title, text, icon = "🏆") {
     toast.classList.remove("show");
     toast.setAttribute("aria-hidden", "true");
   }, 4200);
+}
+
+function setupNPCGuide() {
+  const guideBtn = document.getElementById("npcGuideBtn");
+  const panel = document.getElementById("npcPanel");
+  const closeBtn = document.getElementById("npcCloseBtn");
+  const menuButtons = document.querySelectorAll(".npc-menu button");
+
+  if (!guideBtn || !panel) return;
+
+  guideBtn.addEventListener("click", () => {
+    panel.classList.toggle("show");
+    panel.setAttribute("aria-hidden", !panel.classList.contains("show"));
+  });
+
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => {
+      panel.classList.remove("show");
+      panel.setAttribute("aria-hidden", "true");
+    });
+  }
+
+  menuButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const targetSelector = button.dataset.target;
+      const target = document.querySelector(targetSelector);
+
+      if (target) {
+        target.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+
+        panel.classList.remove("show");
+        panel.setAttribute("aria-hidden", "true");
+      }
+    });
+  });
 }
 
 loadConfig();

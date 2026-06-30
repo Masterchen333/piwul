@@ -387,6 +387,43 @@
       </div>
     </div>
 
+    <div class="npc-guide" id="npcGuide">
+      <button class="npc-character" id="npcGuideBtn" type="button">
+        <span class="npc-bubble">Need help? Klik aku ya!</span>
+        <img src="./assets/sprites/npc.png" alt="Wedding Guide NPC" />
+      </button>
+
+      <div class="npc-panel pixel-box" id="npcPanel" aria-hidden="true">
+        <div class="npc-panel-header">
+          <strong>WEDDING GUIDE</strong>
+          <button id="npcCloseBtn" type="button">×</button>
+        </div>
+
+        <div class="npc-intro">
+          <img src="./assets/sprites/npc.png" alt="" />
+          <p>
+            Hai! Aku si Wedding Guide 🌸<br />
+            Aku akan membantumu menjelajahi undangan ini.
+          </p>
+        </div>
+
+        <div class="npc-menu">
+          <button type="button" data-target=".hero-section">
+            💗 Tentang Kami
+          </button>
+          <button type="button" data-target="#wedding">
+            💍 Informasi Acara
+          </button>
+          <button type="button" data-target="#mapsLink">
+            📍 Lokasi & Maps
+          </button>
+          <button type="button" data-target="#rsvpBox">✅ RSVP</button>
+          <button type="button" data-target="#giftSection">🎁 Gift</button>
+          <button type="button" data-target="#memorybook">💬 Guestbook</button>
+        </div>
+      </div>
+    </div>
+
     <script src="./js/cutscene.js"></script>
     <script src="./js/countdown.js"></script>
     <script src="./js/timeline.js"></script>
