@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const filterGuest = document.getElementById("filterGuest");
 
   const BASE_URL = "https://piwul.vercel.app";
-
   const GOOGLE_SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbwDjSIMzVWoEMssEfjdCuYmYBwJbIGrCH0HIqmenLilBg9AOUHTfUJ6fZwIBchSbO8O/exec";
 
@@ -27,13 +26,8 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  if (searchGuest) {
-    searchGuest.addEventListener("input", renderDashboard);
-  }
-
-  if (filterGuest) {
-    filterGuest.addEventListener("change", renderDashboard);
-  }
+  if (searchGuest) searchGuest.addEventListener("input", renderDashboard);
+  if (filterGuest) filterGuest.addEventListener("change", renderDashboard);
 
   generateBtn.addEventListener("click", async () => {
     const name = guestName.value.trim();
@@ -53,24 +47,17 @@ document.addEventListener("DOMContentLoaded", () => {
       `Silakan buka undangan berikut:\n${invitationLink}\n\n` +
       `Terima kasih ♥`;
 
-    const waLink = `https://wa.me/${cleanedPhone}?text=${encodeURIComponent(
-      message,
-    )}`;
+    const waLink = `https://wa.me/${cleanedPhone}?text=${encodeURIComponent(message)}`;
 
     resultBox.innerHTML = `
       <div class="guest-item">
         <strong>${escapeHTML(name)}</strong><br /><br />
-
         <small>Nomor WA:</small><br />
         <input value="${escapeHTML(cleanedPhone)}" readonly onclick="this.select()" />
-
         <br /><br />
-
         <small>Invitation Link:</small><br />
         <input value="${escapeHTML(invitationLink)}" readonly onclick="this.select()" />
-
         <br /><br />
-
         <a class="pixel-btn" href="${waLink}" target="_blank" rel="noopener">
           OPEN WHATSAPP
         </a>
@@ -95,62 +82,33 @@ document.addEventListener("DOMContentLoaded", () => {
           waLink,
         }),
       });
+
+      setTimeout(loadDashboard, 1000);
     } catch (error) {
       console.error("Generate save failed:", error);
     }
 
     generateBtn.disabled = false;
     generateBtn.textContent = "GENERATE LINK";
-
-    loadDashboard();
   });
 
-  function loadDashboard() {
+  async function loadDashboard() {
     if (!dashboardBox) return;
 
-    dashboardBox.innerHTML = `
-      <div class="guest-item">
-        Loading dashboard...
-      </div>
-    `;
+    try {
+      dashboardBox.innerHTML = `<div class="guest-item">Loading dashboard...</div>`;
 
-    const callbackName = "loadGuestsCallback_" + Date.now();
-    let script;
+      const response = await fetch(
+        `${GOOGLE_SCRIPT_URL}?type=guests&t=${Date.now()}`,
+      );
+      const data = await response.json();
 
-    window[callbackName] = function (data) {
       guestData = Array.isArray(data) ? data : [];
       renderDashboard();
-
-      delete window[callbackName];
-
-      if (script && script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
-    };
-
-    script = document.createElement("script");
-    script.src =
-      GOOGLE_SCRIPT_URL +
-      "?type=guests&callback=" +
-      callbackName +
-      "&t=" +
-      Date.now();
-
-    script.onerror = function () {
-      dashboardBox.innerHTML = `
-        <div class="guest-item">
-          Failed to load dashboard.
-        </div>
-      `;
-
-      delete window[callbackName];
-
-      if (script && script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
-    };
-
-    document.body.appendChild(script);
+    } catch (error) {
+      console.error("Dashboard load failed:", error);
+      dashboardBox.innerHTML = `<div class="guest-item">Failed to load dashboard.</div>`;
+    }
   }
 
   function renderDashboard() {
@@ -212,27 +170,19 @@ document.addEventListener("DOMContentLoaded", () => {
         WA: ${escapeHTML(guest.phone || "-")}<br />
         Opened: ${escapeHTML(guest.opened || "NO")}<br />
         RSVP: ${escapeHTML(guest.rsvp || "-")}<br />
-
         <div class="guest-status">
           Opened At: ${guest.openedAt ? formatAdminDate(guest.openedAt) : "-"}<br />
           RSVP Time: ${guest.rsvpTime ? formatAdminDate(guest.rsvpTime) : "-"}
         </div>
-
         <br />
-
         ${
           guest.link
-            ? `<a class="pixel-btn" href="${escapeHTML(
-                guest.link,
-              )}" target="_blank" rel="noopener">OPEN LINK</a>`
+            ? `<a class="pixel-btn" href="${escapeHTML(guest.link)}" target="_blank" rel="noopener">OPEN LINK</a>`
             : ""
         }
-
         ${
           guest.waLink
-            ? `<a class="pixel-btn" href="${escapeHTML(
-                guest.waLink,
-              )}" target="_blank" rel="noopener">OPEN WA</a>`
+            ? `<a class="pixel-btn" href="${escapeHTML(guest.waLink)}" target="_blank" rel="noopener">OPEN WA</a>`
             : ""
         }
       </div>
