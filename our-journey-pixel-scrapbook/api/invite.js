@@ -9,7 +9,7 @@ export default function handler(req, res) {
   const version = req.query.v || "1";
 
   // Preview image (statis)
-  const ogImage = `${baseUrl}/assets/sprites/wedpiwul.png?v=${version}`;
+  const ogImage = `${baseUrl}/assets/sprites/preview.png?v=${version}`;
 
   const inviteUrl = `${baseUrl}/invite/${encodeURIComponent(rawName)}?v=${version}`;
   const finalUrl = `${baseUrl}/?to=${encodedName}`;
