@@ -100,24 +100,47 @@ document.addEventListener("DOMContentLoaded", () => {
     generateBtn.textContent = "GENERATE LINK";
   });
 
-  async function loadDashboard() {
+  function loadDashboard() {
     if (!dashboardBox) return;
 
-    try {
-      dashboardBox.innerHTML = `<div class="guest-item">Loading dashboard...</div>`;
+    dashboardBox.innerHTML = `<div class="guest-item">Loading dashboard...</div>`;
 
-      const response = await fetch(
-        `${GOOGLE_SCRIPT_URL}?type=guests&t=${Date.now()}`,
-      );
+    const callbackName = "loadGuestsCallback_" + Date.now();
+    let script;
 
-      const data = await response.json();
-
+    window[callbackName] = function (data) {
       guestData = Array.isArray(data) ? data : [];
       renderDashboard();
-    } catch (error) {
-      console.error("Dashboard load failed:", error);
-      dashboardBox.innerHTML = `<div class="guest-item">Failed to load dashboard.</div>`;
-    }
+
+      delete window[callbackName];
+
+      if (script && script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    };
+
+    script = document.createElement("script");
+
+    script.src =
+      `${GOOGLE_SCRIPT_URL}?type=guests` +
+      `&callback=${callbackName}` +
+      `&t=${Date.now()}`;
+
+    script.onerror = function () {
+      delete window[callbackName];
+
+      if (script && script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+
+      dashboardBox.innerHTML = `
+      <div class="guest-item">
+        Failed to load dashboard.
+      </div>
+    `;
+    };
+
+    document.body.appendChild(script);
   }
 
   function renderDashboard() {
