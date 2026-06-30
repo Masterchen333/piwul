@@ -51,7 +51,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
       if (!confirm("Logout dari Admin?")) return;
-
       lockAdmin();
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
@@ -68,22 +67,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       adminLoginBtn.disabled = true;
       adminLoginBtn.textContent = "CHECKING...";
+      adminLoginMessage.textContent = "";
 
       try {
-        const response = await fetch(GOOGLE_SCRIPT_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8",
-          },
-          body: JSON.stringify({
-            type: "admin_login",
-            password,
-          }),
-        });
-
-        const result = await response.json();
-
-        const result = await response.json();
+        const result = await adminLoginJSONP(password);
 
         if (result.success) {
           localStorage.setItem(ADMIN_SESSION_KEY, result.token);
@@ -178,6 +165,43 @@ document.addEventListener("DOMContentLoaded", () => {
     generateBtn.disabled = false;
     generateBtn.textContent = "GENERATE LINK";
   });
+
+  function adminLoginJSONP(password) {
+    return new Promise((resolve, reject) => {
+      const callbackName = "adminLoginCallback_" + Date.now();
+      let script;
+
+      window[callbackName] = function (data) {
+        resolve(data);
+
+        delete window[callbackName];
+
+        if (script && script.parentNode) {
+          script.parentNode.removeChild(script);
+        }
+      };
+
+      script = document.createElement("script");
+
+      script.src =
+        `${GOOGLE_SCRIPT_URL}?type=admin_login` +
+        `&password=${encodeURIComponent(password)}` +
+        `&callback=${callbackName}` +
+        `&t=${Date.now()}`;
+
+      script.onerror = function () {
+        delete window[callbackName];
+
+        if (script && script.parentNode) {
+          script.parentNode.removeChild(script);
+        }
+
+        reject(new Error("JSONP login failed"));
+      };
+
+      document.body.appendChild(script);
+    });
+  }
 
   async function loadDashboard() {
     if (!dashboardBox) return;
