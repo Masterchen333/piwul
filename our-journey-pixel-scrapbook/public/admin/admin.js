@@ -144,13 +144,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     dashboardBox.innerHTML = `
-      <div class="dashboard-stats">
-        <div class="stat-card">TOTAL<strong>${total}</strong></div>
-        <div class="stat-card">OPENED<strong>${opened}</strong></div>
-        <div class="stat-card">NOT OPEN<strong>${total - opened}</strong></div>
-        <div class="stat-card">ATTEND<strong>${attending}</strong></div>
-        <div class="stat-card">PENDING<strong>${pending}</strong></div>
-      </div>
+<div class="dashboard-stats">
+  <div class="stat-card">TOTAL<strong>${total}</strong>👥</div>
+  <div class="stat-card">OPENED<strong>${opened}</strong>✉️</div>
+  <div class="stat-card">NOT OPEN<strong>${total - opened}</strong>📭</div>
+  <div class="stat-card">ATTEND<strong>${attending}</strong>✅</div>
+  <div class="stat-card">PENDING<strong>${pending}</strong>⌛</div>
+</div>
 
       ${
         filteredGuests.length
