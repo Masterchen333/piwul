@@ -127,6 +127,7 @@ async function loadConfig() {
       }, 900);
     } else {
       hideWeddingSection();
+      hideGuestPassport();
     }
 
     try {
@@ -311,6 +312,8 @@ function setupRSVP() {
         if (rsvpMessage) {
           rsvpMessage.textContent = `RSVP saved: ${rsvp} ♥`;
         }
+        localStorage.setItem(`passportRSVP_${guest}`, rsvp);
+        updatePassportRSVP(rsvp);
 
         if (rsvp === "Attending") {
           playPixelConfetti();
@@ -363,6 +366,12 @@ function setupGiftCopy() {
           "Generous Heart +200 XP",
           "🎁",
         );
+      }
+      const guest = getGuestNameFromURL();
+
+      if (guest) {
+        localStorage.setItem(`passportGift_${guest}`, "YES");
+        updatePassportGift();
       }
     } catch (error) {
       if (message) {
@@ -547,6 +556,66 @@ function showNPCBubble() {
     bubble.classList.remove("show");
     bubble.classList.add("hide");
   }, 2800); // 2.8 detik
+}
+
+function setupGuestPassport() {
+  const guestName = getGuestNameFromURL();
+  const passport = document.getElementById("guestPassport");
+
+  if (!guestName || !passport) return;
+
+  passport.classList.remove("hidden-passport");
+
+  setText("passportGuestName", guestName);
+  setText("passportGuestId", createGuestId(guestName));
+
+  const savedRSVP = localStorage.getItem(`passportRSVP_${guestName}`);
+  const savedGift = localStorage.getItem(`passportGift_${guestName}`);
+
+  if (savedRSVP) {
+    updatePassportRSVP(savedRSVP);
+  }
+
+  if (savedGift === "YES") {
+    updatePassportGift();
+  }
+}
+
+function createGuestId(name) {
+  return (
+    "#" +
+    String(name)
+      .toUpperCase()
+      .replace(/[^A-Z0-9]+/g, "-")
+      .replace(/^-|-$/g, "")
+  );
+}
+
+function updatePassportRSVP(rsvp) {
+  const item = document.getElementById("passportRSVP");
+
+  if (!item) return;
+
+  item.classList.add("active");
+  item.textContent =
+    rsvp === "Attending" ? "✓ RSVP Attending" : "✓ RSVP Unable to Attend";
+}
+
+function updatePassportGift() {
+  const item = document.getElementById("passportGift");
+
+  if (!item) return;
+
+  item.classList.add("active");
+  item.textContent = "✓ Gift Number Copied";
+}
+
+function hideGuestPassport() {
+  const passport = document.getElementById("guestPassport");
+
+  if (passport) {
+    passport.classList.add("hidden-passport");
+  }
 }
 
 loadConfig();
