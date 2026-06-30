@@ -52,6 +52,10 @@ if (openInvitation) {
 
     if (npcGuide) {
       npcGuide.classList.remove("npc-hidden");
+
+      setTimeout(() => {
+        showNPCBubble();
+      }, 500);
     }
 
     try {
@@ -105,6 +109,12 @@ async function loadConfig() {
 
     fillJourneyContent();
     setupNPCGuide();
+    guideBtn.addEventListener("click", () => {
+      showNPCBubble();
+
+      panel.classList.toggle("show");
+      panel.setAttribute("aria-hidden", !panel.classList.contains("show"));
+    });
 
     if (isInvitationMode()) {
       fillInvitationContent();
@@ -521,6 +531,22 @@ function setupNPCGuide() {
       }
     });
   });
+}
+
+function showNPCBubble() {
+  const bubble = document.querySelector(".npc-bubble");
+
+  if (!bubble) return;
+
+  bubble.classList.remove("hide");
+  bubble.classList.add("show");
+
+  clearTimeout(bubble.hideTimer);
+
+  bubble.hideTimer = setTimeout(() => {
+    bubble.classList.remove("show");
+    bubble.classList.add("hide");
+  }, 2800); // 2.8 detik
 }
 
 loadConfig();
