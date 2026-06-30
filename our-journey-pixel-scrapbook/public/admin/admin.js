@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const dashboardBox = document.getElementById("dashboardBox");
   const searchGuest = document.getElementById("searchGuest");
   const filterGuest = document.getElementById("filterGuest");
+  const logoutBtn = document.getElementById("logoutBtn");
 
   const adminLoginScreen = document.getElementById("adminLoginScreen");
   const adminWorld = document.getElementById("adminWorld");
@@ -33,8 +34,26 @@ document.addEventListener("DOMContentLoaded", () => {
     loadDashboard();
   }
 
+  function lockAdmin() {
+    localStorage.removeItem(ADMIN_SESSION_KEY);
+
+    if (adminLoginScreen) adminLoginScreen.style.display = "grid";
+    if (adminWorld) adminWorld.classList.add("admin-locked");
+
+    if (adminPassword) adminPassword.value = "";
+    if (adminLoginMessage) adminLoginMessage.textContent = "Logout berhasil.";
+  }
+
   if (localStorage.getItem(ADMIN_SESSION_KEY)) {
     unlockAdmin();
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      if (!confirm("Logout dari Admin?")) return;
+      lockAdmin();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
   }
 
   if (adminLoginBtn) {
