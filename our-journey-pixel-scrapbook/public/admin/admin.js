@@ -1,4 +1,3 @@
-alert("ADMIN JS LOADED");
 document.addEventListener("DOMContentLoaded", () => {
   const guestName =
     document.getElementById("guestName") ||
