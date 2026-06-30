@@ -1416,3 +1416,7 @@ textarea {
   bottom: 150px;
   width: calc(100vw - 20px);
 }
+
+.npc-hidden {
+  display: none !important;
+}

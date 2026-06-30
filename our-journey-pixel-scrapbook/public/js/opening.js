@@ -48,6 +48,11 @@ if (openInvitation) {
     window.scrollTo({ top: 0, behavior: "smooth" });
 
     if (musicControl) musicControl.classList.add("show");
+    const npcGuide = document.getElementById("npcGuide");
+
+    if (npcGuide) {
+      npcGuide.classList.remove("npc-hidden");
+    }
 
     try {
       startDialogCutscene();
