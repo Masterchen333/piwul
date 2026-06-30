@@ -381,7 +381,7 @@
             <div class="gift-card">
               <h3>Bank Transfer</h3>
 
-              <p class="gift-label">BRI</p>
+              <p class="gift-label">BCA</p>
               <p class="gift-number">9876543210</p>
               <p class="gift-name">a.n. Pipit</p>
 
@@ -390,7 +390,7 @@
                 type="button"
                 data-number="9876543210"
               >
-                COPY BRI
+                COPY BCA
               </button>
             </div>
 
@@ -537,6 +537,80 @@
           <button type="button" data-target="#rsvpBox">✅ RSVP</button>
           <button type="button" data-target="#giftSection">🎁 Gift</button>
           <button type="button" data-target="#memorybook">💬 Guestbook</button>
+          <button type="button" id="openEncyclopediaBtn">
+            📖 Wedding Encyclopedia
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="encyclopedia-modal" id="weddingEncyclopedia" aria-hidden="true">
+      <div class="encyclopedia-book pixel-box">
+        <div class="encyclopedia-header">
+          <strong>📖 WEDDING ENCYCLOPEDIA</strong>
+          <button id="encyclopediaClose" type="button">×</button>
+        </div>
+
+        <div class="encyclopedia-tabs">
+          <button class="ency-tab active" type="button" data-tab="bride">
+            Bride
+          </button>
+          <button class="ency-tab" type="button" data-tab="groom">Groom</button>
+          <button class="ency-tab" type="button" data-tab="story">Story</button>
+        </div>
+
+        <div class="ency-page active" id="encyBride">
+          <h2>🌸 Bride</h2>
+          <div class="ency-card">
+            <p><span>Name</span><strong>Wulan</strong></p>
+            <p><span>Role</span><strong>The Bride</strong></p>
+            <p><span>Favorite Color</span><strong>Soft Yellow</strong></p>
+            <p>
+              <span>Personality</span
+              ><strong>Calm, sweet, and thoughtful</strong>
+            </p>
+            <p>
+              <span>Special Trait</span
+              ><strong>Brings warmth to every little moment</strong>
+            </p>
+          </div>
+        </div>
+
+        <div class="ency-page" id="encyGroom">
+          <h2>🌿 Groom</h2>
+          <div class="ency-card">
+            <p><span>Name</span><strong>Pipit</strong></p>
+            <p><span>Role</span><strong>The Groom</strong></p>
+            <p>
+              <span>Favorite Thing</span
+              ><strong>Coffee, games, and little memories</strong>
+            </p>
+            <p>
+              <span>Personality</span
+              ><strong>Thoughtful, romantic, and a bit overthinking</strong>
+            </p>
+            <p>
+              <span>Special Trait</span
+              ><strong>Turns feelings into small stories</strong>
+            </p>
+          </div>
+        </div>
+
+        <div class="ency-page" id="encyStory">
+          <h2>💗 Our Story</h2>
+          <div class="ency-card">
+            <p><span>Quest Name</span><strong>Our Journey</strong></p>
+            <p><span>Started</span><strong>10 February 2026</strong></p>
+            <p>
+              <span>Theme</span
+              ><strong>Pixel scrapbook, memories, and love</strong>
+            </p>
+            <p>
+              <span>Main Quest</span
+              ><strong>Build a life full of warmth together</strong>
+            </p>
+            <p><span>Reward</span><strong>+999 Friendship Points ♥</strong></p>
+          </div>
         </div>
       </div>
     </div>

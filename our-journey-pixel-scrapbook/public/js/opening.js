@@ -120,6 +120,7 @@ async function loadConfig() {
       setupRSVP();
       setupGiftCopy();
       setupSecretLetter();
+      setupWeddingEncyclopedia();
 
       setTimeout(() => {
         unlockAchievement("Achievement Unlocked!", "First Visit +100 XP", "🌸");
@@ -652,6 +653,65 @@ function hideGuestPassport() {
   if (passport) {
     passport.classList.add("hidden-passport");
   }
+}
+
+function setupWeddingEncyclopedia() {
+  const modal = document.getElementById("weddingEncyclopedia");
+  const openBtn = document.getElementById("openEncyclopediaBtn");
+  const closeBtn = document.getElementById("encyclopediaClose");
+  const tabs = document.querySelectorAll(".ency-tab");
+  const pages = {
+    bride: document.getElementById("encyBride"),
+    groom: document.getElementById("encyGroom"),
+    story: document.getElementById("encyStory"),
+  };
+
+  if (!modal || !openBtn) return;
+
+  openBtn.addEventListener("click", () => {
+    modal.classList.add("show");
+    modal.setAttribute("aria-hidden", "false");
+
+    unlockAchievement("Achievement Unlocked!", "Wedding Scholar +150 XP", "📖");
+  });
+
+  if (closeBtn) {
+    closeBtn.addEventListener("click", closeWeddingEncyclopedia);
+  }
+
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) closeWeddingEncyclopedia();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeWeddingEncyclopedia();
+  });
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const target = tab.dataset.tab;
+
+      tabs.forEach((item) => item.classList.remove("active"));
+      tab.classList.add("active");
+
+      Object.values(pages).forEach((page) => {
+        if (page) page.classList.remove("active");
+      });
+
+      if (pages[target]) {
+        pages[target].classList.add("active");
+      }
+    });
+  });
+}
+
+function closeWeddingEncyclopedia() {
+  const modal = document.getElementById("weddingEncyclopedia");
+
+  if (!modal) return;
+
+  modal.classList.remove("show");
+  modal.setAttribute("aria-hidden", "true");
 }
 
 loadConfig();
