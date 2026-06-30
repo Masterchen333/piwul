@@ -23,6 +23,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchGuest = document.getElementById("searchGuest");
   const filterGuest = document.getElementById("filterGuest");
 
+  const adminLoginForm = document.getElementById("adminLoginForm");
+
+  if (adminLoginForm) {
+    adminLoginForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      handleAdminLogin();
+    });
+  }
+
   let guestData = [];
   let isLoggingIn = false;
 
@@ -32,15 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (adminLoginBtn) {
     adminLoginBtn.addEventListener("click", handleAdminLogin);
-
-    adminLoginBtn.addEventListener(
-      "touchend",
-      (event) => {
-        event.preventDefault();
-        handleAdminLogin();
-      },
-      { passive: false },
-    );
   }
 
   if (adminPassword) {
