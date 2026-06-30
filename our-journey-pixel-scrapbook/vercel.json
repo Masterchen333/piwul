@@ -1,3 +1,15 @@
 {
   "rewrites": [{ "source": "/(.*)", "destination": "/" }]
 }
+{
+  "rewrites": [
+    {
+      "source": "/invite/:name",
+      "destination": "/api/invite?name=:name"
+    },
+    {
+      "source": "/og/:name.png",
+      "destination": "/api/og?name=:name"
+    }
+  ]
+}

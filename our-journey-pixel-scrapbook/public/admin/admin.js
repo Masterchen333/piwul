@@ -116,7 +116,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const cleanedPhone = cleanPhone(phone);
-    const invitationLink = `${BASE_URL}/?to=${encodeURIComponent(name)}`;
+    const invitationLink = `${BASE_URL}/invite/${slugifyName(name)}`;
+
+    function slugifyName(name) {
+      return String(name)
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-zA-Z0-9-]/g, "");
+    }
 
     const message =
       `Kepada Yth. ${name}\n\n` +
