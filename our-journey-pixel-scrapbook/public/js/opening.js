@@ -349,39 +349,42 @@ function setupRSVP() {
 }
 
 function setupGiftCopy() {
-  const copyButton = document.getElementById("copyGiftNumber");
-  const giftNumber = document.getElementById("giftBankNumber");
+  const buttons = document.querySelectorAll(".copy-gift-btn");
   const message = document.getElementById("giftCopyMessage");
 
-  if (!copyButton || !giftNumber) return;
+  if (!buttons.length) return;
 
-  copyButton.addEventListener("click", async () => {
-    const number = giftNumber.textContent.trim();
+  buttons.forEach((button) => {
+    button.addEventListener("click", async () => {
+      const number = button.dataset.number;
 
-    try {
-      await navigator.clipboard.writeText(number);
+      if (!number) return;
 
-      if (message) {
-        message.textContent = "Nomor rekening berhasil disalin ♥";
+      try {
+        await navigator.clipboard.writeText(number);
+
+        if (message) {
+          message.textContent = `Nomor ${number} berhasil disalin ♥`;
+        }
+
+        unlockAchievement(
+          "Achievement Unlocked!",
+          "Generous Heart +200 XP",
+          "🎁",
+        );
+
+        const guest = getGuestNameFromURL();
+
+        if (guest) {
+          localStorage.setItem(`passportGift_${guest}`, "YES");
+          updatePassportGift();
+        }
+      } catch (error) {
+        if (message) {
+          message.textContent = "Gagal menyalin. Silakan salin manual ya.";
+        }
       }
-
-      unlockAchievement(
-        "Achievement Unlocked!",
-        "Generous Heart +200 XP",
-        "🎁",
-      );
-
-      const guest = getGuestNameFromURL();
-
-      if (guest) {
-        localStorage.setItem(`passportGift_${guest}`, "YES");
-        updatePassportGift();
-      }
-    } catch (error) {
-      if (message) {
-        message.textContent = "Gagal menyalin. Silakan salin manual ya.";
-      }
-    }
+    });
   });
 }
 

@@ -361,33 +361,65 @@
             Doa restu Anda adalah hadiah terbaik bagi kami.
           </p>
 
-          <div class="gift-card">
-            <h3>Bank Transfer</h3>
+          <div class="gift-grid">
+            <div class="gift-card">
+              <h3>Bank Transfer</h3>
 
-            <p class="gift-label">BCA</p>
-            <p class="gift-number" id="giftBankNumber">1234567890</p>
-            <p class="gift-name">a.n. Pipit Yui</p>
+              <p class="gift-label">BCA</p>
+              <p class="gift-number">1234567890</p>
+              <p class="gift-name">a.n. Wulan</p>
 
-            <button class="pixel-btn" id="copyGiftNumber" type="button">
-              COPY NUMBER
-            </button>
+              <button
+                class="pixel-btn copy-gift-btn"
+                type="button"
+                data-number="1234567890"
+              >
+                COPY BCA
+              </button>
+            </div>
 
-            <p class="small-note" id="giftCopyMessage"></p>
+            <div class="gift-card">
+              <h3>Bank Transfer</h3>
+
+              <p class="gift-label">BRI</p>
+              <p class="gift-number">9876543210</p>
+              <p class="gift-name">a.n. Pipit</p>
+
+              <button
+                class="pixel-btn copy-gift-btn"
+                type="button"
+                data-number="9876543210"
+              >
+                COPY BRI
+              </button>
+            </div>
+
+            <div class="gift-card">
+              <h3>QRIS Wulan</h3>
+
+              <img
+                class="gift-qris"
+                src="./assets/photos/qris-wulan.png"
+                alt="QRIS Wulan"
+              />
+
+              <p class="small-note">Scan QRIS Wulan.</p>
+            </div>
+
+            <div class="gift-card">
+              <h3>QRIS Pipit</h3>
+
+              <img
+                class="gift-qris"
+                src="./assets/photos/qris-pipit.png"
+                alt="QRIS Pipit"
+              />
+
+              <p class="small-note">Scan QRIS Pipit.</p>
+            </div>
           </div>
 
-          <div class="gift-card">
-            <h3>QRIS</h3>
-
-            <img
-              class="gift-qris"
-              src="./assets/photos/qris.png"
-              alt="QRIS Wedding Gift"
-            />
-
-            <p class="small-note">
-              Scan QRIS untuk mengirim gift secara digital.
-            </p>
-          </div>
+          <p class="small-note" id="giftCopyMessage"></p>
         </section>
 
         <section class="section pixel-box" id="memorybook">

@@ -1754,3 +1754,15 @@ textarea {
     font-size: 18px;
   }
 }
+
+.gift-grid {
+  display: grid;
+  gap: 18px;
+  margin-top: 24px;
+}
+
+@media (min-width: 760px) {
+  .gift-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
