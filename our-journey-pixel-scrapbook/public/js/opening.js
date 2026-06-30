@@ -606,8 +606,25 @@ function updatePassportRSVP(rsvp) {
   if (!item) return;
 
   item.classList.add("active");
-  item.textContent =
-    rsvp === "Attending" ? "✓ RSVP Attending" : "✓ RSVP Unable to Attend";
+
+  item.innerHTML =
+    rsvp === "Attending"
+      ? `
+        <span class="quest-icon">✅</span>
+        <div>
+          <strong>RSVP Attending</strong>
+          <small>See you on our wedding day</small>
+        </div>
+        <em>✓</em>
+      `
+      : `
+        <span class="quest-icon">💌</span>
+        <div>
+          <strong>RSVP Unable</strong>
+          <small>Thank you for your wishes</small>
+        </div>
+        <em>✓</em>
+      `;
 }
 
 function updatePassportGift() {
@@ -616,7 +633,14 @@ function updatePassportGift() {
   if (!item) return;
 
   item.classList.add("active");
-  item.textContent = "✓ Gift Number Copied";
+  item.innerHTML = `
+    <span class="quest-icon">🎁</span>
+    <div>
+      <strong>Gift Number Copied</strong>
+      <small>Thank you for your kind support</small>
+    </div>
+    <em>✓</em>
+  `;
 }
 
 function hideGuestPassport() {

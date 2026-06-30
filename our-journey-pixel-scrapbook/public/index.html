@@ -124,34 +124,82 @@
           class="section pixel-box guest-passport hidden-passport"
           id="guestPassport"
         >
-          <p class="overline">VISITOR PASS</p>
-          <h2>Guest Passport</h2>
+          <div class="passport-book">
+            <div class="passport-page passport-left">
+              <p class="overline">VISITOR PASS</p>
+              <h2>Guest Passport</h2>
+              <p class="passport-subtitle">Stardew Wedding Journey</p>
 
-          <div class="passport-card">
-            <div class="passport-avatar">🎟️</div>
+              <div class="passport-profile">
+                <div class="passport-avatar">
+                  <span>🎟️</span>
+                </div>
 
-            <div class="passport-info">
-              <p class="passport-label">Guest Name</p>
-              <h3 id="passportGuestName">Guest</h3>
+                <div class="passport-info">
+                  <p class="passport-label">Guest Name</p>
+                  <h3 id="passportGuestName">Guest</h3>
 
-              <p class="passport-label">Guest ID</p>
-              <p id="passportGuestId">#GUEST</p>
+                  <p class="passport-label">Guest ID</p>
+                  <p id="passportGuestId">#GUEST</p>
+
+                  <p class="passport-label">Status</p>
+                  <p class="passport-approved">💗 Special Invitation</p>
+                </div>
+              </div>
+
+              <div class="passport-stamp">
+                APPROVED<br />
+                WITH LOVE
+              </div>
             </div>
-          </div>
 
-          <div class="passport-status">
-            <div class="passport-check active" id="passportInvited">
-              ✓ Invited
-            </div>
+            <div class="passport-page passport-right">
+              <div class="passport-title-board">GUEST QUEST</div>
+              <p class="passport-message">
+                Let’s make beautiful memories together! ♥
+              </p>
 
-            <div class="passport-check active" id="passportOpened">
-              ✓ Opened
-            </div>
+              <div class="passport-status">
+                <div class="passport-check active" id="passportInvited">
+                  <span class="quest-icon">💌</span>
+                  <div>
+                    <strong>Invited</strong>
+                    <small>Special invitation unlocked</small>
+                  </div>
+                  <em>✓</em>
+                </div>
 
-            <div class="passport-check" id="passportRSVP">☐ RSVP Pending</div>
+                <div class="passport-check active" id="passportOpened">
+                  <span class="quest-icon">🌸</span>
+                  <div>
+                    <strong>Opened</strong>
+                    <small>You opened this invitation</small>
+                  </div>
+                  <em>✓</em>
+                </div>
 
-            <div class="passport-check" id="passportGift">
-              ☐ Gift Not Copied
+                <div class="passport-check" id="passportRSVP">
+                  <span class="quest-icon">✅</span>
+                  <div>
+                    <strong>RSVP Pending</strong>
+                    <small>Confirm your attendance</small>
+                  </div>
+                  <em>○</em>
+                </div>
+
+                <div class="passport-check" id="passportGift">
+                  <span class="quest-icon">🎁</span>
+                  <div>
+                    <strong>Gift Not Copied</strong>
+                    <small>Gift support is optional</small>
+                  </div>
+                  <em>○</em>
+                </div>
+              </div>
+
+              <div class="passport-footer-note">
+                🌷 Thank you for being part of our special day.
+              </div>
             </div>
           </div>
         </section>
