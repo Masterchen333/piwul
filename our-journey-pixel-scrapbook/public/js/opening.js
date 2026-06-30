@@ -111,6 +111,7 @@ async function loadConfig() {
       fillInvitationContent();
       markInvitationOpened();
       setupRSVP();
+      setupGiftCopy();
     } else {
       hideWeddingSection();
     }
@@ -214,6 +215,12 @@ function fillInvitationContent() {
     weddingSection.classList.remove("hidden-wedding");
   }
 
+  const giftSection = document.getElementById("giftSection");
+
+  if (giftSection) {
+    giftSection.classList.remove("hidden-gift");
+  }
+
   if (!wedding) return;
 
   setText("weddingTitle", wedding.title || "Our Wedding Day");
@@ -315,9 +322,33 @@ function setupRSVP() {
         btn.disabled = false;
       });
 
-      buttons[0].textContent = "YES, I WILL ATTEND";
-      buttons[1].textContent = "SORRY, I CAN'T";
+      if (buttons[0]) buttons[0].textContent = "YES, I WILL ATTEND";
+      if (buttons[1]) buttons[1].textContent = "SORRY, I CAN'T";
     });
+  });
+}
+
+function setupGiftCopy() {
+  const copyButton = document.getElementById("copyGiftNumber");
+  const giftNumber = document.getElementById("giftBankNumber");
+  const message = document.getElementById("giftCopyMessage");
+
+  if (!copyButton || !giftNumber) return;
+
+  copyButton.addEventListener("click", async () => {
+    const number = giftNumber.textContent.trim();
+
+    try {
+      await navigator.clipboard.writeText(number);
+
+      if (message) {
+        message.textContent = "Nomor rekening berhasil disalin ♥";
+      }
+    } catch (error) {
+      if (message) {
+        message.textContent = "Gagal menyalin. Silakan salin manual ya.";
+      }
+    }
   });
 }
 
@@ -326,6 +357,12 @@ function hideWeddingSection() {
 
   if (weddingSection) {
     weddingSection.classList.add("hidden-wedding");
+  }
+
+  const giftSection = document.getElementById("giftSection");
+
+  if (giftSection) {
+    giftSection.classList.add("hidden-gift");
   }
 }
 
