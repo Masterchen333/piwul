@@ -43,18 +43,11 @@ if (openInvitation) {
       paperSound.play();
     } catch {}
 
-    if (opening) {
-      opening.classList.add("hidden");
-    }
+    if (opening) opening.classList.add("hidden");
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
 
-    if (musicControl) {
-      musicControl.classList.add("show");
-    }
+    if (musicControl) musicControl.classList.add("show");
 
     try {
       startDialogCutscene();
@@ -147,9 +140,7 @@ async function playMusicFadeIn() {
 
     appState.isPlaying = true;
 
-    if (musicControl) {
-      musicControl.textContent = "♪";
-    }
+    if (musicControl) musicControl.textContent = "♪";
 
     let volume = 0;
 
@@ -165,10 +156,7 @@ async function playMusicFadeIn() {
     }, 100);
   } catch (error) {
     appState.isPlaying = false;
-
-    if (musicControl) {
-      musicControl.textContent = "▶";
-    }
+    if (musicControl) musicControl.textContent = "▶";
   }
 }
 
@@ -181,9 +169,7 @@ function fillJourneyContent() {
   setText("openingSubtitle", site.subtitle);
   setText("openingNote", site.openingNote);
 
-  if (openInvitation) {
-    openInvitation.textContent = site.startButton;
-  }
+  if (openInvitation) openInvitation.textContent = site.startButton;
 
   setText("storyLabel", couple.label.toUpperCase());
   setText("heroTitle", site.title.toUpperCase());
@@ -205,21 +191,19 @@ function fillInvitationContent() {
   setText("openingSubtitle", "Kepada Yth.");
   setText("openingNote", guestName);
 
-  if (openInvitation) {
-    openInvitation.textContent = "BUKA UNDANGAN";
-  }
+  if (openInvitation) openInvitation.textContent = "BUKA UNDANGAN";
 
   const weddingSection = document.getElementById("wedding");
+  if (weddingSection) weddingSection.classList.remove("hidden-wedding");
 
-  if (weddingSection) {
-    weddingSection.classList.remove("hidden-wedding");
-  }
+  const loveLetterSection = document.getElementById("loveLetterSection");
+  if (loveLetterSection)
+    loveLetterSection.classList.remove("hidden-love-letter");
+
+  setText("loveLetterGreeting", `Dear ${guestName},`);
 
   const giftSection = document.getElementById("giftSection");
-
-  if (giftSection) {
-    giftSection.classList.remove("hidden-gift");
-  }
+  if (giftSection) giftSection.classList.remove("hidden-gift");
 
   if (!wedding) return;
 
@@ -249,10 +233,7 @@ function fillInvitationContent() {
   }
 
   const mapsLink = document.getElementById("mapsLink");
-
-  if (mapsLink && wedding.maps) {
-    mapsLink.href = wedding.maps;
-  }
+  if (mapsLink && wedding.maps) mapsLink.href = wedding.maps;
 }
 
 async function markInvitationOpened() {
@@ -358,16 +339,13 @@ function setupGiftCopy() {
 
 function hideWeddingSection() {
   const weddingSection = document.getElementById("wedding");
+  if (weddingSection) weddingSection.classList.add("hidden-wedding");
 
-  if (weddingSection) {
-    weddingSection.classList.add("hidden-wedding");
-  }
+  const loveLetterSection = document.getElementById("loveLetterSection");
+  if (loveLetterSection) loveLetterSection.classList.add("hidden-love-letter");
 
   const giftSection = document.getElementById("giftSection");
-
-  if (giftSection) {
-    giftSection.classList.add("hidden-gift");
-  }
+  if (giftSection) giftSection.classList.add("hidden-gift");
 }
 
 function setText(id, text) {

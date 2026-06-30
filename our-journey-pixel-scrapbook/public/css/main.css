@@ -1055,3 +1055,51 @@ textarea {
     opacity: 0;
   }
 }
+
+.hidden-love-letter {
+  display: none !important;
+}
+
+.love-letter-section {
+  text-align: center;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(241, 120, 168, 0.16),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(255, 216, 112, 0.22),
+      transparent 32%
+    ),
+    var(--paper);
+}
+
+.love-letter-paper {
+  max-width: 720px;
+  margin: 24px auto 0;
+  padding: clamp(20px, 5vw, 34px);
+  border: 5px solid var(--brown);
+  background:
+    linear-gradient(transparent 95%, rgba(75, 47, 35, 0.08) 96%), #fffaf0;
+  background-size: 100% 34px;
+  box-shadow: 6px 6px 0 #d79ab0;
+}
+
+.love-letter-paper p {
+  margin-bottom: 18px;
+  font-size: var(--font-xs);
+  line-height: 2.4;
+  text-align: left;
+}
+
+#loveLetterGreeting {
+  color: var(--pink-dark);
+}
+
+.love-letter-sign {
+  margin-top: 24px !important;
+  text-align: right !important;
+  color: var(--pink-dark);
+}
