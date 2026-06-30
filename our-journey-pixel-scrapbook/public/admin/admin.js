@@ -13,16 +13,74 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchGuest = document.getElementById("searchGuest");
   const filterGuest = document.getElementById("filterGuest");
 
+  const adminLoginScreen = document.getElementById("adminLoginScreen");
+  const adminWorld = document.getElementById("adminWorld");
+  const adminPassword = document.getElementById("adminPassword");
+  const adminLoginBtn = document.getElementById("adminLoginBtn");
+  const adminLoginMessage = document.getElementById("adminLoginMessage");
+
   const BASE_URL = "https://piwul.vercel.app";
   const GOOGLE_SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbwDjSIMzVWoEMssEfjdCuYmYBwJbIGrCH0HIqmenLilBg9AOUHTfUJ6fZwIBchSbO8O/exec";
 
+  const ADMIN_SESSION_KEY = "piwulAdminToken";
+
   let guestData = [];
 
+  function unlockAdmin() {
+    if (adminLoginScreen) adminLoginScreen.style.display = "none";
+    if (adminWorld) adminWorld.classList.remove("admin-locked");
+    loadDashboard();
+  }
+
+  if (localStorage.getItem(ADMIN_SESSION_KEY)) {
+    unlockAdmin();
+  }
+
+  if (adminLoginBtn) {
+    adminLoginBtn.addEventListener("click", async () => {
+      const password = adminPassword.value.trim();
+
+      if (!password) {
+        adminLoginMessage.textContent = "Password tidak boleh kosong.";
+        return;
+      }
+
+      adminLoginBtn.disabled = true;
+      adminLoginBtn.textContent = "CHECKING...";
+
+      try {
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8",
+          },
+          body: JSON.stringify({
+            type: "admin_login",
+            password,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          localStorage.setItem(ADMIN_SESSION_KEY, result.token);
+          unlockAdmin();
+        } else {
+          adminLoginMessage.textContent = "Password salah.";
+          adminPassword.value = "";
+        }
+      } catch (error) {
+        console.error("Login failed:", error);
+        adminLoginMessage.textContent = "Login gagal. Cek koneksi.";
+      }
+
+      adminLoginBtn.disabled = false;
+      adminLoginBtn.textContent = "LOGIN";
+    });
+  }
+
   if (!guestName || !guestPhone || !generateBtn || !resultBox) {
-    alert(
-      "Admin element tidak lengkap. Cek id input/button di admin/index.html.",
-    );
     return;
   }
 
@@ -47,7 +105,9 @@ document.addEventListener("DOMContentLoaded", () => {
       `Silakan buka undangan berikut:\n${invitationLink}\n\n` +
       `Terima kasih ♥`;
 
-    const waLink = `https://wa.me/${cleanedPhone}?text=${encodeURIComponent(message)}`;
+    const waLink = `https://wa.me/${cleanedPhone}?text=${encodeURIComponent(
+      message,
+    )}`;
 
     resultBox.innerHTML = `
       <div class="guest-item">
@@ -144,13 +204,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     dashboardBox.innerHTML = `
-<div class="dashboard-stats">
-  <div class="stat-card">TOTAL<strong>${total}</strong>👥</div>
-  <div class="stat-card">OPENED<strong>${opened}</strong>✉️</div>
-  <div class="stat-card">NOT OPEN<strong>${total - opened}</strong>📭</div>
-  <div class="stat-card">ATTEND<strong>${attending}</strong>✅</div>
-  <div class="stat-card">PENDING<strong>${pending}</strong>⌛</div>
-</div>
+      <div class="dashboard-stats">
+        <div class="stat-card">TOTAL<strong>${total}</strong>👥</div>
+        <div class="stat-card">OPENED<strong>${opened}</strong>✉️</div>
+        <div class="stat-card">NOT OPEN<strong>${total - opened}</strong>📭</div>
+        <div class="stat-card">ATTEND<strong>${attending}</strong>✅</div>
+        <div class="stat-card">PENDING<strong>${pending}</strong>⌛</div>
+      </div>
 
       ${
         filteredGuests.length
@@ -212,6 +272,4 @@ document.addEventListener("DOMContentLoaded", () => {
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
   }
-
-  loadDashboard();
 });
