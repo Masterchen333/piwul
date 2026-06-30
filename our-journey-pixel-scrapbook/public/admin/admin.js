@@ -1,115 +1,33 @@
-console.log("ADMIN JS v21 LOADED");
+console.log("ADMIN JS CLEAN v1 LOADED");
 
 document.addEventListener("DOMContentLoaded", () => {
-  const guestName =
-    document.getElementById("guestName") ||
-    document.getElementById("adminGuestName");
-
-  const guestPhone =
-    document.getElementById("guestPhone") ||
-    document.getElementById("adminGuestPhone");
-
-  const generateBtn = document.getElementById("generateBtn");
-  const resultBox = document.getElementById("resultBox");
-  const dashboardBox = document.getElementById("dashboardBox");
-  const searchGuest = document.getElementById("searchGuest");
-  const filterGuest = document.getElementById("filterGuest");
-  const logoutBtn = document.getElementById("logoutBtn");
-
-  const adminLoginScreen = document.getElementById("adminLoginScreen");
-  const adminWorld = document.getElementById("adminWorld");
-  const adminPassword = document.getElementById("adminPassword");
-  const adminLoginBtn = document.getElementById("adminLoginBtn");
-  const adminLoginMessage = document.getElementById("adminLoginMessage");
-
   const BASE_URL = "https://piwul.vercel.app";
   const GOOGLE_SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbwDjSIMzVWoEMssEfjdCuYmYBwJbIGrCH0HIqmenLilBg9AOUHTfUJ6fZwIBchSbO8O/exec";
 
   const ADMIN_SESSION_KEY = "piwulAdminToken";
 
+  const adminLoginScreen = document.getElementById("adminLoginScreen");
+  const adminWorld = document.getElementById("adminWorld");
+  const adminPassword = document.getElementById("adminPassword");
+  const adminLoginBtn = document.getElementById("adminLoginBtn");
+  const adminLoginMessage = document.getElementById("adminLoginMessage");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  const guestName = document.getElementById("guestName");
+  const guestPhone = document.getElementById("guestPhone");
+  const generateBtn = document.getElementById("generateBtn");
+  const resultBox = document.getElementById("resultBox");
+
+  const dashboardBox = document.getElementById("dashboardBox");
+  const searchGuest = document.getElementById("searchGuest");
+  const filterGuest = document.getElementById("filterGuest");
+
   let guestData = [];
   let isLoggingIn = false;
 
-  function unlockAdmin() {
-    if (adminLoginScreen) adminLoginScreen.style.display = "none";
-    if (adminWorld) adminWorld.classList.remove("admin-locked");
-    loadDashboard();
-  }
-
-  function lockAdmin() {
-    localStorage.removeItem(ADMIN_SESSION_KEY);
-
-    if (adminLoginScreen) adminLoginScreen.style.display = "grid";
-    if (adminWorld) adminWorld.classList.add("admin-locked");
-    if (adminPassword) adminPassword.value = "";
-    if (adminLoginMessage) adminLoginMessage.textContent = "Logout berhasil.";
-  }
-
   if (localStorage.getItem(ADMIN_SESSION_KEY)) {
     unlockAdmin();
-  }
-
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-      if (!confirm("Logout dari Admin?")) return;
-      lockAdmin();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-  }
-
-  async function handleAdminLogin() {
-    if (isLoggingIn) return;
-
-    const password = adminPassword ? adminPassword.value.trim() : "";
-
-    if (!password) {
-      if (adminLoginMessage) {
-        adminLoginMessage.textContent = "Password tidak boleh kosong.";
-      }
-      return;
-    }
-
-    isLoggingIn = true;
-
-    if (adminLoginBtn) {
-      adminLoginBtn.disabled = true;
-      adminLoginBtn.textContent = "CHECKING...";
-    }
-
-    if (adminLoginMessage) {
-      adminLoginMessage.textContent = "";
-    }
-
-    try {
-      const result = await adminLoginJSONP(password);
-
-      if (result && result.success) {
-        localStorage.setItem(ADMIN_SESSION_KEY, result.token || "YES");
-        unlockAdmin();
-      } else {
-        if (adminLoginMessage) {
-          adminLoginMessage.textContent = "Password salah.";
-        }
-
-        if (adminPassword) {
-          adminPassword.value = "";
-        }
-      }
-    } catch (error) {
-      console.error("Login failed:", error);
-
-      if (adminLoginMessage) {
-        adminLoginMessage.textContent = "Login gagal. Cek koneksi.";
-      }
-    }
-
-    isLoggingIn = false;
-
-    if (adminLoginBtn) {
-      adminLoginBtn.disabled = false;
-      adminLoginBtn.textContent = "LOGIN";
-    }
   }
 
   if (adminLoginBtn) {
@@ -127,20 +45,74 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (adminPassword) {
     adminPassword.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        handleAdminLogin();
-      }
+      if (event.key === "Enter") handleAdminLogin();
     });
   }
 
-  if (!guestName || !guestPhone || !generateBtn || !resultBox) {
-    return;
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      if (!confirm("Logout dari Admin?")) return;
+      localStorage.removeItem(ADMIN_SESSION_KEY);
+      location.reload();
+    });
+  }
+
+  if (generateBtn) {
+    generateBtn.addEventListener("click", generateInvitation);
   }
 
   if (searchGuest) searchGuest.addEventListener("input", renderDashboard);
   if (filterGuest) filterGuest.addEventListener("change", renderDashboard);
 
-  generateBtn.addEventListener("click", async () => {
+  async function handleAdminLogin() {
+    if (isLoggingIn) return;
+
+    const password = adminPassword ? adminPassword.value.trim() : "";
+
+    if (!password) {
+      showLoginMessage("Password tidak boleh kosong.");
+      return;
+    }
+
+    isLoggingIn = true;
+    adminLoginBtn.disabled = true;
+    adminLoginBtn.textContent = "CHECKING...";
+    showLoginMessage("");
+
+    try {
+      const result = await jsonpRequest({
+        type: "admin_login",
+        password,
+      });
+
+      if (result && result.success) {
+        localStorage.setItem(ADMIN_SESSION_KEY, result.token || "YES");
+        unlockAdmin();
+      } else {
+        showLoginMessage("Password salah.");
+        if (adminPassword) adminPassword.value = "";
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+      showLoginMessage("Login gagal. Cek koneksi.");
+    }
+
+    isLoggingIn = false;
+    adminLoginBtn.disabled = false;
+    adminLoginBtn.textContent = "LOGIN";
+  }
+
+  function unlockAdmin() {
+    if (adminLoginScreen) adminLoginScreen.style.display = "none";
+    if (adminWorld) adminWorld.classList.remove("admin-locked");
+    loadDashboard();
+  }
+
+  function showLoginMessage(text) {
+    if (adminLoginMessage) adminLoginMessage.textContent = text;
+  }
+
+  async function generateInvitation() {
     const name = guestName.value.trim();
     const phone = guestPhone.value.trim();
 
@@ -158,9 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
       `Silakan buka undangan berikut:\n${invitationLink}\n\n` +
       `Terima kasih ♥`;
 
-    const waLink = `https://wa.me/${cleanedPhone}?text=${encodeURIComponent(
-      message,
-    )}`;
+    const waLink = `https://wa.me/${cleanedPhone}?text=${encodeURIComponent(message)}`;
 
     resultBox.innerHTML = `
       <div class="guest-item">
@@ -201,68 +171,29 @@ document.addEventListener("DOMContentLoaded", () => {
         }),
       });
 
-      setTimeout(loadDashboard, 1000);
+      setTimeout(loadDashboard, 1200);
     } catch (error) {
-      console.error("Generate save failed:", error);
+      console.error("Generate failed:", error);
     }
 
     generateBtn.disabled = false;
-    generateBtn.textContent = "GENERATE LINK";
-  });
-
-  function adminLoginJSONP(password) {
-    return new Promise((resolve, reject) => {
-      const callbackName = "adminLoginCallback_" + Date.now();
-      let script;
-
-      window[callbackName] = function (data) {
-        resolve(data);
-
-        delete window[callbackName];
-
-        if (script && script.parentNode) {
-          script.parentNode.removeChild(script);
-        }
-      };
-
-      script = document.createElement("script");
-
-      script.src =
-        `${GOOGLE_SCRIPT_URL}?type=admin_login` +
-        `&password=${encodeURIComponent(password)}` +
-        `&callback=${callbackName}` +
-        `&t=${Date.now()}`;
-
-      script.onerror = function () {
-        delete window[callbackName];
-
-        if (script && script.parentNode) {
-          script.parentNode.removeChild(script);
-        }
-
-        reject(new Error("JSONP login failed"));
-      };
-
-      document.body.appendChild(script);
-    });
+    generateBtn.textContent = "GENERATE LINK 🤍";
   }
 
   async function loadDashboard() {
     if (!dashboardBox) return;
 
+    dashboardBox.innerHTML = `<div class="guest-item">Loading dashboard...</div>`;
+
     try {
-      dashboardBox.innerHTML = `<div class="guest-item">Loading dashboard...</div>`;
-
-      const response = await fetch(
-        `${GOOGLE_SCRIPT_URL}?type=guests&t=${Date.now()}`,
-      );
-
-      const data = await response.json();
+      const data = await jsonpRequest({
+        type: "guests",
+      });
 
       guestData = Array.isArray(data) ? data : [];
       renderDashboard();
     } catch (error) {
-      console.error("Dashboard load failed:", error);
+      console.error("Dashboard failed:", error);
       dashboardBox.innerHTML = `<div class="guest-item">Failed to load dashboard.</div>`;
     }
   }
@@ -328,9 +259,7 @@ document.addEventListener("DOMContentLoaded", () => {
         RSVP: ${escapeHTML(guest.rsvp || "-")}<br />
 
         <div class="guest-status">
-          Opened At: ${
-            guest.openedAt ? formatAdminDate(guest.openedAt) : "-"
-          }<br />
+          Opened At: ${guest.openedAt ? formatAdminDate(guest.openedAt) : "-"}<br />
           RSVP Time: ${guest.rsvpTime ? formatAdminDate(guest.rsvpTime) : "-"}
         </div>
 
@@ -338,21 +267,55 @@ document.addEventListener("DOMContentLoaded", () => {
 
         ${
           guest.link
-            ? `<a class="pixel-btn" href="${escapeHTML(
-                guest.link,
-              )}" target="_blank" rel="noopener">OPEN LINK</a>`
+            ? `<a class="pixel-btn" href="${escapeHTML(guest.link)}" target="_blank" rel="noopener">OPEN LINK</a>`
             : ""
         }
 
         ${
           guest.waLink
-            ? `<a class="pixel-btn" href="${escapeHTML(
-                guest.waLink,
-              )}" target="_blank" rel="noopener">OPEN WA</a>`
+            ? `<a class="pixel-btn" href="${escapeHTML(guest.waLink)}" target="_blank" rel="noopener">OPEN WA</a>`
             : ""
         }
       </div>
     `;
+  }
+
+  function jsonpRequest(params) {
+    return new Promise((resolve, reject) => {
+      const callbackName =
+        "jsonpCallback_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
+
+      const query = new URLSearchParams({
+        ...params,
+        callback: callbackName,
+        t: Date.now(),
+      });
+
+      let script = document.createElement("script");
+
+      window[callbackName] = function (data) {
+        resolve(data);
+        cleanup();
+      };
+
+      script.onerror = function () {
+        reject(new Error("JSONP failed"));
+        cleanup();
+      };
+
+      function cleanup() {
+        delete window[callbackName];
+
+        if (script && script.parentNode) {
+          script.parentNode.removeChild(script);
+        }
+
+        script = null;
+      }
+
+      script.src = `${GOOGLE_SCRIPT_URL}?${query.toString()}`;
+      document.body.appendChild(script);
+    });
   }
 
   function formatAdminDate(value) {
