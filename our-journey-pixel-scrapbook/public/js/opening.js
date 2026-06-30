@@ -106,6 +106,9 @@ async function loadConfig() {
       setupRSVP();
       setupGiftCopy();
       setupSecretLetter();
+      setTimeout(() => {
+        unlockAchievement("Achievement Unlocked!", "First Visit +100 XP", "🌸");
+      }, 900);
     } else {
       hideWeddingSection();
     }
@@ -296,6 +299,12 @@ function setupRSVP() {
         if (rsvp === "Attending") {
           playPixelConfetti();
 
+          unlockAchievement(
+            "Achievement Unlocked!",
+            "Wedding Supporter +250 XP",
+            "💌",
+          );
+
           setTimeout(() => {
             showSecretLetter();
           }, 500);
@@ -333,6 +342,11 @@ function setupGiftCopy() {
 
       if (message) {
         message.textContent = "Nomor rekening berhasil disalin ♥";
+        unlockAchievement(
+          "Achievement Unlocked!",
+          "Generous Heart +200 XP",
+          "🎁",
+        );
       }
     } catch (error) {
       if (message) {
@@ -438,6 +452,31 @@ function closeSecretLetter() {
 
   modal.classList.remove("show");
   modal.setAttribute("aria-hidden", "true");
+}
+
+function unlockAchievement(title, text, icon = "🏆") {
+  const toast = document.getElementById("achievementToast");
+  const titleElement = document.getElementById("achievementTitle");
+  const textElement = document.getElementById("achievementText");
+  const iconElement = toast?.querySelector(".achievement-icon");
+
+  if (!toast || !titleElement || !textElement || !iconElement) return;
+
+  iconElement.textContent = icon;
+  titleElement.textContent = title;
+  textElement.textContent = text;
+
+  toast.classList.remove("show");
+
+  setTimeout(() => {
+    toast.classList.add("show");
+    toast.setAttribute("aria-hidden", "false");
+  }, 50);
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+    toast.setAttribute("aria-hidden", "true");
+  }, 4200);
 }
 
 loadConfig();
