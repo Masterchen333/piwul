@@ -1,6 +1,15 @@
-export default function handler(req, res) {
-  const rawName = req.query.name || "Guest";
-  const guestName = String(rawName).replace(/-/g, " ");
+import { ImageResponse } from "@vercel/og";
+import React from "react";
+
+export const config = {
+  runtime: "edge",
+};
+
+export default function handler(req) {
+  const { searchParams } = new URL(req.url);
+  const rawName = searchParams.get("name") || "Guest";
+  const guestName = rawName.replace(/-/g, " ");
+
   const guestId =
     "#" +
     guestName
@@ -8,51 +17,87 @@ export default function handler(req, res) {
       .replace(/[^A-Z0-9]+/g, "-")
       .replace(/^-|-$/g, "");
 
-  const svg = `
-<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1200" height="630" fill="#92d9ff"/>
-  <rect y="430" width="1200" height="200" fill="#79c96b"/>
-
-  <rect x="120" y="80" width="960" height="470" fill="#fff8df" stroke="#4b2f23" stroke-width="14"/>
-  <rect x="150" y="110" width="900" height="410" fill="#fff3cf" stroke="#8d5a35" stroke-width="8"/>
-
-  <text x="600" y="175" text-anchor="middle" font-size="42" font-family="monospace" fill="#a7345d">
-    VISITOR PASS
-  </text>
-
-  <text x="600" y="250" text-anchor="middle" font-size="58" font-family="monospace" fill="#4b2f23">
-    ${escapeXML(guestName)}
-  </text>
-
-  <text x="600" y="315" text-anchor="middle" font-size="30" font-family="monospace" fill="#8d5a35">
-    ${escapeXML(guestId)}
-  </text>
-
-  <rect x="370" y="360" width="460" height="70" fill="#ffecb7" stroke="#4b2f23" stroke-width="6"/>
-  <text x="600" y="407" text-anchor="middle" font-size="28" font-family="monospace" fill="#4b2f23">
-    WEDDING INVITATION
-  </text>
-
-  <text x="600" y="485" text-anchor="middle" font-size="34" font-family="monospace" fill="#a7345d">
-    Pipit ♥ Wulan
-  </text>
-
-  <text x="600" y="525" text-anchor="middle" font-size="22" font-family="monospace" fill="#4b2f23">
-    Open your special invitation
-  </text>
-</svg>
-`;
-
-  res.setHeader("Content-Type", "image/svg+xml");
-  res.setHeader("Cache-Control", "public, max-age=3600");
-  res.end(svg);
-}
-
-function escapeXML(text) {
-  return String(text)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&apos;");
+  return new ImageResponse(
+    React.createElement(
+      "div",
+      {
+        style: {
+          width: "1200px",
+          height: "630px",
+          background: "linear-gradient(#92d9ff 0 68%, #79c96b 68% 100%)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontFamily: "monospace",
+        },
+      },
+      React.createElement(
+        "div",
+        {
+          style: {
+            width: "940px",
+            height: "450px",
+            background: "#fff8df",
+            border: "14px solid #4b2f23",
+            boxShadow: "18px 18px 0 #2a1d18",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          },
+        },
+        React.createElement(
+          "div",
+          {
+            style: {
+              fontSize: 46,
+              color: "#a7345d",
+              marginBottom: 28,
+            },
+          },
+          "VISITOR PASS",
+        ),
+        React.createElement(
+          "div",
+          {
+            style: {
+              fontSize: 64,
+              color: "#4b2f23",
+              marginBottom: 18,
+              textAlign: "center",
+            },
+          },
+          guestName,
+        ),
+        React.createElement(
+          "div",
+          {
+            style: {
+              fontSize: 34,
+              color: "#8d5a35",
+              marginBottom: 34,
+            },
+          },
+          guestId,
+        ),
+        React.createElement(
+          "div",
+          {
+            style: {
+              padding: "18px 42px",
+              background: "#ffecb7",
+              border: "7px solid #4b2f23",
+              fontSize: 32,
+              color: "#4b2f23",
+            },
+          },
+          "Pipit ♥ Wulan Wedding Invitation",
+        ),
+      ),
+    ),
+    {
+      width: 1200,
+      height: 630,
+    },
+  );
 }
