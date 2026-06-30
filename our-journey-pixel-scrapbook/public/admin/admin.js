@@ -83,6 +83,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const result = await response.json();
 
+        const result = await response.json();
+
         if (result.success) {
           localStorage.setItem(ADMIN_SESSION_KEY, result.token);
           unlockAdmin();
