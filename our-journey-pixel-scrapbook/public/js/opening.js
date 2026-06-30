@@ -48,6 +48,7 @@ if (openInvitation) {
     window.scrollTo({ top: 0, behavior: "smooth" });
 
     if (musicControl) musicControl.classList.add("show");
+
     const npcGuide = document.getElementById("npcGuide");
 
     if (npcGuide) {
@@ -109,19 +110,15 @@ async function loadConfig() {
 
     fillJourneyContent();
     setupNPCGuide();
-    guideBtn.addEventListener("click", () => {
-      showNPCBubble();
-
-      panel.classList.toggle("show");
-      panel.setAttribute("aria-hidden", !panel.classList.contains("show"));
-    });
 
     if (isInvitationMode()) {
       fillInvitationContent();
+      setupGuestPassport();
       markInvitationOpened();
       setupRSVP();
       setupGiftCopy();
       setupSecretLetter();
+
       setTimeout(() => {
         unlockAchievement("Achievement Unlocked!", "First Visit +100 XP", "🌸");
       }, 900);
@@ -218,8 +215,9 @@ function fillInvitationContent() {
   if (weddingSection) weddingSection.classList.remove("hidden-wedding");
 
   const loveLetterSection = document.getElementById("loveLetterSection");
-  if (loveLetterSection)
+  if (loveLetterSection) {
     loveLetterSection.classList.remove("hidden-love-letter");
+  }
 
   setText("loveLetterGreeting", `Dear ${guestName},`);
 
@@ -312,6 +310,7 @@ function setupRSVP() {
         if (rsvpMessage) {
           rsvpMessage.textContent = `RSVP saved: ${rsvp} ♥`;
         }
+
         localStorage.setItem(`passportRSVP_${guest}`, rsvp);
         updatePassportRSVP(rsvp);
 
@@ -361,12 +360,14 @@ function setupGiftCopy() {
 
       if (message) {
         message.textContent = "Nomor rekening berhasil disalin ♥";
-        unlockAchievement(
-          "Achievement Unlocked!",
-          "Generous Heart +200 XP",
-          "🎁",
-        );
       }
+
+      unlockAchievement(
+        "Achievement Unlocked!",
+        "Generous Heart +200 XP",
+        "🎁",
+      );
+
       const guest = getGuestNameFromURL();
 
       if (guest) {
@@ -458,15 +459,11 @@ function setupSecretLetter() {
   closeBtn.addEventListener("click", closeSecretLetter);
 
   modal.addEventListener("click", (event) => {
-    if (event.target === modal) {
-      closeSecretLetter();
-    }
+    if (event.target === modal) closeSecretLetter();
   });
 
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      closeSecretLetter();
-    }
+    if (event.key === "Escape") closeSecretLetter();
   });
 }
 
@@ -513,6 +510,8 @@ function setupNPCGuide() {
   if (!guideBtn || !panel) return;
 
   guideBtn.addEventListener("click", () => {
+    showNPCBubble();
+
     panel.classList.toggle("show");
     panel.setAttribute("aria-hidden", !panel.classList.contains("show"));
   });
@@ -555,7 +554,7 @@ function showNPCBubble() {
   bubble.hideTimer = setTimeout(() => {
     bubble.classList.remove("show");
     bubble.classList.add("hide");
-  }, 2800); // 2.8 detik
+  }, 2800);
 }
 
 function setupGuestPassport() {
@@ -572,13 +571,8 @@ function setupGuestPassport() {
   const savedRSVP = localStorage.getItem(`passportRSVP_${guestName}`);
   const savedGift = localStorage.getItem(`passportGift_${guestName}`);
 
-  if (savedRSVP) {
-    updatePassportRSVP(savedRSVP);
-  }
-
-  if (savedGift === "YES") {
-    updatePassportGift();
-  }
+  if (savedRSVP) updatePassportRSVP(savedRSVP);
+  if (savedGift === "YES") updatePassportGift();
 }
 
 function createGuestId(name) {
