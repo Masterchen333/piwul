@@ -1,16 +1,17 @@
 {
   "name": "our-journey-pixel-scrapbook",
   "version": "1.0.0",
-  "description": "**Just a little time capsule filled with photos, shared moments, and memories of the two of us.** 🤍✨",
-  "main": "index.js",
+  "description": "Just a little time capsule filled with photos, shared moments, and memories of the two of us.",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vercel dev"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
-    "@resvg/resvg-js": "^2.6.2"
+    "@resvg/resvg-js": "^2.6.2",
+    "@vercel/og": "^0.6.5",
+    "react": "^18.3.1"
   }
 }
