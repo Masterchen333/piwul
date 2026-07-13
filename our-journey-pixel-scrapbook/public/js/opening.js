@@ -359,8 +359,6 @@ function setupRSVP() {
         localStorage.setItem(`passportRSVP_${guest}`, rsvp);
         updatePassportRSVP(rsvp);
 
-        alert("Terima kasih atas ucapan dan doanya! ✨");
-
         if (rsvp === "Attending") {
           playPixelConfetti();
 
