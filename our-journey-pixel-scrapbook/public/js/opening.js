@@ -8,30 +8,6 @@ const appState = {
 const OPENING_TRACKING_URL =
   "https://script.google.com/macros/s/AKfycbwDjSIMzVWoEMssEfjdCuYmYBwJbIGrCH0HIqmenLilBg9AOUHTfUJ6fZwIBchSbO8O/exec";
 
-// Kumpulan Dialog NPC Dinamis Berdasarkan Waktu
-const NPC_DIALOGUES = {
-  morning: [
-    "Selamat pagi! ☀️ Udara Pelican Town segar sekali hari ini.",
-    "Pagi yang cerah! Jangan lupa secangkir kopi sebelum memulai aktivitas ya. ☕",
-    "Halo! Senang melihatmu sepagi ini. Sudah cek menu Encyclopedia belum?",
-  ],
-  afternoon: [
-    "Selamat siang! 🌤️ Cuaca di luar sedang hangat ya.",
-    "Siang-siang begini enaknya jalan-jalan ke pantai. Jangan lupa isi RSVP-mu ya! 💍",
-    "Halo! Semoga harimu menyenangkan. Butuh bantuan untuk melihat lokasi?",
-  ],
-  evening: [
-    "Selamat malam! 🌙 Bintang-bintang malam ini terlihat indah.",
-    "Malam yang tenang. Terima kasih sudah menyempatkan berkunjung ke sini. ✨",
-    "Sudah larut malam, jangan lupa istirahat ya! 🛌",
-  ],
-  weddingDay: [
-    "🎉 HARI YANG DITUNGGU SUDAH TIBA! 🎉",
-    "Hari ini adalah hari bahagia Pipit & Wulan. Sampai jumpa di venue ya! ❤️",
-    "Semua bersukacita! Mari berikan doa terbaik untuk kedua mempelai hari ini. 🌸",
-  ],
-};
-
 if ("scrollRestoration" in history) {
   history.scrollRestoration = "manual";
 }
@@ -145,20 +121,6 @@ async function loadConfig() {
       setupGiftCopy();
       setupSecretLetter();
       setupWeddingEncyclopedia();
-
-      // Buka akses fitur RPG khusus Link Unik di sini
-      const calendarSection = document.getElementById("weddingCalendarSection");
-      if (calendarSection) {
-        calendarSection.classList.add("unlocked");
-        setupStardewCalendar();
-      }
-
-      const stardewMapSection = document.getElementById("stardewMapSection");
-      if (stardewMapSection) {
-        stardewMapSection.classList.add("unlocked");
-      }
-
-      setupDynamicNPCDialogue();
 
       setTimeout(() => {
         unlockAchievement("Achievement Unlocked!", "First Visit +100 XP", "🌸");
@@ -355,10 +317,6 @@ function setupRSVP() {
 
         localStorage.setItem(`passportRSVP_${guest}`, rsvp);
         updatePassportRSVP(rsvp);
-
-        // Pemicu Sukses
-        alert("Terima kasih atas ucapan dan doanya! ✨");
-        triggerWeddingCredits();
 
         if (rsvp === "Attending") {
           playPixelConfetti();
@@ -764,6 +722,7 @@ function setupStardewCalendar() {
 
   if (!weddingDayCell || !modal || !contentBox) return;
 
+  // Data detail acara (Bisa disesuaikan dengan data wedding.json milikmu)
   const eventData = {
     title: "🌸 THE BIG DAY 🌸",
     akadTime: "08.00 WIB",
@@ -773,6 +732,7 @@ function setupStardewCalendar() {
   };
 
   weddingDayCell.addEventListener("click", () => {
+    // Inject detail info ke dalam modal kertas kuno
     contentBox.innerHTML = `
       <div class="calendar-event-details">
         <h3>${eventData.title}</h3>
@@ -791,6 +751,7 @@ function setupStardewCalendar() {
     modal.classList.add("show");
     modal.setAttribute("aria-hidden", "false");
 
+    // Integrasi bonus achievement jika ada sistem XP
     if (typeof unlockAchievement === "function") {
       unlockAchievement(
         "Date Discovered!",
@@ -800,6 +761,7 @@ function setupStardewCalendar() {
     }
   });
 
+  // Event untuk menutup modal
   if (closeBtn) {
     closeBtn.addEventListener("click", closeCalendarModal);
   }
@@ -816,58 +778,24 @@ function closeCalendarModal() {
     modal.setAttribute("aria-hidden", "true");
   }
 }
+// Cari element section kalender
+const calendarSection = document.getElementById("weddingCalendarSection");
 
-function setupDynamicNPCDialogue() {
-  const npcSpeechBubble = document.getElementById("npcSpeechBubble");
-  if (!npcSpeechBubble) return;
+if (calendarSection) {
+  // Buka gembok kalender hanya untuk tamu dengan link unik
+  calendarSection.classList.add("unlocked");
 
-  const now = new Date();
-  const currentHour = now.getHours();
-
-  // Periksa Hari H Pernikahan (10 Oktober 2026)
-  const isWeddingDay =
-    now.getFullYear() === 2026 && now.getMonth() === 9 && now.getDate() === 10;
-
-  let dialoguePool = [];
-
-  if (isWeddingDay) {
-    dialoguePool = NPC_DIALOGUES.weddingDay;
-  } else if (currentHour >= 5 && currentHour < 12) {
-    dialoguePool = NPC_DIALOGUES.morning;
-  } else if (currentHour >= 12 && currentHour < 18) {
-    dialoguePool = NPC_DIALOGUES.afternoon;
-  } else {
-    dialoguePool = NPC_DIALOGUES.evening;
-  }
-
-  const randomDialogue =
-    dialoguePool[Math.floor(Math.random() * dialoguePool.length)];
-  npcSpeechBubble.innerHTML = randomDialogue;
+  // Jalankan fungsi interaksi kalender
+  setupStardewCalendar();
 }
 
-function triggerWeddingCredits() {
-  const overlay = document.getElementById("weddingCreditsOverlay");
-  const skipBtn = document.getElementById("skipCreditsBtn");
+// --- LOGIKA UNTUK MEMBUKA MAPS DENGAN LINK UNIK ---
+const stardewMapSection = document.getElementById("stardewMapSection");
 
-  if (!overlay) return;
-
-  overlay.classList.add("show");
-
-  setTimeout(() => {
-    overlay.classList.add("animate");
-  }, 500);
-
-  const closeCredits = () => {
-    overlay.classList.remove("animate");
-    overlay.classList.remove("show");
-    overlay.setAttribute("aria-hidden", "true");
-  };
-
-  if (skipBtn) {
-    skipBtn.addEventListener("click", closeCredits);
-  }
-
-  setTimeout(closeCredits, 26000);
+if (stardewMapSection) {
+  // Menghilangkan display: none dengan menambahkan class unlocked
+  stardewMapSection.classList.add("unlocked");
+  console.log("Pelican Town Map Unlocked untuk Tamu Undangan! 🗺️");
 }
 
 loadConfig();
