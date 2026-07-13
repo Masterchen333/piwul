@@ -1897,12 +1897,12 @@ textarea {
 .stardew-calendar-wrapper {
   background: #f7d695;
   border: 6px solid #4a2f23;
-  padding: 8px; /* Dikurangi sedikit agar lebih luas di mobile */
-  width: 100%; /* Memaksa mengikuti lebar bingkai luar */
+  padding: 8px;
+  width: 100%;
   max-width: 450px;
   margin: 20px auto;
   box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
-  box-sizing: border-box; /* Memastikan border tidak menambah lebar elemen */
+  box-sizing: border-box;
 }
 
 .calendar-month-header {
@@ -1925,7 +1925,7 @@ textarea {
 /* Grid Kalender */
 .calendar-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr); /* 7 kolom sama rata */
+  grid-template-columns: repeat(7, 1fr);
   gap: 3px;
   background: #4a2f23;
   padding: 4px;
@@ -1946,20 +1946,16 @@ textarea {
 .calendar-cell {
   background: #fff7dc;
   color: #4a2f23;
-  aspect-ratio: 1 / 1; /* MEMBUAT KOTAK SEMPURNA (Otomatis tinggi mengikuti lebar layar) */
+  aspect-ratio: 1 / 1;
   padding: 4px;
-  font-size: clamp(
-    9px,
-    2.5vw,
-    12px
-  ); /* Font otomatis mengecil di HP layar kecil */
+  font-size: clamp(9px, 2.5vw, 12px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
   position: relative;
   box-sizing: border-box;
-  overflow: hidden; /* Mencegah konten meluber keluar kotak sel */
+  overflow: hidden;
 }
 
 .calendar-cell.empty {
@@ -2059,17 +2055,17 @@ textarea {
 /* Khusus untuk layar HP agar kalender tidak jebol */
 @media (max-width: 400px) {
   .stardew-calendar-wrapper {
-    padding: 4px !important; /* Bingkai lebih rapat */
+    padding: 4px !important;
   }
 
   .calendar-grid {
-    gap: 1px !important; /* Jarak antar kotak diminimalkan */
+    gap: 1px !important;
     padding: 2px !important;
   }
 
   .calendar-cell {
-    padding: 1px !important; /* Hapus ruang kosong di dalam kotak */
-    font-size: 8px !important; /* Font diperkecil agar tidak menabrak */
+    padding: 1px !important;
+    font-size: 8px !important;
   }
 
   .calendar-day-name {
@@ -2077,14 +2073,13 @@ textarea {
     padding: 2px 0 !important;
   }
 
-  /* Supaya icon hati tidak terlalu besar */
   .heart-icon {
     font-size: 10px !important;
     margin-top: 0 !important;
   }
 }
 
-/* Container Utama */
+/* Container Utama Peta */
 .stardew-map-container {
   width: 100%;
   max-width: 450px;
@@ -2106,10 +2101,7 @@ textarea {
 .pixel-map-canvas {
   width: 100%;
   height: 220px;
-  background-image: url("../assets/backgrounds/mini-map-pixel.png"); /* Warna dasar rumput hijau stardew */
-  /* Tips: Kamu bisa ganti warna di atas dengan gambar pixel map art menggunakan:
-     background-image: url('../assets/mini-map-pixel.png'); 
-     background-size: cover; */
+  background-image: url("../assets/backgrounds/mini-map-pixel.png");
   border: 4px solid #4a2f23;
   position: relative;
   overflow: hidden;
@@ -2119,7 +2111,7 @@ textarea {
 /* Pin Pernikahan Utama */
 .map-pin-wedding {
   position: absolute;
-  top: 40%; /* Atur posisi koordinat X dan Y sesukamu */
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
@@ -2146,7 +2138,7 @@ textarea {
   box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.15);
 }
 
-/* Elemen Dekorasi Peta (Hanya Gimmick agar ramai) */
+/* Elemen Dekorasi Peta */
 .map-decor {
   position: absolute;
   font-size: 16px;
@@ -2175,7 +2167,7 @@ textarea {
   }
 }
 
-/* Wrapper Tombol */
+/* Wrapper Tombol Peta */
 .map-action-wrap {
   text-align: center;
   margin-top: 15px;
@@ -2204,4 +2196,132 @@ textarea {
 }
 #stardewMapSection.unlocked {
   display: block;
+}
+
+/* ====================================================
+   WEDDING ENDING CREDITS
+==================================================== */
+
+.wedding-credits-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000000;
+  z-index: 500;
+  display: none;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+
+.wedding-credits-overlay.show {
+  display: block;
+  opacity: 1;
+}
+
+/* Jendela Konten */
+.credits-window {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+/* Container Teks yang Berjalan */
+.credits-scroll-container {
+  position: absolute;
+  top: 100%;
+  width: min(90%, 500px);
+  text-align: center;
+  color: #fff7dc;
+  font-family: inherit;
+  padding-bottom: 100px;
+}
+
+/* Animasi Teks Berjalan */
+.wedding-credits-overlay.animate .credits-scroll-container {
+  animation: scrollCredits 25s linear forwards;
+}
+
+@keyframes scrollCredits {
+  0% {
+    top: 100%;
+  }
+  100% {
+    top: -150%;
+  }
+}
+
+/* Styling Komponen Teks Credits */
+.credits-logo {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+.credits-title {
+  font-size: 20px;
+  color: #ffecb7;
+  text-shadow: 2px 2px 0 #4a2f23;
+  margin: 0;
+}
+.credits-subtitle {
+  font-size: 14px;
+  color: #d79ab0;
+  margin: 5px 0;
+}
+.credits-divider {
+  border: 2px dashed #b87835;
+  margin: 30px auto;
+  width: 60%;
+}
+
+.credits-section {
+  margin-bottom: 40px;
+}
+
+.credits-section h3 {
+  font-size: 12px;
+  color: #e2b979;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.credits-section p {
+  font-size: 14px;
+  margin: 4px 0;
+  color: #fff;
+}
+
+.credits-section.highlight p {
+  color: #ff4b72;
+  font-size: 15px;
+}
+
+.credits-footer {
+  margin-top: 60px;
+  font-size: 10px;
+  color: #8d5a35;
+}
+
+.credits-end-icon {
+  font-size: 24px;
+  margin-top: 15px;
+}
+
+/* Button Skip Credits */
+.skip-credits-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(74, 47, 35, 0.7);
+  border: 3px solid #e2b979;
+  color: #fff7dc;
+  padding: 6px 12px;
+  font-size: 10px;
+  cursor: pointer;
+  z-index: 510;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.skip-credits-btn:hover {
+  background: #4a2f23;
 }

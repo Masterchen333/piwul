@@ -235,16 +235,13 @@
             <h2>🌸 OUR CALENDAR 🌸</h2>
 
             <div class="stardew-calendar-wrapper">
-              <!-- Header Kalender -->
               <div class="calendar-month-header">
                 <span>◀</span>
                 <h3>JUNE 2026</h3>
                 <span>▶</span>
               </div>
 
-              <!-- Grid Hari Kalender -->
               <div class="calendar-grid">
-                <!-- Nama Hari -->
                 <div class="calendar-day-name">Sun</div>
                 <div class="calendar-day-name">Mon</div>
                 <div class="calendar-day-name">Tue</div>
@@ -253,7 +250,6 @@
                 <div class="calendar-day-name">Fri</div>
                 <div class="calendar-day-name">Sat</div>
 
-                <!-- Baris Tanggal (Contoh jika 1 Juni dimulai hari Senin) -->
                 <div class="calendar-cell empty"></div>
                 <div class="calendar-cell">1</div>
                 <div class="calendar-cell">2</div>
@@ -288,7 +284,6 @@
 
                 <div class="calendar-cell">28</div>
                 <div class="calendar-cell">29</div>
-                <!-- TANGGAL AKAD & RESEPSI (Misal: 30 Juni) -->
                 <div
                   class="calendar-cell wedding-day"
                   id="calWeddingDay"
@@ -300,7 +295,6 @@
               </div>
             </div>
 
-            <!-- Pop-up Detail Acara ala Kertas Kuno -->
             <div
               class="calendar-toast-overlay"
               id="calendarEventModal"
@@ -314,9 +308,7 @@
                 >
                   ×
                 </button>
-                <div id="calendarEventContent">
-                  <!-- Isi detail acara akan di-inject oleh JS -->
-                </div>
+                <div id="calendarEventContent"></div>
               </div>
             </div>
           </section>
@@ -349,17 +341,13 @@
             <h2>🗺️ MAP</h2>
 
             <div class="stardew-map-container">
-              <!-- Bingkai Peta Pixel -->
               <div class="stardew-map-card">
-                <!-- Area Peta (Ganti background di CSS dengan gambar peta pixel-mu jika ada) -->
                 <div class="pixel-map-canvas">
-                  <!-- Pin Lokasi yang Berkedip -->
                   <div class="map-pin-wedding">
                     <span class="pin-heart">❤️</span>
                     <div class="pin-label">Wulan & Pipit's Venue</div>
                   </div>
 
-                  <!-- Dekorasi Peta Ala Stardew -->
                   <div class="map-decor house"></div>
                   <div class="map-decor trees"></div>
                   <div class="map-decor mountain"></div>
@@ -367,7 +355,6 @@
               </div>
             </div>
 
-            <!-- Tombol Aksi Nyata -->
             <div class="map-action-wrap">
               <a
                 href="https://maps.app.goo.gl/CbdEGMRjSUaYvm4v5"
@@ -412,29 +399,6 @@
 
           <p class="small-note" id="sinceText">Sejak 10 February 2026</p>
         </section>
-
-        <!-- <section class="section pixel-box spotify-section">
-          <h2>OUR PLAYLIST</h2>
-          <p class="small-note">Every memory deserves its own soundtrack.</p>
-
-          <iframe
-            class="spotify-embed"
-            src="https://open.spotify.com/embed/playlist/2UVvsyOr4kJJwBsWs9KjIW"
-            width="100%"
-            height="352"
-            frameborder="0"
-            allowfullscreen=""
-            allow="
-              autoplay;
-              clipboard-write;
-              encrypted-media;
-              fullscreen;
-              picture-in-picture;
-            "
-            loading="lazy"
-          >
-          </iframe>
-        </section> -->
 
         <section class="section pixel-box">
           <h2>TIMELINE MAP</h2>
@@ -625,7 +589,9 @@
 
     <div class="npc-guide npc-hidden" id="npcGuide">
       <button class="npc-character" id="npcGuideBtn" type="button">
-        <span class="npc-bubble">Klik aku ya,<br />jika butuh bantuan</span>
+        <span class="npc-bubble" id="npcSpeechBubble"
+          >Klik aku ya,<br />jika butuh bantuan</span
+        >
 
         <img src="./assets/sprites/npc.png" alt="Wedding Guide NPC" />
 
@@ -735,11 +701,58 @@
       </div>
     </div>
 
+    <div
+      class="wedding-credits-overlay"
+      id="weddingCreditsOverlay"
+      aria-hidden="true"
+    >
+      <button class="skip-credits-btn" id="skipCreditsBtn" type="button">
+        SKIP
+      </button>
+
+      <div class="credits-window">
+        <div class="credits-scroll-container" id="creditsScrollContainer">
+          <div class="credits-logo">🌸</div>
+          <h1 class="credits-title">THANK YOU FOR PLAYING</h1>
+          <p class="credits-subtitle">OUR JOURNEY</p>
+
+          <hr class="credits-divider" />
+
+          <div class="credits-section">
+            <h3>PRODUCER</h3>
+            <p>Pipit</p>
+          </div>
+
+          <div class="credits-section">
+            <h3>LEAD ARTIST</h3>
+            <p>Wulan</p>
+          </div>
+
+          <div class="credits-section">
+            <h3>SPECIAL THANKS</h3>
+            <p>Our Beloved Parents</p>
+            <p>Big Family</p>
+            <p>Pelican Town Friends</p>
+          </div>
+
+          <div class="credits-section highlight">
+            <h3>AND YOU</h3>
+            <p>Thank you for being a part of our story ❤️</p>
+          </div>
+
+          <div class="credits-footer">
+            <p>© 2026 Pipit & Wulan. All Rights Reserved.</p>
+            <div class="credits-end-icon">✨</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="./js/cutscene.js"></script>
     <script src="./js/countdown.js"></script>
     <script src="./js/timeline.js"></script>
     <script src="./js/guestbook.js?v=3"></script>
-    <script src="./js/opening.js?v=7"></script>
+    <script src="./js/opening.js?v=29"></script>
     <script src="./admin.js?v=2"></script>
   </body>
 </html>
