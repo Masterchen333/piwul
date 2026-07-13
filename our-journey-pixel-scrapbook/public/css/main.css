@@ -2106,7 +2106,7 @@ textarea {
 .pixel-map-canvas {
   width: 100%;
   height: 220px;
-  background-color: #78ab46; /* Warna dasar rumput hijau stardew */
+  background-image: url("../assets/backgrounds/mini-map-pixel.png"); /* Warna dasar rumput hijau stardew */
   /* Tips: Kamu bisa ganti warna di atas dengan gambar pixel map art menggunakan:
      background-image: url('../assets/mini-map-pixel.png'); 
      background-size: cover; */
