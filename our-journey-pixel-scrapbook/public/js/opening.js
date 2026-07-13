@@ -714,4 +714,79 @@ function closeWeddingEncyclopedia() {
   modal.setAttribute("aria-hidden", "true");
 }
 
+function setupStardewCalendar() {
+  const weddingDayCell = document.getElementById("calWeddingDay");
+  const modal = document.getElementById("calendarEventModal");
+  const closeBtn = document.getElementById("closeCalModalBtn");
+  const contentBox = document.getElementById("calendarEventContent");
+
+  if (!weddingDayCell || !modal || !contentBox) return;
+
+  // Data detail acara (Bisa disesuaikan dengan data wedding.json milikmu)
+  const eventData = {
+    title: "🌸 THE BIG DAY 🌸",
+    akadTime: "08.00 WIB",
+    resepsiTime: "11.00 WIB - Selesai",
+    location: "Gedung Pernikahan Kediaman Wulan",
+    address: "Tawangmangu, Central Java",
+  };
+
+  weddingDayCell.addEventListener("click", () => {
+    // Inject detail info ke dalam modal kertas kuno
+    contentBox.innerHTML = `
+      <div class="calendar-event-details">
+        <h3>${eventData.title}</h3>
+        <hr style="border: 1px dashed #4a2f23; margin: 10px 0;" />
+        <h4>💍 Akad Nikah</h4>
+        <p>Pukul: ${eventData.akadTime}</p>
+        
+        <h4>🎉 Resepsi</h4>
+        <p>Pukul: ${eventData.resepsiTime}</p>
+        
+        <h4>📍 Lokasi Rumah</h4>
+        <p><strong>${eventData.location}</strong><br>${eventData.address}</p>
+      </div>
+    `;
+
+    modal.classList.add("show");
+    modal.setAttribute("aria-hidden", "false");
+
+    // Integrasi bonus achievement jika ada sistem XP
+    if (typeof unlockAchievement === "function") {
+      unlockAchievement(
+        "Date Discovered!",
+        "Melihat Tanggal Acara +50 XP",
+        "📅",
+      );
+    }
+  });
+
+  // Event untuk menutup modal
+  if (closeBtn) {
+    closeBtn.addEventListener("click", closeCalendarModal);
+  }
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) closeCalendarModal();
+  });
+}
+
+function closeCalendarModal() {
+  const modal = document.getElementById("calendarEventModal");
+  if (modal) {
+    modal.classList.remove("show");
+    modal.setAttribute("aria-hidden", "true");
+  }
+}
+// Cari element section kalender
+const calendarSection = document.getElementById("weddingCalendarSection");
+
+if (calendarSection) {
+  // Buka gembok kalender hanya untuk tamu dengan link unik
+  calendarSection.classList.add("unlocked");
+
+  // Jalankan fungsi interaksi kalender
+  setupStardewCalendar();
+}
+
 loadConfig();
