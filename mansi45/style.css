@@ -1,0 +1,266 @@
+/* --- RESET & ROOT --- */
+:root {
+  --primary-red: #e3001b; /* Merah bendera */
+  --accent-yellow: #ffcc00;
+  --text-dark: #222222;
+  --bg-light: #fefefe;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Saira Semi Condensed", sans-serif;
+}
+
+body {
+  background-color: #f7f7f7;
+  color: var(--text-dark);
+  overflow-x: hidden;
+}
+
+/* Membatasi lebar agar terlihat rapi (seperti di HP) saat dibuka di laptop */
+#main-content {
+  max-width: 480px;
+  margin: 0 auto;
+  background-color: var(--bg-light);
+  min-height: 100vh;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  padding-bottom: 40px;
+  overflow: hidden;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* --- ANIMASI & KARTUN --- */
+.bouncy-btn {
+  animation: bounce 2s infinite;
+  transition: transform 0.2s;
+}
+.bouncy-btn:active {
+  transform: scale(0.9);
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes floatUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- LAYAR AMPLOP --- */
+#envelope-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--primary-red);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: top 1s ease-in-out;
+}
+
+.envelope-container {
+  background: white;
+  width: 300px;
+  height: 200px;
+  border-radius: 15px;
+  position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 4px dashed var(--primary-red);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.envelope-container h2 {
+  color: var(--primary-red);
+  font-weight: 700;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+#open-btn {
+  background-color: var(--accent-yellow);
+  border: 3px solid var(--text-dark);
+  padding: 10px 30px;
+  border-radius: 30px;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 3px 4px 0px var(--text-dark);
+}
+
+/* --- HALAMAN UTAMA --- */
+.logo-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: #fff;
+  border-bottom: 4px solid var(--primary-red);
+}
+
+.logo {
+  width: 60px;
+  height: auto;
+  object-fit: contain;
+}
+
+.logo-center {
+  width: 100px; /* Logo HUT RI dibuat lebih besar */
+}
+
+/* Elemen Dekoratif (Atur background-image dengan potongan grafis dari filemu) */
+.graphic-element {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.2;
+  z-index: 0;
+}
+.top-left {
+  top: 100px;
+  left: -20px;
+  background-image: url("assets/elemen-bunga.png");
+}
+.bottom-right {
+  bottom: 150px;
+  right: -20px;
+  background-image: url("assets/elemen-bunga.png");
+}
+
+.hero-section {
+  text-align: center;
+  padding: 30px 20px;
+  position: relative;
+  z-index: 1;
+  animation: floatUp 0.8s ease-out;
+}
+
+.hero-section .title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary-red);
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+
+.hero-section .subtitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.badge {
+  display: inline-block;
+  background-color: var(--accent-yellow);
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-weight: 700;
+  margin-top: 15px;
+  border: 2px solid var(--text-dark);
+  transform: rotate(-3deg);
+}
+
+.info-card {
+  background-color: white;
+  margin: 20px;
+  padding: 20px;
+  border-radius: 15px;
+  border: 3px solid var(--text-dark);
+  box-shadow: 4px 5px 0px var(--primary-red);
+  animation: floatUp 1s ease-out;
+}
+
+.info-card h3 {
+  color: var(--primary-red);
+  margin-bottom: 15px;
+  font-size: 22px;
+  border-bottom: 2px dashed #ccc;
+  padding-bottom: 5px;
+}
+
+.details-list {
+  list-style: none;
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+.lomba-list {
+  margin: 20px;
+  animation: floatUp 1.2s ease-out;
+}
+
+.lomba-list h3 {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 22px;
+}
+
+.lomba-item {
+  background-color: var(--primary-red);
+  color: white;
+  padding: 12px 20px;
+  margin-bottom: 10px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 18px;
+  border: 2px solid var(--text-dark);
+  box-shadow: 2px 3px 0px var(--text-dark);
+}
+
+.cta-section {
+  text-align: center;
+  padding: 20px;
+  margin-top: 30px;
+  animation: floatUp 1.4s ease-out;
+}
+
+.cta-section p {
+  font-size: 16px;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.daftar-btn {
+  display: inline-block;
+  background-color: #25d366; /* Hijau WhatsApp */
+  color: white;
+  text-decoration: none;
+  padding: 15px 30px;
+  border-radius: 50px;
+  font-size: 22px;
+  font-weight: 700;
+  border: 3px solid var(--text-dark);
+  box-shadow: 4px 5px 0px var(--text-dark);
+}
