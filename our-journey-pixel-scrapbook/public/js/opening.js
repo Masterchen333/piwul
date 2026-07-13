@@ -872,24 +872,29 @@ function triggerWeddingCredits() {
   setTimeout(closeCredits, 26000);
 }
 
-// Handler Pemicu Ending Credits (Scroll Bawah & Tombol Save Progress)
+// Handler Pemicu Ending Credits (Hanya lewat tombol CREDIT)
 function setupCreditsTriggers() {
-  const saveProgressBtn = document.getElementById("saveProgress");
-  if (saveProgressBtn) {
-    saveProgressBtn.addEventListener("click", (e) => {
+  const creditBtn = document.getElementById("creditSceneBtn");
+
+  if (creditBtn) {
+    // 1. Munculkan tombol CREDIT karena ini adalah link unik
+    creditBtn.style.display = "inline-block";
+
+    // 2. Trigger Credit Scene hanya ketika tombol CREDIT ditekan
+    creditBtn.addEventListener("click", (e) => {
       e.preventDefault();
       triggerWeddingCredits();
     });
   }
-
-  window.addEventListener("scroll", () => {
-    const isAtBottom =
-      window.innerHeight + window.scrollY >=
-      document.documentElement.scrollHeight - 5;
-    if (isAtBottom && isInvitationMode()) {
-      triggerWeddingCredits();
-    }
-  });
 }
+
+window.addEventListener("scroll", () => {
+  const isAtBottom =
+    window.innerHeight + window.scrollY >=
+    document.documentElement.scrollHeight - 5;
+  if (isAtBottom && isInvitationMode()) {
+    triggerWeddingCredits();
+  }
+});
 
 loadConfig();
