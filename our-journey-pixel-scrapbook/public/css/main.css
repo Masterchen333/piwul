@@ -2231,11 +2231,14 @@ textarea {
 .credits-scroll-container {
   position: absolute;
   top: 100%;
-  width: min(90%, 500px);
+  width: 100%; /* Ubah menjadi 100% agar menggunakan seluruh ruang bingkai */
+  max-width: 500px;
+  padding: 0 20px; /* Beri sedikit padding kiri-kanan agar tidak mentok layar HP */
   text-align: center;
   color: #fff7dc;
   font-family: inherit;
   padding-bottom: 100px;
+  box-sizing: border-box;
 }
 
 /* Animasi Teks Berjalan */
@@ -2296,8 +2299,16 @@ textarea {
 
 .credits-section.highlight p {
   color: #ff4b72;
-  font-size: clamp(10px, 3.5vw, 15px); /* Otomatis mengecil di HP */
+  font-size: clamp(
+    9px,
+    3.2vw,
+    14px
+  ); /* Disesuaikan agar pas di resolusi HP terkecil */
   line-height: 1.8;
+  text-align: center; /* Memastikan teks yang turun ke bawah tetap di tengah */
+  white-space: normal; /* Memaksa teks membuat baris baru jika terlalu panjang */
+  display: block;
+  width: 100%;
 }
 
 .credits-footer {
