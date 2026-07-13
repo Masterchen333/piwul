@@ -1897,10 +1897,12 @@ textarea {
 .stardew-calendar-wrapper {
   background: #f7d695;
   border: 6px solid #4a2f23;
-  padding: 12px;
+  padding: 8px;
+  width: 100%;
   max-width: 450px;
   margin: 20px auto;
   box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
 }
 
 .calendar-month-header {
@@ -1924,16 +1926,18 @@ textarea {
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
+  gap: 3px;
   background: #4a2f23;
   padding: 4px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .calendar-day-name {
   background: #e2b979;
   color: #4a2f23;
   text-align: center;
-  font-size: 10px;
+  font-size: clamp(9px, 2.5vw, 11px);
   padding: 4px 0;
   font-weight: bold;
 }
@@ -1941,14 +1945,16 @@ textarea {
 .calendar-cell {
   background: #fff7dc;
   color: #4a2f23;
-  height: 45px;
+  aspect-ratio: 1/1;
   padding: 4px;
-  font-size: 11px;
+  font-size: clamp(9px,22.5vw,12px):
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
   position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .calendar-cell.empty {
