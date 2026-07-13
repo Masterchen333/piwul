@@ -625,7 +625,9 @@
 
     <div class="npc-guide npc-hidden" id="npcGuide">
       <button class="npc-character" id="npcGuideBtn" type="button">
-        <span class="npc-bubble">Klik aku ya,<br />jika butuh bantuan</span>
+        <span class="npc-bubble" id="npcSpeechBubble">
+          Klik aku ya,<br />jika butuh bantuan
+        </span>
 
         <img src="./assets/sprites/npc.png" alt="Wedding Guide NPC" />
 
@@ -730,6 +732,54 @@
               ><strong>Build a life full of warmth together</strong>
             </p>
             <p><span>Reward</span><strong>+999 Heart Points ♥</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="wedding-credits-overlay"
+      id="weddingCreditsOverlay"
+      aria-hidden="true"
+    >
+      <button class="skip-credits-btn" id="skipCreditsBtn" type="button">
+        SKIP
+      </button>
+
+      <div class="credits-window">
+        <div class="credits-scroll-container" id="creditsScrollContainer">
+          <div class="credits-logo">🌸</div>
+          <h1 class="credits-title">THANK YOU FOR BEING A PART OF</h1>
+          <p class="credits-subtitle">OUR JOURNEY</p>
+
+          <hr class="credits-divider" />
+
+          <div class="credits-section">
+            <h3>GROOM</h3>
+            <p>Pipit</p>
+          </div>
+
+          <div class="credits-section">
+            <h3>BRIDE</h3>
+            <p>Wulan</p>
+          </div>
+
+          <div class="credits-section">
+            <h3>SPECIAL THANKS TO</h3>
+            <p>Allah SWT</p>
+            <p>Our Beloved Parents</p>
+            <p>Big Family</p>
+            <p>Our Friends</p>
+          </div>
+
+          <div class="credits-section highlight">
+            <h3>AND YOU</h3>
+            <p>Thank you for being a part of our story ❤️</p>
+          </div>
+
+          <div class="credits-footer">
+            <p>© 2026 Pipit & Wulan. All Rights Reserved.</p>
+            <div class="credits-end-icon">✨</div>
           </div>
         </div>
       </div>
