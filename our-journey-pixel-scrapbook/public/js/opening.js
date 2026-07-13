@@ -339,6 +339,14 @@ function setupRSVP() {
         }
       }
 
+      // Contoh penempatan di dalam fungsi setelah sukses submit data
+      if (response.success) {
+        alert("Terima kasih atas ucapan dan doanya! ✨");
+
+        // Pemicu layar tamat / ending credits game muncul
+        triggerWeddingCredits();
+      }
+
       buttons.forEach((btn) => {
         btn.disabled = false;
       });
@@ -796,6 +804,35 @@ if (stardewMapSection) {
   // Menghilangkan display: none dengan menambahkan class unlocked
   stardewMapSection.classList.add("unlocked");
   console.log("Pelican Town Map Unlocked untuk Tamu Undangan! 🗺️");
+}
+
+function triggerWeddingCredits() {
+  const overlay = document.getElementById("weddingCreditsOverlay");
+  const skipBtn = document.getElementById("skipCreditsBtn");
+
+  if (!overlay) return;
+
+  // 1. Tampilkan overlay dengan efek fade-in
+  overlay.classList.add("show");
+
+  // Berikan jeda sedikit agar transisi opacity terasa mulus sebelum text jalan
+  setTimeout(() => {
+    overlay.classList.add("animate");
+  }, 500);
+
+  // 2. Logika tombol skip atau ketika animasi selesai otomatis
+  const closeCredits = () => {
+    overlay.classList.remove("animate");
+    overlay.classList.remove("show");
+    overlay.setAttribute("aria-hidden", "true");
+  };
+
+  if (skipBtn) {
+    skipBtn.addEventListener("click", closeCredits);
+  }
+
+  // Otomatis menutup layar setelah 26 detik (durasi animasi + jeda)
+  setTimeout(closeCredits, 26000);
 }
 
 loadConfig();

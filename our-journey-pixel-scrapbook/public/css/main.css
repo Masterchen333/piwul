@@ -2205,3 +2205,127 @@ textarea {
 #stardewMapSection.unlocked {
   display: block;
 }
+
+/* Overlay Utama */
+.wedding-credits-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000000;
+  z-index: 500; /* Paling atas mendahului segalanya */
+  display: none;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+
+.wedding-credits-overlay.show {
+  display: block;
+  opacity: 1;
+}
+
+/* Jendela Konten */
+.credits-window {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+/* Container Teks yang Berjalan */
+.credits-scroll-container {
+  position: absolute;
+  top: 100%; /* Mulai dari bawah layar */
+  width: min(90%, 500px);
+  text-align: center;
+  color: #fff7dc;
+  font-family: inherit;
+  padding-bottom: 100px;
+}
+
+/* Animasi Teks Berjalan */
+.wedding-credits-overlay.animate .credits-scroll-container {
+  animation: scrollCredits 25s linear forwards;
+}
+
+@keyframes scrollCredits {
+  0% {
+    top: 100%;
+  }
+  100% {
+    top: -150%; /* Berhenti setelah teks paling bawah melewati layar */
+  }
+}
+
+/* Styling Komponen Teks */
+.credits-logo {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+.credits-title {
+  font-size: 20px;
+  color: #ffecb7;
+  text-shadow: 2px 2px 0 #4a2f23;
+  margin: 0;
+}
+.credits-subtitle {
+  font-size: 14px;
+  color: #d79ab0;
+  margin: 5px 0;
+}
+.credits-divider {
+  border: 2px dashed #b87835;
+  margin: 30px auto;
+  width: 60%;
+}
+
+.credits-section {
+  margin-bottom: 40px;
+}
+
+.credits-section h3 {
+  font-size: 12px;
+  color: #e2b979;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.credits-section p {
+  font-size: 14px;
+  margin: 4px 0;
+  color: #fff;
+}
+
+.credits-section.highlight p {
+  color: #ff4b72;
+  font-size: 15px;
+}
+
+.credits-footer {
+  margin-top: 60px;
+  font-size: 10px;
+  color: #8d5a35;
+}
+
+.credits-end-icon {
+  font-size: 24px;
+  margin-top: 15px;
+}
+
+/* Button Skip */
+.skip-credits-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(74, 47, 35, 0.7);
+  border: 3px solid #e2b979;
+  color: #fff7dc;
+  padding: 6px 12px;
+  font-size: 10px;
+  cursor: pointer;
+  z-index: 510;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+}
+.skip-credits-btn:hover {
+  background: #4a2f23;
+}
