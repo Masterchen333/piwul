@@ -789,12 +789,4 @@ if (calendarSection) {
   setupStardewCalendar();
 }
 
-/* Sembunyikan secara default jika ingin dikunci */
-#stardewMapSection {
-  display: none;
-}
-#stardewMapSection.unlocked {
-  display: block;
-}
-
 loadConfig();
