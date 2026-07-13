@@ -1897,12 +1897,12 @@ textarea {
 .stardew-calendar-wrapper {
   background: #f7d695;
   border: 6px solid #4a2f23;
-  padding: 8px;
-  width: 100%;
+  padding: 8px; /* Dikurangi sedikit agar lebih luas di mobile */
+  width: 100%; /* Memaksa mengikuti lebar bingkai luar */
   max-width: 450px;
   margin: 20px auto;
   box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
-  box-sizing: border-box;
+  box-sizing: border-box; /* Memastikan border tidak menambah lebar elemen */
 }
 
 .calendar-month-header {
@@ -1925,7 +1925,7 @@ textarea {
 /* Grid Kalender */
 .calendar-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, 1fr); /* 7 kolom sama rata */
   gap: 3px;
   background: #4a2f23;
   padding: 4px;
@@ -1942,19 +1942,24 @@ textarea {
   font-weight: bold;
 }
 
+/* Sel Tanggal Kalender */
 .calendar-cell {
   background: #fff7dc;
   color: #4a2f23;
-  aspect-ratio: 1/1;
+  aspect-ratio: 1 / 1; /* MEMBUAT KOTAK SEMPURNA (Otomatis tinggi mengikuti lebar layar) */
   padding: 4px;
-  font-size: clamp(9px,22.5vw,12px):
+  font-size: clamp(
+    9px,
+    2.5vw,
+    12px
+  ); /* Font otomatis mengecil di HP layar kecil */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
   position: relative;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: hidden; /* Mencegah konten meluber keluar kotak sel */
 }
 
 .calendar-cell.empty {
@@ -2049,4 +2054,32 @@ textarea {
 /* Class untuk menampilkan kalender setelah sukses verifikasi link unik */
 #weddingCalendarSection.unlocked {
   display: block;
+}
+
+/* Khusus untuk layar HP agar kalender tidak jebol */
+@media (max-width: 400px) {
+  .stardew-calendar-wrapper {
+    padding: 4px !important; /* Bingkai lebih rapat */
+  }
+
+  .calendar-grid {
+    gap: 1px !important; /* Jarak antar kotak diminimalkan */
+    padding: 2px !important;
+  }
+
+  .calendar-cell {
+    padding: 1px !important; /* Hapus ruang kosong di dalam kotak */
+    font-size: 8px !important; /* Font diperkecil agar tidak menabrak */
+  }
+
+  .calendar-day-name {
+    font-size: 8px !important;
+    padding: 2px 0 !important;
+  }
+
+  /* Supaya icon hati tidak terlalu besar */
+  .heart-icon {
+    font-size: 10px !important;
+    margin-top: 0 !important;
+  }
 }
