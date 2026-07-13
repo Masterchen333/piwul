@@ -2258,10 +2258,11 @@ textarea {
   margin-bottom: 10px;
 }
 .credits-title {
-  font-size: 20px;
+  font-size: clamp(12px, 4vw, 20px); /* Otomatis mengecil di HP */
   color: #ffecb7;
   text-shadow: 2px 2px 0 #4a2f23;
   margin: 0;
+  line-height: 1.6; /* Memberi ruang antar baris */
 }
 .credits-subtitle {
   font-size: 14px;
@@ -2286,14 +2287,17 @@ textarea {
 }
 
 .credits-section p {
-  font-size: 14px;
+  font-size: clamp(9px, 3vw, 14px); /* Otomatis mengecil di HP */
   margin: 4px 0;
   color: #fff;
+  line-height: 1.8; /* Mencegah teks bertumpuk jika turun baris */
+  word-wrap: break-word; /* Mencegah kata menabrak batas tepi */
 }
 
 .credits-section.highlight p {
   color: #ff4b72;
-  font-size: 15px;
+  font-size: clamp(10px, 3.5vw, 15px); /* Otomatis mengecil di HP */
+  line-height: 1.8;
 }
 
 .credits-footer {
