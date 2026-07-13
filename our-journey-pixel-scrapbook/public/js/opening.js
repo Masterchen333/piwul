@@ -32,8 +32,6 @@ const NPC_DIALOGUES = {
   ],
 };
 
-let creditsHasRun = false; // Flag agar ending credits hanya terpicu sekali
-
 if ("scrollRestoration" in history) {
   history.scrollRestoration = "manual";
 }
@@ -148,7 +146,6 @@ async function loadConfig() {
       setupSecretLetter();
       setupWeddingEncyclopedia();
 
-      // Buka akses fitur khusus Link Unik (Kalender & Map)
       const calendarSection = document.getElementById("weddingCalendarSection");
       if (calendarSection) {
         calendarSection.classList.add("unlocked");
@@ -845,14 +842,12 @@ function setupDynamicNPCDialogue() {
 }
 
 function triggerWeddingCredits() {
-  if (creditsHasRun) return; // Cegah duplikasi pemicu
-
   const overlay = document.getElementById("weddingCreditsOverlay");
   const skipBtn = document.getElementById("skipCreditsBtn");
 
-  if (!overlay) return;
+  // Jika overlay belum ada atau sedang jalan, batalkan
+  if (!overlay || overlay.classList.contains("show")) return;
 
-  creditsHasRun = true;
   overlay.classList.add("show");
 
   setTimeout(() => {
@@ -866,7 +861,7 @@ function triggerWeddingCredits() {
   };
 
   if (skipBtn) {
-    skipBtn.addEventListener("click", closeCredits);
+    skipBtn.onclick = closeCredits;
   }
 
   setTimeout(closeCredits, 26000);
@@ -877,10 +872,10 @@ function setupCreditsTriggers() {
   const creditBtn = document.getElementById("creditSceneBtn");
 
   if (creditBtn) {
-    // 1. Munculkan tombol CREDIT karena ini adalah link unik
-    creditBtn.style.display = "inline-block";
+    // 1. Munculkan tombol CREDIT dan posisikan di tengah (berlaku untuk mode block)
+    creditBtn.style.display = "block";
 
-    // 2. Trigger Credit Scene hanya ketika tombol CREDIT ditekan
+    // 2. Trigger Credit Scene ketika ditekan (tanpa batasan flag)
     creditBtn.addEventListener("click", (e) => {
       e.preventDefault();
       triggerWeddingCredits();
@@ -888,13 +883,6 @@ function setupCreditsTriggers() {
   }
 }
 
-window.addEventListener("scroll", () => {
-  const isAtBottom =
-    window.innerHeight + window.scrollY >=
-    document.documentElement.scrollHeight - 5;
-  if (isAtBottom && isInvitationMode()) {
-    triggerWeddingCredits();
-  }
-});
+// FUNGSI SCROLL DI HAPUS DARI SINI
 
 loadConfig();
