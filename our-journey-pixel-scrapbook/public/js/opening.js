@@ -789,4 +789,13 @@ if (calendarSection) {
   setupStardewCalendar();
 }
 
+// --- LOGIKA UNTUK MEMBUKA MAPS DENGAN LINK UNIK ---
+const stardewMapSection = document.getElementById("stardewMapSection");
+
+if (stardewMapSection) {
+  // Menghilangkan display: none dengan menambahkan class unlocked
+  stardewMapSection.classList.add("unlocked");
+  console.log("Pelican Town Map Unlocked untuk Tamu Undangan! 🗺️");
+}
+
 loadConfig();
