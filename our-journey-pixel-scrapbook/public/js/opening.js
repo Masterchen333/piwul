@@ -798,4 +798,71 @@ if (stardewMapSection) {
   console.log("Pelican Town Map Unlocked untuk Tamu Undangan! 🗺️");
 }
 
+if (guestNameFound) {
+  setupSecretLetter();
+  setupWeddingEncyclopedia();
+  setupStardewCalendar();
+  const stardewMapSection = document.getElementById("stardewMapSection");
+  if (stardewMapSection) stardewMapSection.classList.add("unlocked");
+
+  // PANGGIL DI SINI
+  setupDynamicNPCDialogue();
+}
+
+const NPC_DIALOGUES = {
+  morning: [
+    "Selamat pagi! ☀️ Udara terasa segar sekali hari ini.",
+    "Pagi yang cerah! Jangan lupa secangkir kopi sebelum memulai aktivitas ya. ☕",
+    "Halo! Senang melihatmu sepagi ini. Sudah cek menu Encyclopedia belum?",
+  ],
+  afternoon: [
+    "Selamat siang! 🌤️ Cuaca di luar sedang hangat ya.",
+    "Siang-siang begini enaknya jalan-jalan ke pantai. Jangan lupa isi RSVP-mu ya! 💍",
+    "Halo! Semoga harimu menyenangkan. Butuh bantuan untuk melihat lokasi?",
+  ],
+  evening: [
+    "Selamat malam! 🌙 Bintang-bintang malam ini terlihat indah.",
+    "Malam yang tenang. Terima kasih sudah menyempatkan berkunjung ke sini. ✨",
+    "Sudah larut malam, jangan lupa istirahat ya! 🛌",
+  ],
+  weddingDay: [
+    "🎉 HARI YANG DITUNGGU SUDAH TIBA! 🎉",
+    "Hari ini adalah hari bahagia Pipit & Wulan. Sampai jumpa di venue ya! ❤️",
+    "Semua bersukacita! Mari berikan doa terbaik untuk kedua mempelai hari ini. 🌸",
+  ],
+};
+
+function setupDynamicNPCDialogue() {
+  const npcSpeechBubble = document.getElementById("npcSpeechBubble"); // Sesuaikan ID dengan elemen balon teks NPC-mu
+  if (!npcSpeechBubble) return;
+
+  const now = new Date();
+  const currentHour = now.getHours();
+
+  // Deteksi Hari H (Misal pernikahan tanggal 10 Oktober 2026)
+  const isWeddingDay =
+    now.getFullYear() === 2026 &&
+    now.getMonth() === 9 && // Catatan: Bulan di JS dimulai dari 0 (9 = Oktober)
+    now.getDate() === 10;
+
+  let dialoguePool = [];
+
+  if (isWeddingDay) {
+    dialoguePool = NPC_DIALOGUES.weddingDay;
+  } else if (currentHour >= 5 && currentHour < 12) {
+    dialoguePool = NPC_DIALOGUES.morning;
+  } else if (currentHour >= 12 && currentHour < 18) {
+    dialoguePool = NPC_DIALOGUES.afternoon;
+  } else {
+    dialoguePool = NPC_DIALOGUES.evening;
+  }
+
+  // Pilih satu dialog secara acak dari pool yang sesuai
+  const randomDialogue =
+    dialoguePool[Math.floor(Math.random() * dialoguePool.length)];
+
+  // Suntikkan teks ke dalam balon dialog NPC
+  npcSpeechBubble.textContent = randomDialogue;
+}
+
 loadConfig();
