@@ -14,19 +14,29 @@
 }
 
 body {
-  background-color: #f7f7f7;
+  /* Gradasi merah bendera ke merah gelap untuk background luar (desktop) */
+  background: linear-gradient(135deg, #e3001b 0%, #8b0000 100%);
   color: var(--text-dark);
   overflow-x: hidden;
+  /* Memastikan background menutupi seluruh tinggi layar */
+  min-height: 100vh;
 }
 
 /* Membatasi lebar agar terlihat rapi (seperti di HP) saat dibuka di laptop */
 #main-content {
   max-width: 480px;
   margin: 0 auto;
-  background-color: var(--bg-light);
+
+  /* Background putih dengan pola polkadot merah tipis ala kartun */
+  background-color: #ffffff;
+  background-image: radial-gradient(#ffb3bc 3px, transparent 3px);
+  background-size: 30px 30px; /* Jarak antar titik */
+
   min-height: 100vh;
   position: relative;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+
+  /* Bayangan lebih tegas untuk memisahkan konten dari background luar */
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
   padding-bottom: 40px;
   overflow: hidden;
 }
