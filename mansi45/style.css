@@ -334,3 +334,137 @@ body {
   color: var(--text-dark);
   margin-top: 10px;
 }
+
+/* --- TATA LETAK ORNAMEN GRAFIS --- */
+
+/* 1. Bendera Gantung di Atas */
+.ornament-banner {
+  width: 100%;
+  overflow: hidden;
+  margin-top: -5px; /* Sedikit naik agar menempel pas di bawah header */
+  position: relative;
+  z-index: 10;
+}
+
+.ornament-banner img {
+  width: 100%;
+  height: auto;
+  display: block;
+  /* Memberikan efek visual kartun agar sedikit melengkung keluar batas */
+  transform: scale(1.05);
+}
+
+/* 2. Ilustrasi Lomba Kerupuk di Tengah */
+.ornament-illustration-kerupuk {
+  width: 100%;
+  padding: 0 10px;
+  margin: 15px 0;
+  text-align: center;
+  animation: floatAnimation 3s ease-in-out infinite; /* Efek melayang halus */
+}
+
+.ornament-illustration-kerupuk img {
+  width: 90%; /* Mengatur skala gambar kartun agar pas di layar HP */
+  max-width: 380px;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* 3. Area Daftar Lomba & Ornamen Lomba Sendal */
+.lomba-section {
+  margin: 20px;
+}
+
+.lomba-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.lomba-list-box {
+  background: #ffffff;
+  border: 3px solid var(--text-dark);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 4px 5px 0px var(--text-dark);
+  position: relative;
+  z-index: 2;
+}
+
+/* Menempatkan gambar karakter lomba sendal menyembul dari belakang kotak list */
+.ornament-illustration-sendal {
+  position: absolute;
+  bottom: -35px; /* Memosisikan karakter di bagian bawah kanan kotak */
+  right: -10px;
+  width: 110px;
+  z-index: 3;
+  animation: bounceMini 2.5s ease-in-out infinite;
+}
+
+.ornament-illustration-sendal img {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(3px 3px 0px rgba(0, 0, 0, 0.15)); /* Shadow ala kartun */
+}
+
+/* Menggeser margin item lomba agar tidak tertutup oleh karakter lomba sendal */
+.lomba-list-box .lomba-item:last-child {
+  margin-bottom: 25px;
+}
+
+.lomba-list-box h3 {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 22px;
+  color: var(--primary-red);
+}
+
+.lomba-item {
+  background-color: var(--primary-red);
+  color: white;
+  padding: 12px 20px;
+  margin-bottom: 10px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 18px;
+  border: 2px solid var(--text-dark);
+  box-shadow: 2px 3px 0px var(--text-dark);
+}
+
+/* --- ANIMASI TAMBAHAN UNTUK ORNAMEN --- */
+
+/* Efek melayang naik-turun lembut untuk anak-anak lomba kerupuk */
+@keyframes floatAnimation {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Efek detak/lompat kecil untuk karakter lomba bakiak */
+@keyframes bounceMini {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-5px) scale(1.02);
+  }
+}
+
+/* --- RESPONSIVITAS MOBILE --- */
+@media (max-width: 400px) {
+  .ornament-illustration-sendal {
+    width: 90px;
+    bottom: -30px;
+    right: -5px;
+  }
+  .hero-section .title {
+    font-size: 24px;
+  }
+}
