@@ -81,51 +81,179 @@ body {
   }
 }
 
-/* --- LAYAR AMPLOP --- */
+/* --- LAYAR AMPLOP 3D KARTUN --- */
 #envelope-screen {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  /* Latar belakang merah bendera */
   background-color: var(--primary-red);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9999;
-  transition: top 1s ease-in-out;
+  transition:
+    top 0.8s ease-in-out,
+    opacity 0.8s;
+  overflow: hidden;
 }
 
-.envelope-container {
-  background: white;
-  width: 300px;
-  height: 200px;
-  border-radius: 15px;
+/* Pola background berputar perlahan agar layar tidak sepi */
+#envelope-screen::before {
+  content: "";
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.15) 3px,
+    transparent 3px
+  );
+  background-size: 40px 40px;
+  animation: rotateBg 90s linear infinite;
+}
+
+@keyframes rotateBg {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.envelope-wrapper {
   position: relative;
+  width: 320px;
+  height: 220px;
+  z-index: 1;
+  /* Efek amplop melayang di udara */
+  animation: floatAnimation 3s ease-in-out infinite;
+}
+
+/* Bagian Belakang Amplop */
+.envelope-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  border: 4px solid var(--text-dark);
+  border-radius: 12px;
+  box-shadow: 10px 12px 0px rgba(0, 0, 0, 0.3);
+}
+
+/* Kertas Surat (Awalnya bersembunyi di dalam) */
+.letter {
+  position: absolute;
+  top: 10px;
+  left: 5%;
+  width: 90%;
+  height: 95%;
+  background-color: #fff9e6;
+  border: 3px solid var(--text-dark);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 15px;
+  z-index: 2;
+  transition: transform 0.6s ease;
+}
+
+.letter-logo {
+  width: 90px;
+  margin-bottom: 5px;
+}
+
+.letter h2 {
+  color: var(--primary-red);
+  font-size: 20px;
   text-align: center;
+  line-height: 1.1;
+}
+
+/* Bagian Depan Amplop (Saku Bawah) */
+.envelope-front {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 65%;
+  background-color: #f0f0f0;
+  border: 4px solid var(--text-dark);
+  border-top: 2px solid var(--text-dark);
+  border-radius: 0 0 12px 12px;
+  z-index: 4;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 20px;
+}
+
+/* Tutup Amplop Atas (Merah) */
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  background-color: var(--primary-red);
+  border: 4px solid var(--text-dark);
+  border-radius: 12px 12px 0 0;
+  /* Membuat bentuk segitiga ke bawah ala amplop */
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top;
+  transition: transform 0.6s ease;
+  z-index: 5;
+}
+
+/* Stempel Pos Keren */
+.postmark {
+  position: absolute;
+  top: -40px;
+  right: 15px;
+  width: 80px;
+  height: 80px;
+  border: 3px dashed var(--primary-red);
+  border-radius: 50%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border: 4px dashed var(--primary-red);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  align-items: center;
+  transform: rotate(15deg);
+  font-size: 10px;
+  font-weight: 900;
+  color: var(--primary-red);
+  background-color: rgba(255, 255, 255, 0.85);
+  z-index: 6;
 }
 
-.envelope-container h2 {
-  color: var(--primary-red);
-  font-weight: 700;
-  margin-bottom: 20px;
-  font-size: 24px;
+.postmark .kota {
+  font-size: 11px;
+  border-top: 2px solid var(--primary-red);
+  border-bottom: 2px solid var(--primary-red);
+  margin: 3px 0;
+  padding: 2px 0;
 }
 
 #open-btn {
-  background-color: var(--accent-yellow);
-  border: 3px solid var(--text-dark);
-  padding: 10px 30px;
-  border-radius: 30px;
-  font-size: 20px;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 3px 4px 0px var(--text-dark);
+  position: relative;
+  z-index: 7; /* Tombol harus di depan agar bisa diklik */
+  padding: 12px 35px;
+  font-size: 22px;
+}
+
+/* --- KELAS ANIMASI SAAT TOMBOL DIKLIK --- */
+.envelope-wrapper.is-open .envelope-flap {
+  transform: rotateX(180deg); /* Membuka tutup amplop ke atas */
+  z-index: 1; /* Pindah ke belakang surat */
+}
+
+.envelope-wrapper.is-open .letter {
+  transform: translateY(-70px); /* Surat ditarik menyembul ke atas */
 }
 
 /* --- HALAMAN UTAMA --- */

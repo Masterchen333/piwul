@@ -15,11 +15,34 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <!-- Layar Undangan (Amplop Kartun) -->
     <div id="envelope-screen">
-      <div class="envelope-container">
+      <div class="envelope-wrapper">
+        <!-- Bagian Belakang Amplop -->
+        <div class="envelope-back"></div>
+
+        <!-- Kertas Surat yang ada di dalam -->
+        <div class="letter">
+          <img
+            src="assets/logo-hut-81.png"
+            alt="HUT RI 81"
+            class="letter-logo"
+          />
+          <h2>UNDANGAN<br />Peringatan HUT RI</h2>
+        </div>
+
+        <!-- Tutup Amplop (Flap) Merah -->
         <div class="envelope-flap"></div>
-        <div class="envelope-body">
-          <h2>UNDANGAN LOMBA</h2>
+
+        <!-- Bagian Depan Amplop -->
+        <div class="envelope-front">
+          <!-- Stempel Pos -->
+          <div class="postmark">
+            <span class="cap-pos">CAP POS</span>
+            <span class="kota">TAWANGMANGU</span>
+            <span class="tanggal">16 AGT 2026</span>
+          </div>
+
           <button id="open-btn" class="bouncy-btn">BUKA 💌</button>
         </div>
       </div>
