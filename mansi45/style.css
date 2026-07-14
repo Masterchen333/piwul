@@ -274,3 +274,63 @@ body {
   border: 3px solid var(--text-dark);
   box-shadow: 4px 5px 0px var(--text-dark);
 }
+
+/* --- PHOTOBOOTH SECTION --- */
+.photo-section {
+  text-align: center;
+  /* Memberi warna dasar kuning muda agar sedikit berbeda dari kartu info di atasnya */
+  background-color: #fff9e6;
+  border-color: var(--text-dark);
+}
+
+.polaroid-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+/* Membuat efek foto polaroid kartun */
+.polaroid-frame {
+  background: #ffffff;
+  padding: 10px 10px 15px 10px;
+  border: 3px solid var(--text-dark);
+  /* Shadow tegas ala komik */
+  box-shadow: 5px 6px 0px var(--primary-red);
+  /* Sedikit dimiringkan agar berkesan playful */
+  transform: rotate(6deg);
+  width: 160px;
+  transition: transform 0.3s ease;
+}
+
+/* Efek saat polaroid disentuh/di-hover */
+.polaroid-frame:hover,
+.polaroid-frame:active {
+  transform: rotate(-3deg) scale(1.05);
+}
+
+/* Kotak gambar di dalam polaroid */
+.polaroid-image {
+  background-color: #ffcccc; /* Warna pink/merah muda pucat */
+  height: 120px;
+  border: 3px solid var(--text-dark);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 50px; /* Ukuran emoji */
+  margin-bottom: 10px;
+}
+
+.polaroid-text {
+  font-family: "Saira Semi Condensed", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text-dark);
+  letter-spacing: 1px;
+}
+
+.photo-desc {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-dark);
+  margin-top: 10px;
+}
