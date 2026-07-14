@@ -239,11 +239,61 @@ body {
   padding: 2px 0;
 }
 
+/* --- TOMBOL BUKA AMPLOP KARTUN --- */
 #open-btn {
   position: relative;
-  z-index: 7; /* Tombol harus di depan agar bisa diklik */
-  padding: 12px 35px;
+  z-index: 7; /* Pastikan selalu di atas amplop */
+
+  /* Tema Merah Putih */
+  background-color: #ffffff; /* Latar putih bersih */
+  color: var(--primary-red); /* Teks merah bendera */
+
+  /* Bentuk Kapsul ala Kartun */
+  padding: 15px 40px;
+  border-radius: 50px;
+  border: 4px solid var(--text-dark); /* Garis hitam tebal */
+
+  /* Teks lebih tegas */
+  font-family: "Saira Semi Condensed", sans-serif;
   font-size: 22px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+
+  /* Bayangan 3D Keras (Pop-Art) berwarna Merah */
+  box-shadow: 5px 6px 0px var(--primary-red);
+
+  /* Transisi halus saat disentuh */
+  transition: all 0.2s ease;
+
+  /* Animasi goyang agar menarik perhatian */
+  animation: pulseButton 1.5s infinite;
+}
+
+/* Efek saat tombol disentuh/di-hover */
+#open-btn:hover {
+  background-color: #fff9e6; /* Berubah sedikit kekuningan */
+}
+
+/* Efek saat tombol diklik (seakan-akan ditekan masuk ke dalam) */
+#open-btn:active {
+  transform: translate(5px, 6px); /* Mengikuti arah shadow */
+  box-shadow: 0px 0px 0px var(--primary-red); /* Shadow hilang */
+  animation: none; /* Hentikan animasi saat ditekan */
+}
+
+/* Keyframes untuk animasi goyang-goyang (bouncy) */
+@keyframes pulseButton {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08) rotate(-3deg);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* --- KELAS ANIMASI SAAT TOMBOL DIKLIK --- */
