@@ -974,3 +974,97 @@ body {
   color: var(--text-dark);
   margin-top: 5px;
 }
+
+/* --- SESI DOORPRIZE --- */
+.doorprize-section {
+  background-color: #e6ffed; /* Hijau mint muda yang segar */
+  border-color: var(--text-dark);
+  text-align: center;
+}
+
+.doorprize-desc {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 20px;
+}
+
+.prize-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Dua kolom sejajar */
+  gap: 15px;
+}
+
+/* Memaksa hadiah utama agar mengambil lebar penuh (2 kolom) */
+.prize-item.grand-prize {
+  grid-column: span 2;
+  border-color: var(--primary-red);
+  box-shadow: 5px 6px 0px var(--primary-red);
+}
+
+.prize-item {
+  background: #ffffff;
+  border: 3px solid var(--text-dark);
+  border-radius: 12px;
+  position: relative; /* Penting untuk pita ribbon */
+  overflow: hidden;
+  box-shadow: 4px 5px 0px var(--text-dark);
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.prize-item:hover {
+  transform: translateY(-5px);
+}
+
+/* Pita khusus hadiah utama */
+.prize-ribbon {
+  position: absolute;
+  top: 15px;
+  left: -35px;
+  background-color: var(--accent-yellow);
+  color: var(--text-dark);
+  font-weight: 900;
+  font-size: 14px;
+  padding: 5px 40px;
+  transform: rotate(-45deg);
+  border: 2px solid var(--text-dark);
+  z-index: 10;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
+}
+
+.prize-img-wrapper {
+  width: 100%;
+  aspect-ratio: 4 / 3; /* Bentuk foto landscape yang konsisten */
+  border-bottom: 3px solid var(--text-dark);
+  background-color: #f0f0f0;
+  overflow: hidden;
+}
+
+/* Tambahkan pointer agar user tahu ini bisa di-klik untuk Pop-up */
+.prize-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.prize-info {
+  padding: 10px;
+  background-color: white;
+  flex-grow: 1; /* Mendorong teks agar rapi */
+}
+
+.prize-info h4 {
+  font-size: 16px;
+  color: var(--primary-red);
+  margin-bottom: 5px;
+}
+
+.prize-info p {
+  font-size: 12px;
+  color: #555;
+  font-weight: 600;
+  line-height: 1.3;
+}

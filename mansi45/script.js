@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Ambil semua gambar yang ada di dalam Photobooth dan Galeri Dokumentasi
     const clickableImages = document.querySelectorAll(
-      ".polaroid-image img, .doc-item img",
+      ".polaroid-image img, .doc-item img, .prize-img-wrapper img",
     );
 
     // Jika gambar diklik, buka pop-up
