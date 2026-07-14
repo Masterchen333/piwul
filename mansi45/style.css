@@ -751,3 +751,74 @@ body {
   height: 100%;
   object-fit: cover;
 }
+
+/* --- POP-UP MODAL (LIGHTBOX) --- */
+#image-modal {
+  position: fixed;
+  z-index: 10000; /* Pastikan selalu berada di paling atas layar */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85); /* Latar belakang gelap transparan */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  /* Transisi untuk animasi muncul */
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+}
+
+/* Class ini digunakan oleh JS untuk memunculkan modal */
+#image-modal.modal-show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Gambar di dalam pop-up */
+.modal-content {
+  max-width: 90%;
+  max-height: 80%;
+  border: 5px solid #ffffff;
+  border-radius: 12px;
+  box-shadow: 8px 10px 0px var(--primary-red); /* Bayangan kartun merah */
+  transform: scale(0.7);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Animasi membal */
+}
+
+/* Saat modal muncul, gambar membesar (efek pop) */
+#image-modal.modal-show .modal-content {
+  transform: scale(1);
+}
+
+/* Tombol Tutup (X) */
+.close-modal {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  color: #ffffff;
+  font-size: 45px;
+  font-weight: 900;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    color 0.2s;
+  text-shadow: 3px 3px 0px var(--primary-red);
+}
+
+.close-modal:hover,
+.close-modal:active {
+  color: var(--accent-yellow);
+  transform: scale(1.2) rotate(10deg);
+}
+
+/* Menambahkan pointer agar user tahu foto bisa diklik */
+.polaroid-image img,
+.doc-item img {
+  cursor: pointer;
+}
