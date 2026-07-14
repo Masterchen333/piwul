@@ -822,3 +822,105 @@ body {
 .doc-item img {
   cursor: pointer;
 }
+
+/* --- TIMELINE / RUNDOWN ACARA --- */
+.rundown-section {
+  /* Background pink muda pastel agar terlihat manis */
+  background-color: #fff0f5;
+  border-color: var(--text-dark);
+}
+
+.timeline {
+  position: relative;
+  margin: 25px 0 10px 0;
+  padding-left: 20px;
+  /* Garis vertikal putus-putus */
+  border-left: 5px dashed var(--primary-red);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 25px;
+  padding-left: 20px;
+}
+
+/* Menghilangkan margin bawah di item terakhir */
+.timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Bulatan (Node) pada garis waktu */
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  /* Menyelaraskan posisi bulatan dengan garis */
+  left: -17px;
+  top: 5px;
+  width: 22px;
+  height: 22px;
+  background-color: var(--accent-yellow);
+  border: 4px solid var(--text-dark);
+  border-radius: 50%;
+  box-shadow: 2px 3px 0px var(--text-dark);
+  z-index: 2;
+}
+
+/* Desain Jam/Waktu */
+.timeline-time {
+  font-weight: 900;
+  font-size: 16px;
+  color: var(--primary-red);
+  background-color: white;
+  display: inline-block;
+  padding: 3px 12px;
+  border: 3px solid var(--text-dark);
+  border-radius: 20px;
+  margin-bottom: 8px;
+  box-shadow: 2px 3px 0px var(--text-dark);
+}
+
+/* Kotak Konten Jadwal */
+.timeline-content {
+  background-color: white;
+  border: 3px solid var(--text-dark);
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 4px 5px 0px var(--primary-red);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  position: relative;
+}
+
+/* Segitiga kecil penunjuk ke garis waktu */
+.timeline-content::before {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 15px;
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 8px solid var(--text-dark);
+}
+
+/* Efek saat kotak jadwal disentuh (membal ke kanan atas) */
+.timeline-content:hover,
+.timeline-content:active {
+  transform: translateX(5px) translateY(-3px);
+  box-shadow: 6px 7px 0px var(--accent-yellow);
+}
+
+.timeline-content h4 {
+  color: var(--text-dark);
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.timeline-content p {
+  font-size: 14px;
+  color: #444;
+  line-height: 1.5;
+  font-weight: 600;
+}
