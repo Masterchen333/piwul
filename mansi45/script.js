@@ -65,5 +65,51 @@ document.addEventListener("DOMContentLoaded", function () {
         closePopup();
       }
     });
+
+    // --- LOGIKA HITUNG MUNDUR (COUNTDOWN) ---
+
+    // Tentukan waktu tujuan (16 Agustus 2026 pukul 07:00:00 WIB)
+    const targetWaktu = new Date("August 16, 2026 07:00:00").getTime();
+
+    // Jalankan pembaruan data setiap 1 detik
+    const jalankanCountdown = setInterval(function () {
+      const waktuSekarang = new Date().getTime();
+      const selisihWaktu = targetWaktu - waktuSekarang;
+
+      // Jika hitungan mundur selesai / sudah hari H
+      if (selisihWaktu < 0) {
+        clearInterval(jalankanCountdown);
+        document.getElementById("cd-days").innerText = "00";
+        document.getElementById("cd-hours").innerText = "00";
+        document.getElementById("cd-minutes").innerText = "00";
+        document.getElementById("cd-seconds").innerText = "00";
+
+        const teksDeskripsi = document.querySelector(".countdown-desc");
+        if (teksDeskripsi) {
+          teksDeskripsi.innerText = "Acara sudah dimulai! Selamat berlomba! 🎉";
+        }
+        return;
+      }
+
+      // Rumus matematika konversi milidetik ke satuan waktu biasa
+      const hitungHari = Math.floor(selisihWaktu / (1000 * 60 * 60 * 24));
+      const hitungJam = Math.floor(
+        (selisihWaktu % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+      );
+      const hitungMenit = Math.floor(
+        (selisihWaktu % (1000 * 60 * 60)) / (1000 * 60),
+      );
+      const hitungDetik = Math.floor((selisihWaktu % (1000 * 60)) / 1000);
+
+      // Tampilkan angka ke HTML dengan format dua digit (misal: 05 jika di bawah 10)
+      document.getElementById("cd-days").innerText =
+        hitungHari < 10 ? "0" + hitungHari : hitungHari;
+      document.getElementById("cd-hours").innerText =
+        hitungJam < 10 ? "0" + hitungJam : hitungJam;
+      document.getElementById("cd-minutes").innerText =
+        hitungMenit < 10 ? "0" + hitungMenit : hitungMenit;
+      document.getElementById("cd-seconds").innerText =
+        hitungDetik < 10 ? "0" + hitungDetik : hitungDetik;
+    }, 1000);
   });
 });
