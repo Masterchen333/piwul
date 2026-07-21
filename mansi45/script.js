@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // --- LOGIKA HITUNG MUNDUR (COUNTDOWN) ---
 
     // Tentukan waktu tujuan (16 Agustus 2026 pukul 07:00:00 WIB)
-    const targetWaktu = new Date("August 16, 2026 07:00:00").getTime();
+    const targetWaktu = new Date("August 15, 2026 07:00:00").getTime();
 
     // Jalankan pembaruan data setiap 1 detik
     const jalankanCountdown = setInterval(function () {
