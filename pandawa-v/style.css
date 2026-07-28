@@ -132,7 +132,9 @@ body {
   display: flex;
   justify-content: center;
   gap: 20px;
-  padding: 30px 20px 10px;
+  padding: 130px 20px 10px; /* Angka 130px akan mendorong logo jauh ke bawah bendera */
+  position: relative;
+  z-index: 2;
 }
 .logo-img {
   width: 70px;
