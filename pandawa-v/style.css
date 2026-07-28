@@ -472,3 +472,99 @@ body {
   position: relative;
   z-index: 2;
 }
+
+/* =========================================
+   ORNAMEN BENDERA GANTUNG (BUNTING FLAGS)
+========================================= */
+.bunting-flag-container {
+  position: absolute;
+  top: -5px; /* Sedikit ditarik ke atas agar tidak ada celah */
+  left: 0;
+  width: 100%;
+  z-index: 10; /* Di atas segalanya */
+  pointer-events: none;
+}
+
+.bunting-flag {
+  width: 100%;
+  height: auto;
+  transform-origin: top center; /* Poros ayunan ada di bagian atas bendera */
+  animation: swayFlag 5s ease-in-out infinite;
+  filter: drop-shadow(
+    0 5px 8px rgba(0, 0, 0, 0.8)
+  ); /* Bayangan hitam agar menonjol */
+}
+
+@keyframes swayFlag {
+  0%,
+  100% {
+    transform: rotate(-2deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+}
+
+/* Jarak ekstra untuk logo agar tidak tertutup bendera */
+.logos {
+  padding-top: 60px !important;
+}
+
+/* =========================================
+   ORNAMEN BUNGA (FLOATING FLOWERS)
+========================================= */
+.flower-ornament {
+  position: absolute;
+  z-index: 3; /* Sengaja dibuat = 3 agar bunganya sedikit menimpa sudut-sudut card kaca (3D effect) */
+  pointer-events: none;
+  opacity: 0.85; /* Sedikit transparan agar menyatu dengan malam */
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.6));
+  animation: spinFloat 10s linear infinite;
+}
+
+/* Mengatur letak, ukuran, dan kecepatan putaran masing-masing bunga */
+.flower-1 {
+  top: 14%;
+  left: -15px;
+  width: 55px;
+  animation-duration: 12s;
+}
+.flower-2 {
+  top: 27%;
+  right: -20px;
+  width: 65px;
+  animation-duration: 9s;
+  animation-direction: reverse; /* Berputar ke arah sebaliknya */
+}
+.flower-3 {
+  top: 52%;
+  left: -10px;
+  width: 45px;
+  animation-duration: 15s;
+}
+.flower-4 {
+  top: 72%;
+  right: -15px;
+  width: 60px;
+  animation-duration: 11s;
+}
+.flower-5 {
+  bottom: 10%;
+  left: 30px;
+  width: 40px;
+  animation-duration: 14s;
+  animation-direction: reverse;
+}
+
+/* Animasi melayang sambil berputar rotasi */
+@keyframes spinFloat {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(180deg);
+  }
+  100% {
+    transform: translateY(0) rotate(360deg);
+  }
+}
