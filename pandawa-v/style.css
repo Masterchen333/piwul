@@ -210,10 +210,11 @@ body {
   display: flex;
   justify-content: center;
   gap: 20px;
-  padding: 130px 20px 10px; /* Angka 130px akan mendorong logo jauh ke bawah bendera */
+  padding-top: 180px !important; /* <-- Jarak dorongan ke bawah diperbesar */
   position: relative;
-  z-index: 2;
+  z-index: 10; /* <-- Z-index dibuat 10 agar logo selalu tampil DI DEPAN bendera */
 }
+
 .logo-img {
   width: 70px;
   height: 70px;
@@ -561,7 +562,7 @@ body {
   top: -5px; /* Sedikit ditarik ke atas agar tidak ada celah */
   left: 0;
   width: 100%;
-  z-index: 10; /* Di atas segalanya */
+  z-index: 5; /* Di atas segalanya */
   pointer-events: none;
 }
 
