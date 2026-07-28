@@ -74,7 +74,7 @@ window.addEventListener("resize", () => {
 });
 
 const particles = [];
-const colors = ["#d62828", "#f4a261", "#ffffff", "#e9c46a", "#2a9d8f"];
+const colors = ["#ff0000", "#e62429", "#ffffff", "#f0f0f0", "#ffbaba"];
 
 class Particle {
   constructor(x, y, color) {
