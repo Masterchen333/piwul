@@ -409,3 +409,66 @@ body {
     transform: translateY(0);
   }
 }
+
+/* =========================================
+   ORNAMEN AWAN (FLOATING CLOUDS)
+========================================= */
+.cloud-ornament {
+  position: absolute;
+  z-index: 0; /* Berada di belakang teks/kotak, tapi di depan kembang api */
+  opacity: 0.15; /* Dibuat agak transparan agar terasa seperti kabut malam */
+  pointer-events: none; /* Agar gambar awan tidak menghalangi jika layar di-klik/scroll */
+  animation: floatCloud 8s ease-in-out infinite;
+  filter: drop-shadow(
+    0 0 10px rgba(255, 255, 255, 0.3)
+  ); /* Sedikit efek menyala */
+}
+
+/* Mengatur posisi masing-masing awan */
+.cloud-1 {
+  top: 5%;
+  right: -40px; /* Sengaja dibuat sedikit keluar layar */
+  width: 160px;
+  animation-delay: 0s;
+}
+.cloud-2 {
+  top: 30%;
+  left: -50px;
+  width: 200px;
+  animation-delay: 2s; /* Delay agar gerakannya tidak bersamaan dengan awan 1 */
+}
+.cloud-3 {
+  top: 60%;
+  right: -60px;
+  width: 180px;
+  animation-delay: 4s;
+}
+.cloud-4 {
+  bottom: 15%;
+  left: -30px;
+  width: 150px;
+  animation-delay: 1.5s;
+}
+
+/* Animasi melayang naik turun secara halus */
+@keyframes floatCloud {
+  0%,
+  100% {
+    margin-top: 0;
+  }
+  50% {
+    margin-top: -20px;
+  } /* Bergerak ke atas sejauh 20px lalu turun lagi */
+}
+
+/* 
+   PASTIKAN KONTEN UTAMA BERADA DI DEPAN AWAN 
+   (Tambahkan z-index: 2 ke elemen-elemen ini jika belum ada)
+*/
+.logos,
+.hero,
+.section-card,
+.tab-container {
+  position: relative;
+  z-index: 2;
+}
