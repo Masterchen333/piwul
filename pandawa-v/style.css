@@ -1,0 +1,296 @@
+/* CSS Variables untuk Tema Malam Kemerdekaan */
+:root {
+  --bg-night: #0b132b;
+  --bg-card: #1c2541;
+  --red-primary: #d62828;
+  --red-glow: rgba(214, 40, 40, 0.6);
+  --white: #ffffff;
+  --text-gray: #e0e0e0;
+  --gold: #f4a261;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Saira Semi Condensed", sans-serif;
+}
+
+body {
+  background-color: var(--bg-night);
+  color: var(--white);
+  overflow-x: hidden;
+}
+
+/* --- ENVELOPE / OPENING SCREEN --- */
+#envelope-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition:
+    opacity 1s ease,
+    transform 1s ease;
+}
+
+.envelope-container {
+  width: 300px;
+  height: 200px;
+  background: linear-gradient(
+    to bottom,
+    var(--red-primary) 50%,
+    var(--white) 50%
+  );
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #fff;
+}
+
+.envelope-container::before {
+  content: "DIRGAHAYU RI 81";
+  position: absolute;
+  top: 20px;
+  color: var(--white);
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+}
+
+.btn-buka {
+  background-color: var(--bg-night);
+  color: var(--white);
+  border: 2px solid var(--gold);
+  padding: 10px 30px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  border-radius: 25px;
+  cursor: pointer;
+  box-shadow: 0 0 15px var(--gold);
+  animation: pulse 1.5s infinite;
+  z-index: 2;
+}
+
+.envelope-hint {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 10px var(--gold);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px var(--gold);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 10px var(--gold);
+  }
+}
+
+/* --- MAIN CONTENT --- */
+#main-content {
+  display: none;
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding-bottom: 80px;
+  position: relative;
+  background: radial-gradient(circle at top, #1a254c 0%, var(--bg-night) 100%);
+}
+
+/* Logos */
+.logos {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  padding: 20px;
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 10px 20px;
+}
+.hero h1 {
+  font-size: 2rem;
+  color: var(--white);
+  text-shadow: 0 0 10px var(--red-primary);
+  margin-bottom: 5px;
+}
+.hero p {
+  color: var(--gold);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Sections */
+.section-card {
+  background-color: var(--bg-card);
+  margin: 15px 20px;
+  padding: 20px;
+  border-radius: 15px;
+  border-left: 5px solid var(--red-primary);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+.section-title {
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  color: var(--red-primary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 5px;
+}
+
+/* Grid Detail Lomba & Waktu */
+.info-grid {
+  display: grid;
+  gap: 10px;
+}
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.info-item span {
+  color: var(--text-gray);
+}
+.info-item strong {
+  color: var(--white);
+}
+
+/* Doorprize */
+.doorprize-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.doorprize-item {
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px dashed var(--gold);
+}
+
+/* Tabs Panitia */
+.tab-container {
+  margin: 20px;
+}
+.tab-buttons {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 10px;
+  overflow-x: auto;
+  padding-bottom: 5px;
+}
+.tab-btn {
+  background-color: var(--bg-card);
+  color: var(--text-gray);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.3s;
+}
+.tab-btn.active {
+  background-color: var(--red-primary);
+  color: var(--white);
+  border-color: var(--red-primary);
+  box-shadow: 0 0 10px var(--red-glow);
+}
+.tab-content {
+  display: none;
+  background-color: var(--bg-card);
+  padding: 15px;
+  border-radius: 10px;
+}
+.tab-content.active {
+  display: block;
+}
+
+.role-title {
+  color: var(--gold);
+  font-size: 0.9rem;
+  margin-top: 10px;
+  text-transform: uppercase;
+}
+.role-desc {
+  font-size: 0.8rem;
+  color: var(--text-gray);
+  margin-bottom: 5px;
+}
+.name-list {
+  list-style: none;
+  margin-left: 10px;
+}
+.name-list li {
+  position: relative;
+  padding-left: 15px;
+  margin-bottom: 3px;
+}
+.name-list li::before {
+  content: "•";
+  color: var(--red-primary);
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+/* Floating WA Button */
+.fab-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+  background: linear-gradient(to top, var(--bg-night) 60%, transparent);
+  z-index: 100;
+}
+.btn-wa {
+  background-color: #25d366;
+  color: white;
+  text-decoration: none;
+  padding: 12px 40px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+}
+
+/* --- CSS Tambahan untuk Aset Asli --- */
+.logo-img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain; /* Agar logo tidak gepeng */
+  border-radius: 50%;
+  background-color: white; /* Opsional: jika logo transparan tapi butuh background */
+  box-shadow: 0 0 10px var(--red-glow);
+}
+
+.doorprize-img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover; /* Memotong gambar agar proporsional di kotak */
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
