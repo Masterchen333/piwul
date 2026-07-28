@@ -5,15 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Undangan Lomba HUT RI-81 - PANDAWA V</title>
 
-    <!-- Font Saira Semi Condensed -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@400;700&display=swap"
       rel="stylesheet"
     />
-
-    <!-- Memanggil file CSS eksternal -->
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -21,6 +18,9 @@
     <audio id="bgm" loop>
       <source src="assets/audio/lagu-kemerdekaan.mp3" type="audio/mpeg" />
     </audio>
+
+    <!-- Canvas untuk Kembang Api (Background) -->
+    <canvas id="fireworks-canvas"></canvas>
 
     <!-- Screen 1: Amplop Undangan -->
     <div id="envelope-screen">
@@ -33,7 +33,7 @@
     <!-- Screen 2: Konten Utama -->
     <div id="main-content">
       <!-- Header / Logos -->
-      <div class="logos">
+      <div class="logos reveal">
         <img
           src="assets/img/logo-hut-ri.png"
           alt="Logo HUT RI 81"
@@ -44,50 +44,66 @@
           alt="Logo PANDAWA V"
           class="logo-img"
         />
-        <!-- Hapus logo 3 jika tidak dipakai -->
       </div>
 
       <!-- Hero -->
-      <div class="hero">
+      <div class="hero reveal">
         <h1>
           MALAM PUNCAK <br />
-          HUT RI-81
+          <span class="highlight">HUT RI-81</span>
         </h1>
         <p>Karang Taruna PANDAWA V</p>
+        <p class="hero-desc">
+          Mari jadikan malam puncak ini penuh gemuruh dan tawa! Bersama kita
+          rajut kebersamaan, meriahkan kemerdekaan kita.
+        </p>
       </div>
 
       <!-- Detail Acara -->
-      <div class="section-card">
+      <div class="section-card reveal">
         <h2 class="section-title">Informasi Acara</h2>
+        <p class="section-desc">
+          Jangan sampai terlewat! Catat waktu dan lokasinya, siapkan dirimu
+          untuk malam yang tak terlupakan.
+        </p>
         <div class="info-grid">
           <div class="info-item">
-            <span>📅</span> <strong>16 Agustus 2026</strong>
+            <span class="icon">📅</span> <strong>16 Agustus 2026</strong>
           </div>
           <div class="info-item">
-            <span>⏰</span> <strong>Pukul 20:00 WIB</strong>
+            <span class="icon">⏰</span> <strong>Pukul 20:00 WIB</strong>
           </div>
           <div class="info-item">
-            <span>📍</span> <strong>Halaman Depan Bapak RW</strong>
+            <span class="icon">📍</span> <strong>Halaman Depan Bapak RW</strong>
           </div>
         </div>
       </div>
 
       <!-- Detail Lomba -->
-      <div class="section-card">
+      <div class="section-card reveal">
         <h2 class="section-title">Daftar Lomba Malam</h2>
+        <p class="section-desc">
+          Buktikan ketangkasan dan kekompakan timmu! Mari ikuti keseruan
+          lombanya dan jadilah juaranya:
+        </p>
         <div class="info-grid">
-          <div class="info-item">
-            <span>🎈</span> <strong>Lomba Kereta Balon</strong>
+          <div class="info-item lomba-item">
+            <span class="icon">🎈</span> <strong>Lomba Kereta Balon</strong>
           </div>
-          <div class="info-item">
-            <span>⚽</span> <strong>Lomba Estafet Bola Sarung</strong>
+          <div class="info-item lomba-item">
+            <span class="icon">⚽</span>
+            <strong>Lomba Estafet Bola Sarung</strong>
           </div>
         </div>
       </div>
 
       <!-- Doorprize -->
-      <div class="section-card">
+      <div class="section-card reveal">
         <h2 class="section-title">Hadiah & Doorprize</h2>
+        <p class="section-desc">
+          Siapa tahu malam ini adalah malam keberuntunganmu! Dapatkan kuponnya
+          dan bawa pulang hadiah menarik ini:
+        </p>
         <div class="doorprize-grid">
           <div class="doorprize-item">
             <img
@@ -125,10 +141,14 @@
       </div>
 
       <!-- Panitia Nav/Tabs -->
-      <div class="tab-container">
-        <h2 class="section-title" style="margin-bottom: 10px">
+      <div class="tab-container reveal">
+        <h2 class="section-title" style="margin-bottom: 5px">
           Susunan Panitia
         </h2>
+        <p class="section-desc" style="margin-bottom: 15px">
+          Di balik layar kemeriahan, ada mereka yang bekerja keras. Kenalan yuk
+          dengan panitia hebat kita!
+        </p>
 
         <div class="tab-buttons">
           <button class="tab-btn active" onclick="openTab(event, 'tab-umum')">
@@ -148,23 +168,19 @@
           <ul class="name-list">
             <li>Ari Sentun</li>
           </ul>
-
           <div class="role-title">Ketua Panitia</div>
           <ul class="name-list">
             <li>Wahyu Pambukti</li>
           </ul>
-
           <div class="role-title">Wakil Panitia</div>
           <ul class="name-list">
             <li>Rohman</li>
           </ul>
-
           <div class="role-title">Bendahara</div>
           <ul class="name-list">
             <li>Marsono Wilis</li>
             <li>Sulis</li>
           </ul>
-
           <div class="role-title">Sekretaris</div>
           <ul class="name-list">
             <li>Rahmad</li>
@@ -178,13 +194,11 @@
           <ul class="name-list">
             <li>Hartono</li>
           </ul>
-
           <div class="role-title">Sound Engineering</div>
           <ul class="name-list">
             <li>Dandi</li>
             <li>Danang</li>
           </ul>
-
           <div class="role-title">Perlengkapan</div>
           <ul class="name-list">
             <li>Pian</li>
@@ -192,13 +206,11 @@
             <li>Supri</li>
             <li>Ardi</li>
           </ul>
-
           <div class="role-title">Dokumentasi</div>
           <ul class="name-list">
             <li>Akbar</li>
             <li>Arjun</li>
           </ul>
-
           <div class="role-title">Konsumsi</div>
           <ul class="name-list">
             <li>Dian Dobleh</li>
@@ -216,7 +228,6 @@
             <li>Dian Dono</li>
             <li>Lilik</li>
           </ul>
-
           <div class="role-title">Anggota Pelaksana</div>
           <p class="role-desc">Role: Membantu pelaksanaan sesuai instruksi</p>
           <ul class="name-list">
@@ -239,19 +250,21 @@
         </div>
       </div>
 
+      <div style="height: 60px"></div>
+      <!-- Spacing bawah -->
+
       <!-- Tombol WA -->
-      <div class="fab-container">
+      <div class="fab-container reveal">
         <a
           href="https://wa.me/6281234567890?text=Halo%20Admin,%20saya%20ingin%20mendaftar%20Lomba%20Agustusan%20HUT%20RI-81"
           target="_blank"
           class="btn-wa"
         >
-          DAFTAR SEKARANG
+          DAFTAR LOMBA SEKARANG
         </a>
       </div>
     </div>
 
-    <!-- Memanggil file JavaScript eksternal -->
     <script src="script.js"></script>
   </body>
 </html>

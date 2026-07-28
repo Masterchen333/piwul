@@ -1,52 +1,151 @@
-// Logika Membuka Amplop dan Memutar Musik
+// ==========================================
+// 1. LOGIKA BUKA AMPLOP & MUSIK
+// ==========================================
 function bukaUndangan() {
   const envelope = document.getElementById("envelope-screen");
   const mainContent = document.getElementById("main-content");
   const audio = document.getElementById("bgm");
 
-  // 1. Pengecekan aman: Putar musik JIKA tag audio-nya ditemukan
+  // Putar musik
   if (audio) {
     audio
       .play()
-      .catch((error) =>
-        console.log("Audio diblokir browser atau file tidak ditemukan:", error),
-      );
-  } else {
-    console.warn("Tag audio dengan id='bgm' tidak ditemukan.");
+      .catch((error) => console.log("Autoplay audio dicegah browser:", error));
   }
 
-  // 2. Jalankan animasi JIKA elemen amplop dan konten ditemukan
   if (envelope && mainContent) {
-    // Animasi envelope naik ke atas
-    envelope.style.transform = "translateY(-100vh)";
+    // Animasi amplop naik
+    envelope.style.transform = "translateY(-100vh) scale(0.8)";
     envelope.style.opacity = "0";
-
-    // Tampilkan konten utama
     mainContent.style.display = "block";
 
-    // Hapus amplop secara permanen setelah 1 detik
     setTimeout(() => {
       envelope.style.display = "none";
-    }, 1000);
-  } else {
-    console.error(
-      "Error: Halaman amplop atau halaman utama tidak ditemukan di HTML.",
-    );
+      // Picu pengecekan animasi scroll awal saat halaman terbuka
+      revealElements();
+    }, 800);
   }
 }
 
-// Logika Navigasi Tab Panitia (Tetap sama)
+// ==========================================
+// 2. LOGIKA ANIMASI SCROLL (REVEAL)
+// ==========================================
+function revealElements() {
+  const reveals = document.querySelectorAll(".reveal");
+  const windowHeight = window.innerHeight;
+  const elementVisible = 100; // Jarak sebelum elemen muncul
+
+  reveals.forEach((reveal) => {
+    const elementTop = reveal.getBoundingClientRect().top;
+    if (elementTop < windowHeight - elementVisible) {
+      reveal.classList.add("active");
+    }
+  });
+}
+window.addEventListener("scroll", revealElements);
+
+// ==========================================
+// 3. LOGIKA TABS PANITIA
+// ==========================================
 function openTab(event, tabId) {
   const contents = document.querySelectorAll(".tab-content");
-  contents.forEach((content) => {
-    content.classList.remove("active");
-  });
+  contents.forEach((content) => content.classList.remove("active"));
 
   const buttons = document.querySelectorAll(".tab-btn");
-  buttons.forEach((btn) => {
-    btn.classList.remove("active");
-  });
+  buttons.forEach((btn) => btn.classList.remove("active"));
 
   document.getElementById(tabId).classList.add("active");
   event.currentTarget.classList.add("active");
 }
+
+// ==========================================
+// 4. EFEK KEMBANG API (FIREWORKS CANVAS)
+// ==========================================
+const canvas = document.getElementById("fireworks-canvas");
+const ctx = canvas.getContext("2d");
+
+// Atur ukuran canvas menyesuaikan layar
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+const particles = [];
+const colors = ["#d62828", "#f4a261", "#ffffff", "#e9c46a", "#2a9d8f"];
+
+class Particle {
+  constructor(x, y, color) {
+    this.x = x;
+    this.y = y;
+    this.color = color;
+    // Arah ledakan menyebar (melingkar)
+    const angle = Math.random() * Math.PI * 2;
+    const speed = Math.random() * 4 + 1; // Kecepatan ledakan
+    this.velocity = {
+      x: Math.cos(angle) * speed,
+      y: Math.sin(angle) * speed,
+    };
+    this.alpha = 1;
+    this.friction = 0.96; // Perlambatan di udara
+    this.gravity = 0.04; // Efek gravitasi jatuh berjatuhan
+  }
+
+  draw() {
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, 2, 0, Math.PI * 2, false);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = this.color;
+    ctx.restore();
+  }
+
+  update() {
+    this.draw();
+    this.velocity.x *= this.friction;
+    this.velocity.y *= this.friction;
+    this.velocity.y += this.gravity;
+    this.x += this.velocity.x;
+    this.y += this.velocity.y;
+    this.alpha -= 0.01; // Memudar perlahan
+  }
+}
+
+// Fungsi memicu ledakan kembang api
+function createFireworks(x, y) {
+  const particleCount = 40; // Jumlah percikan per kembang api
+  for (let i = 0; i < particleCount; i++) {
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    particles.push(new Particle(x, y, color));
+  }
+}
+
+// Loop animasi
+function animateFireworks() {
+  requestAnimationFrame(animateFireworks);
+  ctx.clearRect(0, 0, canvas.width, canvas.height); // Bersihkan frame sblmnya
+
+  particles.forEach((particle, index) => {
+    if (particle.alpha <= 0) {
+      particles.splice(index, 1);
+    } else {
+      particle.update();
+    }
+  });
+}
+animateFireworks();
+
+// Tembakkan kembang api secara acak otomatis setiap beberapa detik
+setInterval(() => {
+  // Jangan tembakkan jika amplop belum dibuka
+  if (document.getElementById("main-content").style.display === "block") {
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * (canvas.height / 2); // Meledak di bagian atas layar
+    createFireworks(x, y);
+  }
+}, 1500); // Meledak tiap 1.5 detik
