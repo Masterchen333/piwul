@@ -814,3 +814,159 @@ body {
     transform: translateY(0) rotate(360deg);
   }
 }
+
+/* =========================================
+   ORNAMEN KHAS HUT RI (MERAH PUTIH LUXURY)
+========================================= */
+
+/* 1. Lampion Merah Putih Gantung */
+.lantern-container {
+  position: absolute;
+  top: 15px;
+  z-index: 6;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: lanternSway 4s ease-in-out infinite alternate;
+  transform-origin: top center;
+}
+.lantern-left {
+  left: 12px;
+}
+.lantern-right {
+  right: 12px;
+  animation-delay: -2s;
+}
+
+.lantern-string {
+  width: 2px;
+  height: 45px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.lantern-body {
+  position: relative;
+  width: 36px;
+  height: 48px;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 
+    0 0 15px rgba(230, 36, 41, 0.8),
+    0 4px 10px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.lantern-top {
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(135deg, #ff1a1a 0%, #b30000 100%);
+}
+
+.lantern-bottom {
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(135deg, #ffffff 0%, #dddddd 100%);
+}
+
+.lantern-tassel {
+  width: 6px;
+  height: 25px;
+  background: linear-gradient(to bottom, #d4af37, #e62429);
+  border-radius: 0 0 3px 3px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+@keyframes lanternSway {
+  0% { transform: rotate(-5deg); }
+  100% { transform: rotate(5deg); }
+}
+
+/* 2. Umbul-Umbul Merah Putih Pinggir */
+.umbul-streamer {
+  position: absolute;
+  top: 100px;
+  width: 14px;
+  height: 500px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.85;
+  background: repeating-linear-gradient(
+    180deg,
+    #e62429 0px,
+    #e62429 25px,
+    #ffffff 25px,
+    #ffffff 50px
+  );
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  animation: umbulWave 3s ease-in-out infinite alternate;
+  filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.6));
+}
+
+.umbul-left {
+  left: 2px;
+  border-radius: 0 10px 10px 0;
+  clip-path: polygon(0 0, 100% 0, 100% 96%, 50% 100%, 0 96%);
+}
+
+.umbul-right {
+  right: 2px;
+  border-radius: 10px 0 0 10px;
+  clip-path: polygon(0 0, 100% 0, 100% 96%, 50% 100%, 0 96%);
+  animation-delay: -1.5s;
+}
+
+@keyframes umbulWave {
+  0% { transform: skewY(-2deg) scaleX(1); }
+  100% { transform: skewY(2deg) scaleX(0.95); }
+}
+
+/* 3. Strip Pita Merah Putih di Atas Setiap Card Section */
+.section-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #e62429 0%, #e62429 50%, #ffffff 50%, #ffffff 100%);
+  border-radius: 20px 20px 0 0;
+  z-index: 5;
+}
+
+/* 4. Konfeti & Sparkles Merah Putih Melayang */
+.festive-sparkles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.sparkle {
+  position: absolute;
+  font-size: 1rem;
+  opacity: 0.7;
+  animation: floatSparkle 7s ease-in-out infinite;
+}
+
+.sparkle-1 { top: 12%; left: 8%; animation-delay: 0s; }
+.sparkle-2 { top: 22%; right: 10%; animation-delay: 1.5s; }
+.sparkle-3 { top: 45%; left: 5%; animation-delay: 3s; }
+.sparkle-4 { top: 65%; right: 7%; animation-delay: 4.5s; }
+.sparkle-5 { top: 82%; left: 12%; animation-delay: 2s; }
+.sparkle-6 { top: 92%; right: 15%; animation-delay: 5.5s; }
+
+@keyframes floatSparkle {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg) scale(0.9);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-25px) rotate(180deg) scale(1.2);
+    opacity: 0.9;
+  }
+}
