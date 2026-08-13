@@ -379,9 +379,9 @@ body {
   display: flex;
   justify-content: center;
   gap: 20px;
-  padding-top: 180px !important; /* <-- Jarak dorongan ke bawah diperbesar */
+  padding-top: 60px;
   position: relative;
-  z-index: 10; /* <-- Z-index dibuat 10 agar logo selalu tampil DI DEPAN bendera */
+  z-index: 10 !important; /* Logo selalu tampil di depan bendera gantung */
 }
 
 .logo-img {
@@ -711,7 +711,6 @@ body {
    PASTIKAN KONTEN UTAMA BERADA DI DEPAN AWAN 
    (Tambahkan z-index: 2 ke elemen-elemen ini jika belum ada)
 */
-.logos,
 .hero,
 .section-card,
 .tab-container {
@@ -727,7 +726,7 @@ body {
   top: -5px; /* Sedikit ditarik ke atas agar tidak ada celah */
   left: 0;
   width: 100%;
-  z-index: 5; /* Di atas segalanya */
+  z-index: 3; /* Dibuat di belakang logo Pandawa & HUT RI (z-index: 10) */
   pointer-events: none;
 }
 
@@ -749,11 +748,6 @@ body {
   50% {
     transform: rotate(2deg);
   }
-}
-
-/* Jarak ekstra untuk logo agar tidak tertutup bendera */
-.logos {
-  padding-top: 60px !important;
 }
 
 /* =========================================
