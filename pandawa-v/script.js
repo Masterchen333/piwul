@@ -1,29 +1,42 @@
 // ==========================================
 // 1. LOGIKA BUKA AMPLOP & MUSIK
 // ==========================================
+// Variable pencegah multi-click
+let isOpeningEnvelope = false;
+
 function bukaUndangan() {
-  const envelope = document.getElementById("envelope-screen");
+  if (isOpeningEnvelope) return;
+  isOpeningEnvelope = true;
+
+  const envelopeScreen = document.getElementById("envelope-screen");
   const mainContent = document.getElementById("main-content");
   const audio = document.getElementById("bgm");
 
-  // Putar musik
+  // Putar musik latar
   if (audio) {
     audio
       .play()
       .catch((error) => console.log("Autoplay audio dicegah browser:", error));
   }
 
-  if (envelope && mainContent) {
-    // Animasi amplop naik
-    envelope.style.transform = "translateY(-100vh) scale(0.8)";
-    envelope.style.opacity = "0";
+  if (envelopeScreen && mainContent) {
+    // 1. Tampilkan class animasi fisik (flap terbuka, surat meluncur)
+    envelopeScreen.classList.add("is-opening");
+
+    // 2. Tampilkan main content di latar belakang
     mainContent.style.display = "block";
 
+    // 3. Setelah animasi unboxing selesai, geser dan pudarkan amplop
     setTimeout(() => {
-      envelope.style.display = "none";
-      // Picu pengecekan animasi scroll awal saat halaman terbuka
-      revealElements();
-    }, 800);
+      envelopeScreen.style.transform = "translateY(-100vh) scale(0.9)";
+      envelopeScreen.style.opacity = "0";
+
+      setTimeout(() => {
+        envelopeScreen.style.display = "none";
+        // Picu animasi elemen saat pertama kali masuk
+        revealElements();
+      }, 700);
+    }, 700);
   }
 }
 

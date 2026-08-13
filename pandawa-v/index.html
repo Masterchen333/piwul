@@ -39,18 +39,45 @@
   <!-- Canvas untuk Kembang Api (Background) -->
   <canvas id="fireworks-canvas"></canvas>
 
-  <!-- Screen 1: Amplop Undangan -->
+  <!-- Screen 1: Amplop Undangan Luxury -->
   <div id="envelope-screen">
-    <div class="envelope-container">
-      <!-- Efek Segel Logo Pandawa -->
-      <img src="assets/img/logo-pandawa.png" alt="Logo PANDAWA V" class="envelope-logo" />
+    <div class="envelope-wrapper">
+      <!-- Flap Lipatan Atas (3D Triangular Fold) -->
+      <div class="envelope-top-flap"></div>
 
-      <!-- Teks Dirgahayu -->
-      <h2 class="envelope-title">DIRGAHAYU RI 81</h2>
+      <!-- Surat Internal di Dalam Amplop -->
+      <div class="envelope-letter">
+        <div class="letter-badge">UNDANGAN MALAM PUNCAK</div>
+        <h3 class="letter-title">DIRGAHAYU RI 81</h3>
+        <p class="letter-subtitle">Karang Taruna PANDAWA V</p>
+      </div>
 
+      <!-- Body Depan Amplop (Pocket) -->
+      <div class="envelope-body">
+        <div class="foil-border"></div>
+
+        <!-- Label Penerima -->
+        <div class="envelope-recipient">
+          <span class="recipient-label">Kepada Yth.</span>
+          <span class="recipient-name">Bapak / Ibu / Saudara / i</span>
+        </div>
+      </div>
+
+      <!-- Segel Lilin Wax Stamp Interaktif -->
+      <div class="wax-seal-wrapper" onclick="bukaUndangan()" title="Ketuk untuk membuka">
+        <div class="wax-ribbon red-ribbon"></div>
+        <div class="wax-ribbon white-ribbon"></div>
+        <div class="wax-seal">
+          <div class="wax-seal-inner">
+            <img src="assets/img/logo-pandawa.png" alt="Logo PANDAWA V" class="wax-logo" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Tombol Buka Undangan -->
       <button class="btn-buka" onclick="bukaUndangan()">BUKA UNDANGAN</button>
     </div>
-    <p class="envelope-hint">Ketuk untuk membuka undangan</p>
+    <p class="envelope-hint">Ketuk segel lilin atau tombol untuk membuka</p>
   </div>
 
   <!-- Screen 2: Konten Utama -->
